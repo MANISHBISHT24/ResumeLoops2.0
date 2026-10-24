@@ -243,6 +243,28 @@ export function createResume(input: CreateResumeInput): Resume {
 }
 
 /**
+ * Update an existing resume by ID
+ */
+export function updateResume(id: string, updates: Partial<Resume>): Resume | undefined {
+  const resumes = getStoredResumes();
+  const index = resumes.findIndex((r) => r.id === id);
+  if (index === -1) return undefined;
+
+  const current = resumes[index];
+  const updated: Resume = {
+    ...current,
+    ...updates,
+    id: current.id, // enforce id immutability
+    lastModified: "Just now",
+  };
+
+  const newResumes = [...resumes];
+  newResumes[index] = updated;
+  saveStoredResumes(newResumes);
+  return updated;
+}
+
+/**
  * Duplicate an existing resume
  */
 export function duplicateResume(id: string): Resume | undefined {
@@ -337,6 +359,7 @@ export function useResumeStore() {
     isHydrated,
     reload,
     createResume,
+    updateResume,
     duplicateResume,
     deleteResume,
     resetToSampleResumes,

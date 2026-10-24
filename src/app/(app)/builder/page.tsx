@@ -1,262 +1,274 @@
 "use client";
 
-import React, { Suspense } from "react";
+import React, { Suspense, useState, useRef, useCallback } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import {
-  Sparkles,
-  FileText,
-  Download,
-  Eye,
-  CheckCircle2,
-  ListOrdered,
-  SlidersHorizontal,
-  ArrowLeft,
-} from "lucide-react";
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/Card";
+import { ArrowLeft, AlertCircle, Sparkles } from "lucide-react";
+import { SectionType, Resume, TemplateId } from "@/types/resume";
+import { getResumeById, updateResume, useResumeStore } from "@/lib/storage";
+import { Card, CardContent } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
-import { Badge } from "@/components/ui/Badge";
-import { Input } from "@/components/ui/Input";
-import { Textarea } from "@/components/ui/Textarea";
-import { Resume } from "@/types/resume";
-import { DEMO_RESUME, DEMO_TEMPLATES } from "@/lib/sample-data";
-import { getResumeById, getStoredResumes } from "@/lib/storage";
+import { ResumeToolbar } from "@/components/builder/ResumeToolbar";
+import { SectionNav } from "@/components/builder/SectionNav";
+import { PersonalForm } from "@/components/builder/sections/PersonalForm";
+import { SummaryForm } from "@/components/builder/sections/SummaryForm";
+import { ExperienceForm } from "@/components/builder/sections/ExperienceForm";
+import { EducationForm } from "@/components/builder/sections/EducationForm";
+import { SkillsForm } from "@/components/builder/sections/SkillsForm";
+import { ProjectsForm } from "@/components/builder/sections/ProjectsForm";
+import { CertificationsForm } from "@/components/builder/sections/CertificationsForm";
+import { LiveResumePreview } from "@/components/builder/LiveResumePreview";
 
-function BuilderContent() {
-  const searchParams = useSearchParams();
-  const resumeId = searchParams.get("id");
+interface ResumeEditorProps {
+  resumeId: string | null;
+}
 
-  const activeResume: Resume = React.useMemo(() => {
-    if (!resumeId) return DEMO_RESUME;
-    const found = getResumeById(resumeId);
-    if (found) return found;
-    const all = getStoredResumes();
-    return all.length > 0 ? all[0] : DEMO_RESUME;
-  }, [resumeId]);
+function ResumeEditor({ resumeId }: ResumeEditorProps) {
+  const { isHydrated } = useResumeStore();
 
-  const template = DEMO_TEMPLATES.find((t) => t.id === activeResume.templateId);
+  const [activeSection, setActiveSection] = useState<SectionType>("personal");
+  const [mobileView, setMobileView] = useState<"edit" | "preview">("edit");
+  const [resume, setResume] = useState<Resume | null>(() => {
+    if (!resumeId) return null;
+    return getResumeById(resumeId) || null;
+  });
 
-  const sections = [
-    { name: "Personal Details", status: "Complete", active: true },
-    { name: "Professional Summary", status: "Complete", active: false },
-    { name: "Work Experience", status: "Complete", active: false },
-    { name: "Education", status: "Complete", active: false },
-    { name: "Technical Skills", status: "Complete", active: false },
-    { name: "Projects", status: "Complete", active: false },
-    { name: "Certifications", status: "Complete", active: false },
-  ];
+  // Save status states
+  const [saveStatus, setSaveStatus] = useState<"saved" | "saving" | "unsaved">("saved");
+  const [lastSavedText, setLastSavedText] = useState("Saved");
 
-  return (
-    <div className="space-y-6">
-      {/* Honest In-Progress Editor Banner */}
-      <div className="p-3.5 rounded-xl bg-secondary-container/60 border border-primary/20 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs">
-        <div className="flex items-center gap-2">
-          <Badge variant="indigo" className="text-[10px] shrink-0">
-            Phase 3D Draft Mode
-          </Badge>
-          <span className="text-on-surface font-medium">
-            Viewing resume draft: <strong className="font-bold">{activeResume.title}</strong>
-          </span>
+  const debounceTimerRef = useRef<NodeJS.Timeout | null>(null);
+
+  // Derived not found state
+  const isNotFound = isHydrated && Boolean(resumeId) && resume === null;
+
+  // Persist changes with debounce
+  const triggerAutoSave = useCallback((updated: Resume) => {
+    setSaveStatus("saving");
+
+    if (debounceTimerRef.current) {
+      clearTimeout(debounceTimerRef.current);
+    }
+
+    debounceTimerRef.current = setTimeout(() => {
+      try {
+        const saved = updateResume(updated.id, updated);
+        if (saved) {
+          setSaveStatus("saved");
+          setLastSavedText("Saved just now");
+        } else {
+          setSaveStatus("unsaved");
+        }
+      } catch (err) {
+        console.error("Auto-save failed:", err);
+        setSaveStatus("unsaved");
+      }
+    }, 500);
+  }, []);
+
+  // Update helper
+  const handleUpdateResume = (partial: Partial<Resume>) => {
+    if (!resume) return;
+    const updated: Resume = {
+      ...resume,
+      ...partial,
+      lastModified: "Just now",
+    };
+    setResume(updated);
+    triggerAutoSave(updated);
+  };
+
+  const handlePrint = () => {
+    window.print();
+  };
+
+  // Missing or Invalid ID Error State
+  if (!resumeId) {
+    return (
+      <div className="max-w-md mx-auto my-16 text-center bg-surface-container-lowest p-8 rounded-2xl border border-border-subtle shadow-xs space-y-4">
+        <div className="w-12 h-12 rounded-full bg-secondary-container text-primary flex items-center justify-center mx-auto">
+          <AlertCircle className="w-6 h-6" />
         </div>
-        <div className="flex items-center gap-2 text-on-surface-variant text-[11px]">
-          <span>Saved to local browser storage</span>
-          <Link
-            href="/dashboard"
-            className="font-semibold text-primary hover:underline flex items-center gap-1"
-          >
-            <ArrowLeft className="w-3 h-3" />
-            <span>Back to Dashboard</span>
-          </Link>
-        </div>
-      </div>
-
-      {/* Top Builder Bar */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-border-subtle">
-        <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-xl bg-primary/10 text-primary flex items-center justify-center font-bold">
-            <FileText className="w-5 h-5" />
-          </div>
-          <div>
-            <div className="flex items-center gap-2">
-              <h2 className="text-xl font-bold text-on-surface">
-                {activeResume.title}
-              </h2>
-              <Badge variant="indigo">
-                {template ? template.name : "Swiss Chronicle"}
-              </Badge>
-            </div>
-            <p className="text-xs text-on-surface-variant">
-              Target: {activeResume.targetRole || "General Application"}
-              {activeResume.targetCompany ? ` • ${activeResume.targetCompany}` : ""} •{" "}
-              {activeResume.lastModified}
-            </p>
-          </div>
-        </div>
-
-        <div className="flex items-center gap-2">
-          <Link href="/templates">
-            <Button variant="outline" size="sm">
-              <SlidersHorizontal className="w-3.5 h-3.5" />
-              Template
+        <h2 className="text-lg font-bold text-on-surface">No Resume Selected</h2>
+        <p className="text-xs text-on-surface-variant leading-relaxed">
+          Please select an existing resume draft from your dashboard or create a new one to begin editing.
+        </p>
+        <div className="pt-2">
+          <Link href="/dashboard">
+            <Button variant="primary" className="flex items-center gap-2 mx-auto">
+              <ArrowLeft className="w-4 h-4" />
+              <span>Back to Dashboard</span>
             </Button>
           </Link>
-          <Button variant="secondary" size="sm">
-            <Eye className="w-3.5 h-3.5" />
-            Preview
-          </Button>
-          <Button variant="primary" size="sm">
-            <Download className="w-3.5 h-3.5" />
-            Export PDF
-          </Button>
         </div>
       </div>
+    );
+  }
 
-      {/* 3-Panel Architecture Grid Representation */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        {/* Left Panel: Section Navigation (3 cols) */}
-        <div className="lg:col-span-3 space-y-3">
-          <div className="flex items-center justify-between px-1">
-            <span className="text-xs font-semibold text-on-surface-variant uppercase tracking-wider flex items-center gap-1.5">
-              <ListOrdered className="w-3.5 h-3.5" />
-              Sections
-            </span>
-            <Badge variant="neutral">7/7 Complete</Badge>
-          </div>
-
-          <div className="space-y-1.5">
-            {sections.map((section, idx) => (
-              <div
-                key={idx}
-                className={`flex items-center justify-between p-3 rounded-lg text-sm transition-all border ${
-                  section.active
-                    ? "bg-secondary-container text-primary font-semibold border-primary/20 shadow-xs"
-                    : "bg-surface-container-lowest text-on-surface hover:bg-surface-container-low border-border-subtle font-medium"
-                }`}
-              >
-                <span>{section.name}</span>
-                <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
-              </div>
-            ))}
-          </div>
+  if (isNotFound) {
+    return (
+      <div className="max-w-md mx-auto my-16 text-center bg-surface-container-lowest p-8 rounded-2xl border border-border-subtle shadow-xs space-y-4">
+        <div className="w-12 h-12 rounded-full bg-red-50 text-red-600 flex items-center justify-center mx-auto">
+          <AlertCircle className="w-6 h-6" />
         </div>
-
-        {/* Center Panel: Active Section Form Editor (5 cols) */}
-        <div className="lg:col-span-5">
-          <Card>
-            <CardHeader>
-              <div className="flex items-center justify-between">
-                <CardTitle>Personal Details</CardTitle>
-                <Badge variant="indigo">Active Section</Badge>
-              </div>
-              <CardDescription>
-                Update your contact details and professional identity.
-              </CardDescription>
-            </CardHeader>
-
-            <CardContent className="space-y-4">
-              <div className="grid grid-cols-2 gap-3">
-                <Input
-                  label="First Name"
-                  defaultValue={activeResume.personalInfo.firstName}
-                />
-                <Input
-                  label="Last Name"
-                  defaultValue={activeResume.personalInfo.lastName}
-                />
-              </div>
-
-              <Input
-                label="Email Address"
-                type="email"
-                defaultValue={activeResume.personalInfo.email}
-              />
-
-              <div className="grid grid-cols-2 gap-3">
-                <Input
-                  label="Phone Number"
-                  defaultValue={activeResume.personalInfo.phone || "+1 (555) 019-2834"}
-                />
-                <Input
-                  label="Location"
-                  defaultValue={activeResume.personalInfo.location || "San Francisco, CA"}
-                />
-              </div>
-
-              <Input
-                label="Professional Title"
-                defaultValue={activeResume.personalInfo.title}
-                helperText="Aligned with target role for ATS title matching."
-              />
-
-              <Textarea
-                label="Professional Summary"
-                rows={4}
-                defaultValue={activeResume.summary}
-              />
-
-              <div className="pt-2 flex items-center justify-end gap-2 border-t border-border-subtle">
-                <Button variant="ghost" size="sm">
-                  Reset
-                </Button>
-                <Button variant="primary" size="sm">
-                  <Sparkles className="w-3.5 h-3.5" />
-                  Save Section
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
+        <h2 className="text-lg font-bold text-on-surface">Resume Draft Not Found</h2>
+        <p className="text-xs text-on-surface-variant leading-relaxed">
+          The requested resume ID <code className="font-mono bg-surface-container px-1 py-0.5 rounded text-[11px]">{resumeId}</code> was not found in your browser&apos;s local storage.
+        </p>
+        <div className="pt-2">
+          <Link href="/dashboard">
+            <Button variant="primary" className="flex items-center gap-2 mx-auto">
+              <ArrowLeft className="w-4 h-4" />
+              <span>Return to Dashboard</span>
+            </Button>
+          </Link>
         </div>
+      </div>
+    );
+  }
 
-        {/* Right Panel: A4 Live Preview Sheet Representation (4 cols) */}
-        <div className="lg:col-span-4">
-          <div className="p-4 rounded-xl bg-surface-container-low border border-border-subtle flex flex-col items-center">
-            <div className="w-full flex items-center justify-between mb-3 text-xs text-on-surface-variant font-medium">
-              <span>A4 Live Preview</span>
-              <span>Page 1 of 1</span>
+  if (!resume) {
+    return (
+      <div className="p-12 text-center text-xs text-on-surface-variant font-medium">
+        Loading resume draft...
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen flex flex-col -m-6 sm:-m-8">
+      {/* Top Builder Toolbar */}
+      <ResumeToolbar
+        title={resume.title}
+        onTitleChange={(newTitle) => handleUpdateResume({ title: newTitle })}
+        templateId={resume.templateId}
+        onTemplateChange={(newTemplateId: TemplateId) =>
+          handleUpdateResume({ templateId: newTemplateId })
+        }
+        saveStatus={saveStatus}
+        lastSavedText={lastSavedText}
+        mobileView={mobileView}
+        onMobileViewChange={setMobileView}
+        onPrint={handlePrint}
+      />
+
+      {/* Main Workspace Body */}
+      <div className="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+          {/* Left Column: Section Navigator (3 cols on desktop) */}
+          <div
+            className={`lg:col-span-3 space-y-4 ${
+              mobileView === "preview" ? "hidden lg:block" : "block"
+            }`}
+          >
+            <SectionNav
+              activeSection={activeSection}
+              onSectionSelect={setActiveSection}
+              resume={resume}
+            />
+
+            {/* Quick Tips Box */}
+            <div className="p-4 rounded-2xl bg-surface-container-low border border-border-subtle text-xs text-on-surface-variant space-y-2">
+              <span className="font-bold text-on-surface flex items-center gap-1.5 uppercase tracking-wider text-[11px]">
+                <Sparkles className="w-3.5 h-3.5 text-primary" />
+                Editorial Tip
+              </span>
+              <p className="leading-relaxed">
+                Use strong action verbs (*Architected*, *Spearheaded*, *Optimized*) and metric-backed outcomes for higher ATS scoring velocity.
+              </p>
             </div>
+          </div>
 
-            {/* Simulated Scaled A4 Sheet */}
-            <div className="w-full max-w-sm bg-white border border-border-subtle rounded-sm shadow-md p-6 text-left space-y-4">
-              <div className="border-b border-border-subtle pb-3">
-                <h4 className="text-base font-bold text-on-surface">
-                  {activeResume.personalInfo.firstName}{" "}
-                  {activeResume.personalInfo.lastName}
-                </h4>
-                <p className="text-xs font-medium text-primary">
-                  {activeResume.personalInfo.title}
-                </p>
-                <p className="text-[10px] text-on-surface-variant mt-1 font-mono">
-                  {activeResume.personalInfo.email} • {activeResume.personalInfo.location}
-                </p>
+          {/* Center Column: Active Section Form Editor (5 cols on desktop) */}
+          <div
+            className={`lg:col-span-5 ${
+              mobileView === "preview" ? "hidden lg:block" : "block"
+            }`}
+          >
+            <Card className="shadow-xs border-border-subtle">
+              <CardContent className="pt-6">
+                {activeSection === "personal" && (
+                  <PersonalForm
+                    data={resume.personalInfo}
+                    onChange={(updatedPersonal) =>
+                      handleUpdateResume({ personalInfo: updatedPersonal })
+                    }
+                  />
+                )}
+
+                {activeSection === "summary" && (
+                  <SummaryForm
+                    summary={resume.summary}
+                    onChange={(updatedSummary) =>
+                      handleUpdateResume({ summary: updatedSummary })
+                    }
+                  />
+                )}
+
+                {activeSection === "experience" && (
+                  <ExperienceForm
+                    experience={resume.experience}
+                    onChange={(updatedExperience) =>
+                      handleUpdateResume({ experience: updatedExperience })
+                    }
+                  />
+                )}
+
+                {activeSection === "education" && (
+                  <EducationForm
+                    education={resume.education}
+                    onChange={(updatedEducation) =>
+                      handleUpdateResume({ education: updatedEducation })
+                    }
+                  />
+                )}
+
+                {activeSection === "skills" && (
+                  <SkillsForm
+                    categories={resume.skillCategories}
+                    onChange={(updatedSkills) =>
+                      handleUpdateResume({ skillCategories: updatedSkills })
+                    }
+                  />
+                )}
+
+                {activeSection === "projects" && (
+                  <ProjectsForm
+                    projects={resume.projects}
+                    onChange={(updatedProjects) =>
+                      handleUpdateResume({ projects: updatedProjects })
+                    }
+                  />
+                )}
+
+                {activeSection === "certifications" && (
+                  <CertificationsForm
+                    certifications={resume.certifications}
+                    onChange={(updatedCerts) =>
+                      handleUpdateResume({ certifications: updatedCerts })
+                    }
+                  />
+                )}
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Right Column: Live Document Preview (4 cols on desktop) */}
+          <div
+            className={`lg:col-span-4 ${
+              mobileView === "edit" ? "hidden lg:block" : "block"
+            }`}
+          >
+            <div className="sticky top-20 max-h-[calc(100vh-6rem)] overflow-y-auto rounded-2xl bg-surface-container-low p-2 sm:p-4 border border-border-subtle flex flex-col items-center">
+              <div className="w-full flex items-center justify-between mb-2 px-2 text-xs text-on-surface-variant font-medium">
+                <span className="uppercase tracking-wider text-[11px] font-bold">
+                  Live A4 Document
+                </span>
+                <span className="text-[11px] font-mono">100% Scale</span>
               </div>
 
-              <div className="space-y-1.5">
-                <h5 className="text-[11px] font-bold uppercase tracking-wider text-on-surface border-b border-border-subtle/80 pb-0.5">
-                  Summary
-                </h5>
-                <p className="text-[10px] text-on-surface-variant leading-relaxed line-clamp-3">
-                  {activeResume.summary}
-                </p>
-              </div>
-
-              <div className="space-y-2">
-                <h5 className="text-[11px] font-bold uppercase tracking-wider text-on-surface border-b border-border-subtle/80 pb-0.5">
-                  Experience
-                </h5>
-                {activeResume.experience.slice(0, 2).map((exp) => (
-                  <div key={exp.id} className="space-y-0.5">
-                    <div className="flex justify-between text-[10px] font-semibold text-on-surface">
-                      <span>{exp.role}</span>
-                      <span className="text-on-surface-variant font-mono">
-                        {exp.startDate} - {exp.endDate}
-                      </span>
-                    </div>
-                    <p className="text-[9px] text-on-surface-variant">
-                      {exp.company}
-                    </p>
-                  </div>
-                ))}
-              </div>
+              {/* Document Sheet */}
+              <LiveResumePreview resume={resume} />
             </div>
           </div>
         </div>
@@ -265,12 +277,19 @@ function BuilderContent() {
   );
 }
 
+function BuilderContent() {
+  const searchParams = useSearchParams();
+  const resumeId = searchParams.get("id");
+
+  return <ResumeEditor key={resumeId || "none"} resumeId={resumeId} />;
+}
+
 export default function BuilderPage() {
   return (
     <Suspense
       fallback={
-        <div className="p-8 text-center text-sm text-on-surface-variant">
-          Loading resume editor...
+        <div className="p-12 text-center text-xs text-on-surface-variant font-medium">
+          Loading resume editor workspace...
         </div>
       }
     >
