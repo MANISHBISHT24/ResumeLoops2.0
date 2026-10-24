@@ -1,5 +1,8 @@
-import React from "react";
+"use client";
+
+import React, { Suspense } from "react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import {
   Sparkles,
   FileText,
@@ -8,20 +11,31 @@ import {
   CheckCircle2,
   ListOrdered,
   SlidersHorizontal,
+  ArrowLeft,
 } from "lucide-react";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
 import { Input } from "@/components/ui/Input";
 import { Textarea } from "@/components/ui/Textarea";
-import { DEMO_RESUME } from "@/lib/sample-data";
+import { Resume } from "@/types/resume";
+import { DEMO_RESUME, DEMO_TEMPLATES } from "@/lib/sample-data";
+import { getResumeById, getStoredResumes } from "@/lib/storage";
 
-export const metadata = {
-  title: "Resume Builder — ResumeLoops",
-  description: "3-panel live resume builder with real-time A4 preview.",
-};
+function BuilderContent() {
+  const searchParams = useSearchParams();
+  const resumeId = searchParams.get("id");
 
-export default function BuilderPage() {
+  const activeResume: Resume = React.useMemo(() => {
+    if (!resumeId) return DEMO_RESUME;
+    const found = getResumeById(resumeId);
+    if (found) return found;
+    const all = getStoredResumes();
+    return all.length > 0 ? all[0] : DEMO_RESUME;
+  }, [resumeId]);
+
+  const template = DEMO_TEMPLATES.find((t) => t.id === activeResume.templateId);
+
   const sections = [
     { name: "Personal Details", status: "Complete", active: true },
     { name: "Professional Summary", status: "Complete", active: false },
@@ -34,21 +48,47 @@ export default function BuilderPage() {
 
   return (
     <div className="space-y-6">
+      {/* Honest In-Progress Editor Banner */}
+      <div className="p-3.5 rounded-xl bg-secondary-container/60 border border-primary/20 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs">
+        <div className="flex items-center gap-2">
+          <Badge variant="indigo" className="text-[10px] shrink-0">
+            Phase 3D Draft Mode
+          </Badge>
+          <span className="text-on-surface font-medium">
+            Viewing resume draft: <strong className="font-bold">{activeResume.title}</strong>
+          </span>
+        </div>
+        <div className="flex items-center gap-2 text-on-surface-variant text-[11px]">
+          <span>Saved to local browser storage</span>
+          <Link
+            href="/dashboard"
+            className="font-semibold text-primary hover:underline flex items-center gap-1"
+          >
+            <ArrowLeft className="w-3 h-3" />
+            <span>Back to Dashboard</span>
+          </Link>
+        </div>
+      </div>
+
       {/* Top Builder Bar */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-border-subtle">
         <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded bg-primary/10 text-primary flex items-center justify-center font-bold">
+          <div className="w-9 h-9 rounded-xl bg-primary/10 text-primary flex items-center justify-center font-bold">
             <FileText className="w-5 h-5" />
           </div>
           <div>
             <div className="flex items-center gap-2">
               <h2 className="text-xl font-bold text-on-surface">
-                {DEMO_RESUME.title}
+                {activeResume.title}
               </h2>
-              <Badge variant="indigo">Swiss Chronicle</Badge>
+              <Badge variant="indigo">
+                {template ? template.name : "Swiss Chronicle"}
+              </Badge>
             </div>
             <p className="text-xs text-on-surface-variant">
-              Target: {DEMO_RESUME.targetRole} • Saved 2m ago
+              Target: {activeResume.targetRole || "General Application"}
+              {activeResume.targetCompany ? ` • ${activeResume.targetCompany}` : ""} •{" "}
+              {activeResume.lastModified}
             </p>
           </div>
         </div>
@@ -117,41 +157,41 @@ export default function BuilderPage() {
               <div className="grid grid-cols-2 gap-3">
                 <Input
                   label="First Name"
-                  defaultValue={DEMO_RESUME.personalInfo.firstName}
+                  defaultValue={activeResume.personalInfo.firstName}
                 />
                 <Input
                   label="Last Name"
-                  defaultValue={DEMO_RESUME.personalInfo.lastName}
+                  defaultValue={activeResume.personalInfo.lastName}
                 />
               </div>
 
               <Input
                 label="Email Address"
                 type="email"
-                defaultValue={DEMO_RESUME.personalInfo.email}
+                defaultValue={activeResume.personalInfo.email}
               />
 
               <div className="grid grid-cols-2 gap-3">
                 <Input
                   label="Phone Number"
-                  defaultValue={DEMO_RESUME.personalInfo.phone}
+                  defaultValue={activeResume.personalInfo.phone || "+1 (555) 019-2834"}
                 />
                 <Input
                   label="Location"
-                  defaultValue={DEMO_RESUME.personalInfo.location}
+                  defaultValue={activeResume.personalInfo.location || "San Francisco, CA"}
                 />
               </div>
 
               <Input
                 label="Professional Title"
-                defaultValue={DEMO_RESUME.personalInfo.title}
+                defaultValue={activeResume.personalInfo.title}
                 helperText="Aligned with target role for ATS title matching."
               />
 
               <Textarea
                 label="Professional Summary"
                 rows={4}
-                defaultValue={DEMO_RESUME.summary}
+                defaultValue={activeResume.summary}
               />
 
               <div className="pt-2 flex items-center justify-end gap-2 border-t border-border-subtle">
@@ -179,14 +219,14 @@ export default function BuilderPage() {
             <div className="w-full max-w-sm bg-white border border-border-subtle rounded-sm shadow-md p-6 text-left space-y-4">
               <div className="border-b border-border-subtle pb-3">
                 <h4 className="text-base font-bold text-on-surface">
-                  {DEMO_RESUME.personalInfo.firstName}{" "}
-                  {DEMO_RESUME.personalInfo.lastName}
+                  {activeResume.personalInfo.firstName}{" "}
+                  {activeResume.personalInfo.lastName}
                 </h4>
                 <p className="text-xs font-medium text-primary">
-                  {DEMO_RESUME.personalInfo.title}
+                  {activeResume.personalInfo.title}
                 </p>
                 <p className="text-[10px] text-on-surface-variant mt-1 font-mono">
-                  {DEMO_RESUME.personalInfo.email} • {DEMO_RESUME.personalInfo.location}
+                  {activeResume.personalInfo.email} • {activeResume.personalInfo.location}
                 </p>
               </div>
 
@@ -195,7 +235,7 @@ export default function BuilderPage() {
                   Summary
                 </h5>
                 <p className="text-[10px] text-on-surface-variant leading-relaxed line-clamp-3">
-                  {DEMO_RESUME.summary}
+                  {activeResume.summary}
                 </p>
               </div>
 
@@ -203,7 +243,7 @@ export default function BuilderPage() {
                 <h5 className="text-[11px] font-bold uppercase tracking-wider text-on-surface border-b border-border-subtle/80 pb-0.5">
                   Experience
                 </h5>
-                {DEMO_RESUME.experience.slice(0, 2).map((exp) => (
+                {activeResume.experience.slice(0, 2).map((exp) => (
                   <div key={exp.id} className="space-y-0.5">
                     <div className="flex justify-between text-[10px] font-semibold text-on-surface">
                       <span>{exp.role}</span>
@@ -222,5 +262,19 @@ export default function BuilderPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function BuilderPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="p-8 text-center text-sm text-on-surface-variant">
+          Loading resume editor...
+        </div>
+      }
+    >
+      <BuilderContent />
+    </Suspense>
   );
 }
