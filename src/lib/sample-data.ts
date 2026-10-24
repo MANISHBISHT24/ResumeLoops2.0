@@ -4,7 +4,7 @@
  * This does NOT represent a real customer, signed-in user, or real personal credentials.
  */
 
-import { Resume, TemplateId } from "@/types/resume";
+import type { Resume, TemplateId } from "../types/resume";
 
 export interface TemplateDefinition {
   id: TemplateId;

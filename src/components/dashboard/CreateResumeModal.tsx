@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { Badge } from "@/components/ui/Badge";
 import { TemplateId } from "@/types/resume";
-import { DEMO_TEMPLATES } from "@/lib/sample-data";
+import { TEMPLATES, DEFAULT_TEMPLATE_ID } from "@/lib/templates";
 import { createResume } from "@/lib/storage";
 
 export interface CreateResumeModalProps {
@@ -16,6 +16,7 @@ export interface CreateResumeModalProps {
   onClose: () => void;
   onCreated?: (resumeId: string) => void;
   defaultRole?: string;
+  defaultTemplate?: TemplateId;
 }
 
 export function CreateResumeModal({
@@ -23,13 +24,16 @@ export function CreateResumeModal({
   onClose,
   onCreated,
   defaultRole,
+  defaultTemplate,
 }: CreateResumeModalProps) {
   const router = useRouter();
 
   const [title, setTitle] = useState(defaultRole ? `${defaultRole} Resume` : "");
   const [targetRole, setTargetRole] = useState(defaultRole || "");
   const [targetCompany, setTargetCompany] = useState("");
-  const [selectedTemplate, setSelectedTemplate] = useState<TemplateId>("swiss-chronicle");
+  const [selectedTemplateOverride, setSelectedTemplateOverride] = useState<TemplateId | null>(null);
+  const selectedTemplate: TemplateId =
+    selectedTemplateOverride || defaultTemplate || DEFAULT_TEMPLATE_ID;
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -57,7 +61,7 @@ export function CreateResumeModal({
       setTitle("");
       setTargetRole("");
       setTargetCompany("");
-      setSelectedTemplate("swiss-chronicle");
+      setSelectedTemplateOverride(null);
       setIsSubmitting(false);
 
       if (onCreated) {
@@ -131,12 +135,12 @@ export function CreateResumeModal({
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-h-60 overflow-y-auto p-1">
-            {DEMO_TEMPLATES.map((tmpl) => {
+            {TEMPLATES.map((tmpl) => {
               const isSelected = selectedTemplate === tmpl.id;
               return (
                 <div
                   key={tmpl.id}
-                  onClick={() => setSelectedTemplate(tmpl.id)}
+                  onClick={() => setSelectedTemplateOverride(tmpl.id)}
                   className={`p-3.5 rounded-xl border text-left cursor-pointer transition-all flex flex-col justify-between ${
                     isSelected
                       ? "border-primary bg-secondary-container/60 ring-2 ring-primary/20 shadow-xs"
@@ -147,7 +151,7 @@ export function CreateResumeModal({
                   tabIndex={0}
                   onKeyDown={(e) => {
                     if (e.key === " " || e.key === "Enter") {
-                      setSelectedTemplate(tmpl.id);
+                      setSelectedTemplateOverride(tmpl.id);
                     }
                   }}
                 >

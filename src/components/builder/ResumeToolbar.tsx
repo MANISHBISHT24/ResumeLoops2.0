@@ -12,7 +12,7 @@ import {
   FileEdit,
 } from "lucide-react";
 import { TemplateId } from "@/types/resume";
-import { DEMO_TEMPLATES } from "@/lib/sample-data";
+import { TEMPLATES } from "@/lib/templates";
 
 export interface ResumeToolbarProps {
   title: string;
@@ -186,7 +186,7 @@ export function ResumeToolbar({
               className="bg-transparent text-xs font-semibold text-on-surface py-1 pr-2 pl-1 focus:outline-none cursor-pointer"
               aria-label="Select resume layout template"
             >
-              {DEMO_TEMPLATES.map((tmpl) => (
+              {TEMPLATES.map((tmpl) => (
                 <option key={tmpl.id} value={tmpl.id}>
                   {tmpl.name} ({tmpl.category})
                 </option>

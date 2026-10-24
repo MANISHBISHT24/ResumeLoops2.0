@@ -11,10 +11,11 @@ import {
   Sparkles,
   FileText,
   MoreVertical,
+  LayoutTemplate,
 } from "lucide-react";
 import { Resume } from "@/types/resume";
 import { Badge } from "@/components/ui/Badge";
-import { DEMO_TEMPLATES } from "@/lib/sample-data";
+import { getTemplateById } from "@/lib/templates";
 
 export interface ResumeCardProps {
   resume: Resume;
@@ -30,7 +31,7 @@ export function ResumeCard({
   const router = useRouter();
   const [menuOpen, setMenuOpen] = useState(false);
 
-  const template = DEMO_TEMPLATES.find((t) => t.id === resume.templateId);
+  const template = getTemplateById(resume.templateId);
   const isSample = resume.id.startsWith("sample-");
 
   const handleCardClick = (e: React.MouseEvent) => {
@@ -114,6 +115,14 @@ export function ResumeCard({
                 >
                   <ExternalLink className="w-3.5 h-3.5 text-primary" />
                   <span>Open in Builder</span>
+                </Link>
+                <Link
+                  href={`/templates?id=${resume.id}`}
+                  className="flex items-center gap-2 px-3 py-2 text-xs font-medium text-on-surface hover:bg-surface-container-low transition-colors"
+                  role="menuitem"
+                >
+                  <LayoutTemplate className="w-3.5 h-3.5 text-on-surface-variant" />
+                  <span>Change Template</span>
                 </Link>
                 <button
                   type="button"

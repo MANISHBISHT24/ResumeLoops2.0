@@ -11,8 +11,8 @@
  */
 
 import { useSyncExternalStore, useCallback } from "react";
-import { Resume, TemplateId } from "@/types/resume";
-import { DEMO_RESUME } from "@/lib/sample-data";
+import type { Resume, TemplateId } from "../types/resume";
+import { DEMO_RESUME } from "./sample-data";
 
 const STORAGE_KEY = "resumeloops_resumes_v1";
 const STORAGE_EVENT_NAME = "resumeloops_storage_change";

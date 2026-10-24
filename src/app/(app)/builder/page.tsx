@@ -1,11 +1,11 @@
 "use client";
 
-import React, { Suspense, useState, useRef, useCallback } from "react";
+import React, { Suspense, useState, useRef, useCallback, useMemo } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { ArrowLeft, AlertCircle, Sparkles } from "lucide-react";
 import { SectionType, Resume, TemplateId } from "@/types/resume";
-import { getResumeById, updateResume, useResumeStore } from "@/lib/storage";
+import { updateResume, useResumeStore } from "@/lib/storage";
 import { Card, CardContent } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { ResumeToolbar } from "@/components/builder/ResumeToolbar";
@@ -24,14 +24,19 @@ interface ResumeEditorProps {
 }
 
 function ResumeEditor({ resumeId }: ResumeEditorProps) {
-  const { isHydrated } = useResumeStore();
+  const { resumes, isHydrated } = useResumeStore();
 
   const [activeSection, setActiveSection] = useState<SectionType>("personal");
   const [mobileView, setMobileView] = useState<"edit" | "preview">("edit");
-  const [resume, setResume] = useState<Resume | null>(() => {
-    if (!resumeId) return null;
-    return getResumeById(resumeId) || null;
-  });
+  const [localOverrides, setLocalOverrides] = useState<{ id: string; data: Resume } | null>(null);
+
+  const storedResume = useMemo(() => {
+    if (!isHydrated || !resumeId) return null;
+    return resumes.find((r) => r.id === resumeId) || null;
+  }, [isHydrated, resumeId, resumes]);
+
+  const resume =
+    localOverrides && localOverrides.id === resumeId ? localOverrides.data : storedResume;
 
   // Save status states
   const [saveStatus, setSaveStatus] = useState<"saved" | "saving" | "unsaved">("saved");
@@ -40,7 +45,7 @@ function ResumeEditor({ resumeId }: ResumeEditorProps) {
   const debounceTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   // Derived not found state
-  const isNotFound = isHydrated && Boolean(resumeId) && resume === null;
+  const isNotFound = isHydrated && Boolean(resumeId) && storedResume === null;
 
   // Persist changes with debounce
   const triggerAutoSave = useCallback((updated: Resume) => {
@@ -74,7 +79,7 @@ function ResumeEditor({ resumeId }: ResumeEditorProps) {
       ...partial,
       lastModified: "Just now",
     };
-    setResume(updated);
+    setLocalOverrides({ id: updated.id, data: updated });
     triggerAutoSave(updated);
   };
 
