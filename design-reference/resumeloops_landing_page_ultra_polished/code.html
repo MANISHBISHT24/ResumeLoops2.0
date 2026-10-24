@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_standard" name="shell-type"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&amp;display=swap" rel="stylesheet"/><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = {"darkMode": "class", "theme": {"extend": {"colors": {"surface-variant": "#e3e2e0", "on-error": "#ffffff", "surface-container-lowest": "#ffffff", "outline-variant": "#c7c4d8", "tertiary-fixed": "#e6e2db", "secondary-fixed-dim": "#c7c4d8", "error-container": "#ffdad6", "on-tertiary-container": "#dfdbd4", "tertiary-container": "#62605a", "on-surface": "#1a1c1a", "tertiary-fixed-dim": "#c9c6bf", "inverse-surface": "#2f312f", "on-secondary-fixed-variant": "#464555", "on-secondary-fixed": "#1a1a28", "on-tertiary-fixed-variant": "#484741", "surface-dim": "#dbdad7", "surface-container-low": "#f4f3f1", "on-primary-fixed-variant": "#3621cc", "primary": "#3724cd", "on-error-container": "#93000a", "tertiary": "#4a4843", "error": "#ba1a1a", "inverse-primary": "#c4c0ff", "surface-container-highest": "#e3e2e0", "on-primary-container": "#dad7ff", "inverse-on-surface": "#f2f1ee", "surface-container-high": "#e9e8e5", "background": "#faf9f6", "on-secondary-container": "#646373", "on-surface-variant": "#464555", "secondary": "#5e5d6d", "surface-container": "#efeeeb", "on-background": "#1a1c1a", "on-secondary": "#ffffff", "primary-container": "#5145e5", "primary-fixed-dim": "#c4c0ff", "on-primary": "#ffffff", "on-primary-fixed": "#100069", "primary-fixed": "#e3dfff", "surface-bright": "#faf9f6", "on-tertiary": "#ffffff", "outline": "#777587", "surface": "#faf9f6", "on-tertiary-fixed": "#1c1c17", "secondary-container": "#e3e0f4", "secondary-fixed": "#e3e0f4", "surface-tint": "#4f43e3"}, "borderRadius": {"DEFAULT": "0.125rem", "lg": "0.5rem", "xl": "1rem", "full": "9999px"}, "spacing": {"space-lg": "1.5rem", "space-xs": "0.25rem", "margin": "2rem", "space-sm": "0.5rem", "space-xl": "2.5rem", "gutter": "1.5rem", "space-md": "1rem", "space-2xl": "4rem"}, "fontFamily": {"headline-sm": ["Inter"], "label-sm": ["Inter"], "body-sm": ["Inter"], "label-md": ["Inter"], "display-xl": ["Inter"], "display-lg": ["Inter"], "headline-md": ["Inter"], "headline-lg": ["Inter"], "body-lg": ["Inter"], "body-md": ["Inter"], "headline-lg-mobile": ["Inter"]}}}}</script></head><body class="bg-background font-body-md text-on-surface antialiased selection:bg-primary/20 selection:text-primary"><header class="fixed top-0 w-full z-50 bg-background/80 backdrop-blur-xl border-b border-surface-container/60 shadow-[0_4px_20px_rgba(0,0,0,0.02)]"><div class="h-20 max-w-7xl mx-auto px-gutter flex items-center justify-between"><div class="flex items-center gap-space-md"><img alt="ResumeLoops Logo" class="h-9 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1XpDOGQXLOhVDY_pVpnCaovKz4i-MrwF-tF9572KidNN2lZsNYl-ExptBk_sTgh7njpucWDivHRPvLwEJz8_OQHrbELaIdCLN2zqbHBIDx1AePrdAaw2Z2OEB3x8v5WS2iZ8YK6FH_S6I_Nkcf6_9b2kFIW-jatjsbux0WDHYRQtvXFnTKFyTs8R47Ti57OHN5tNifNxvAD6E5gw_ChT8ZR4wKdLvoXXtnfuas8anyM7Eskv-_Ybqg-m7g"/><span class="font-headline-sm text-on-surface font-extrabold tracking-tight text-lg">ResumeLoops</span></div><nav class="hidden md:flex items-center gap-space-xs bg-surface-container-low p-1.5 rounded-full border border-surface-container"><a aria-current="page" class="transition-all px-space-md py-1.5 bg-primary text-on-primary font-medium rounded-full shadow-sm" data-path="home" href="#">Home</a><a class="text-body-md text-on-surface-variant hover:text-on-surface transition-colors px-space-md py-1.5 font-medium rounded-full hover:bg-surface-container" data-path="features" href="#">Features</a><a class="text-body-md text-on-surface-variant hover:text-on-surface transition-colors px-space-md py-1.5 font-medium rounded-full hover:bg-surface-container" data-path="pricing" href="#">Pricing</a></nav><div class="flex items-center gap-space-md"><div class="w-10 h-10 rounded-full bg-primary-container/20 text-primary border border-primary/20 flex items-center justify-center font-bold shadow-inner"><span class="material-symbols-outlined text-[20px]">person</span></div></div></div></header><main class="w-full pt-20 bg-background min-h-screen"><div class="flex flex-col w-full">
+<!-- Hero Section -->
+<section class="relative pt-16 pb-24 px-gutter max-w-7xl mx-auto w-full overflow-hidden">
+<!-- Ambient glow background element -->
+<div class="absolute top-1/4 right-10 w-[500px] h-[500px] bg-primary/10 rounded-full blur-[120px] pointer-events-none"></div>
+<div class="absolute bottom-0 left-10 w-96 h-96 bg-secondary-container/40 rounded-full blur-[100px] pointer-events-none"></div>
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+<!-- Left Column: Typography & CTAs -->
+<div class="lg:col-span-6 flex flex-col items-start gap-space-lg z-10">
+<div class="inline-flex items-center gap-space-sm px-4 py-2 rounded-full bg-secondary-container/80 backdrop-blur-sm text-on-secondary-container text-label-md border border-secondary-fixed/50 shadow-sm"><span class="w-2.5 h-2.5 rounded-full bg-primary animate-pulse"></span>
+<span class="material-symbols-outlined text-[16px]">auto_awesome</span>
+<span class="font-medium">Powered by Advanced ATS Intelligence</span>
+</div>
+<h1 class="text-4xl lg:text-6xl font-extrabold tracking-tight text-on-surface leading-[1.1]">
+          Your Next Opportunity Starts With a Better Resume.
+        </h1>
+<p class="text-body-lg text-on-surface-variant max-w-xl text-lg leading-relaxed">
+          Create a compelling resume, understand your ATS compatibility, and tailor your experience to the roles you want with editorial precision.
+        </p>
+<div class="flex flex-wrap items-center gap-space-md pt-space-xs">
+<a class="relative group bg-primary hover:bg-primary-container text-on-primary font-headline-sm px-8 py-4 rounded-xl transition-all duration-300 flex items-center gap-space-sm shadow-[0_10px_30px_rgba(55,36,205,0.3)] hover:shadow-[0_15px_35px_rgba(55,36,205,0.4)] hover:-translate-y-0.5" href="#builder">
+<span class="font-bold tracking-wide">Create My Resume</span>
+<span class="material-symbols-outlined text-[18px] transition-transform group-hover:translate-x-1">arrow_forward</span>
+</a>
+<a class="bg-surface-container-low hover:bg-surface-container border border-surface-container-high text-on-surface font-headline-sm px-8 py-4 rounded-xl transition-all font-medium" href="#templates">
+            Explore Templates
+          </a>
+</div>
+<!-- Social Proof Metric -->
+<div class="flex items-center gap-space-lg pt-space-md border-t border-surface-container-high/60 w-full mt-2">
+<div class="flex -space-x-3">
+<div class="w-11 h-11 rounded-full bg-surface-variant bg-cover bg-center border-2 border-surface shadow-md" data-alt="Portrait of a smiling young professional woman with dark hair in a modern workspace environment, soft neutral lighting, high-end editorial photography style." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBT2ESISZHvRbbpeByWCW27udvzKJPSwKXBkEdnfqPFJRrZjPN8fdhEtmdnnp0OM2LeqOsIPJNPcaR_2zKCYNHrc04iDd_nAo7JlL_2QZ1c9fZhmWQgVJq9K2QLdXp95p8UoEZiTfQS4d8ZveskL5hsVCOX5bLzmsEKI5H2VK2QJWHhfEwoPylkNjkEei8irsuypG7vZ5EQDWYZigRjp64U3R7DSBeZG6Z5L92oY48-D7UDtCUDanl2')"></div>
+<div class="w-11 h-11 rounded-full bg-surface-variant bg-cover bg-center border-2 border-surface shadow-md" data-alt="Portrait of a confident man with glasses wearing a dark minimalist sweater, studio lighting, crisp editorial aesthetic." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCV7WGQlslNJX2iGbPbMOQwhXxw9NKRd7NgQB3_gOdsREJ7kimPp3qxtTzAbTMOVOKOxGhHX6XewgvU3f9esleqF_cBkfc-FC7mTMnQOjXt54jFjUTCPpW3YXVb9mzP-P3N6dAfME2MmAKVESgOPdFpBKi_gvo62LCWhRgqJENZj59EWebn9mNZrZc4Hf5OAFL_TF87WT0lY2_lZDBLmsxqwIc1VS-u6CWgxYJskxZxX3or_Xzwrjo8')"></div>
+<div class="w-11 h-11 rounded-full bg-surface-variant bg-cover bg-center border-2 border-surface shadow-md" data-alt="Portrait of a smiling professional woman with blonde hair, bright minimalist office background, high resolution corporate photography." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCLzltC2INQza0iyUSoxzVVj5nOnEfDLHN7Ud5ar9s2Dtw8F5JaMfHoHVZGKhxia-wd3Poo4dYDK8o39LQZAqshcmIdYzwIGDQVIRmtQdAy6VEfFjW-FXkLCEy-Y40j9YoKaYkkelkduQOtQfn9pz5O9EiC6BxcBp5h1AVrLYdhRixoq1a1E71ccayTGp7rAQ_74ZzceReWmnp7YWt-PseXNvfEVq9dX02Al2_XOm3KalaToIuJxZrh')"></div>
+</div>
+<div>
+<div class="flex items-center gap-1 text-primary mb-0.5">
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">star</span>
+</div>
+<span class="text-body-sm text-on-surface-variant font-medium">Trusted by <strong class="text-on-surface font-semibold">45,000+</strong> job seekers at top tech &amp; finance firms</span>
+</div>
+</div>
+</div>
+<!-- Right Column: Layered Product Composition -->
+<div class="lg:col-span-6 relative flex justify-center items-center">
+<!-- Background decorative card base -->
+<div class="w-full max-w-lg bg-surface-container-lowest rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.08)] border border-surface-container-high/80 p-space-lg relative flex flex-col gap-space-md backdrop-blur-xl">
+<!-- Mock Resume Header inside preview -->
+<div class="flex items-center justify-between pb-space-md bg-surface-container-low p-space-md rounded-xl border border-surface-container">
+<div class="flex items-center gap-space-md">
+<div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary font-headline-md font-bold">AL</div>
+<div>
+<h4 class="font-headline-sm text-on-surface font-bold">Alex Lawson</h4>
+<p class="text-body-sm text-on-surface-variant">Senior Product Designer</p>
+</div>
+</div>
+<span class="px-3 py-1 bg-secondary-container text-on-secondary-container rounded-full text-label-sm font-semibold shadow-2xs">PDF Ready</span>
+</div>
+<!-- Mock Experience entries -->
+<div class="space-y-space-sm p-2 bg-surface/50 rounded-xl">
+<div class="h-4 bg-surface-container-high rounded-full w-3/4"></div>
+<div class="h-3 bg-surface-container rounded-full w-full"></div>
+<div class="h-3 bg-surface-container rounded-full w-5/6"></div>
+</div>
+<div class="space-y-space-sm p-2 bg-surface/50 rounded-xl pt-space-xs">
+<div class="h-4 bg-surface-container-high rounded-full w-2/3"></div>
+<div class="h-3 bg-surface-container rounded-full w-full"></div>
+</div>
+<!-- Floating ATS Score Card -->
+<div class="absolute -top-8 -left-6 bg-surface-container-lowest/95 backdrop-blur-md rounded-2xl shadow-[0_15px_35px_rgba(0,0,0,0.1)] p-4 flex items-center gap-space-md border border-surface-container-high animate-bounce duration-1000">
+<div class="w-14 h-14 rounded-xl bg-primary text-on-primary flex items-center justify-center font-headline-md font-bold shadow-lg shadow-primary/30 text-xl">96</div>
+<div>
+<span class="text-label-sm text-on-surface-variant uppercase tracking-wider font-semibold">ATS Compatibility</span>
+<p class="font-headline-sm text-on-surface font-bold">Optimized Score</p>
+</div>
+</div>
+<!-- Floating AI Suggestion Card -->
+<div class="absolute -bottom-8 -right-4 bg-surface-container-lowest/95 backdrop-blur-md rounded-2xl shadow-[0_15px_35px_rgba(0,0,0,0.1)] p-4 max-w-xs border border-surface-container-high flex flex-col gap-space-xs">
+<div class="flex items-center gap-space-xs text-primary">
+<span class="material-symbols-outlined text-[18px]">lightbulb</span>
+<span class="text-label-md font-bold">AI Keyword Match</span>
+</div>
+<p class="text-body-sm text-on-surface-variant font-medium">Added 'Design Systems' &amp; 'Cross-functional Leadership' seamlessly.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Featured Resume Templates Grid -->
+<section class="py-24 px-gutter max-w-7xl mx-auto w-full" id="templates">
+<div class="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-space-md">
+<div>
+<span class="text-label-sm text-primary uppercase tracking-widest font-bold mb-space-xs block">Curated Layouts</span>
+<h2 class="text-3xl lg:text-4xl font-extrabold text-on-surface tracking-tight">Designed for Maximum Readability</h2>
+</div>
+<p class="text-body-md text-on-surface-variant max-w-md text-base">Choose from our collection of ATS-friendly, publication-quality resume templates crafted by top typographic designers.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+<!-- Template Card 1 -->
+<div class="group bg-surface-container-lowest rounded-2xl shadow-[0_4px_20px_rgba(0,0,0,0.03)] hover:shadow-[0_20px_40px_rgba(0,0,0,0.08)] border border-surface-container transition-all duration-300 p-5 flex flex-col gap-4 cursor-pointer">
+<div class="w-full h-80 rounded-xl bg-surface-container-low bg-cover bg-center overflow-hidden relative shadow-inner" data-alt="A clean, minimalist resume template layout displayed on a neutral warm background, featuring crisp typography and generous whitespace." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuC2F2FtOEXAKkW7vCOLnEpbuK1xFjjINjLJBqQ8cRmkaQzZYLgajrp5J106wP69DU81h-5eHgKFtp5pQejFFr5q12P4l_vtm7qtseN9sUzaeZuwrcDYXdSSx4yqZqTw8_vYI1GXwp_3pERyk0A56CJkBfRU7N994fB1i0JknCZV8RHewlSd87xe81qc4LaHGNkG7kVsCEVQPiUyCzmWhHAyeebJ5Apd5pTP3141L_lA25tm7mpinTvn')">
+<div class="absolute inset-0 bg-primary/0 group-hover:bg-primary/10 backdrop-blur-[2px] transition-all duration-300 flex items-center justify-center">
+<span class="opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0 bg-surface-container-lowest text-on-surface px-6 py-3 rounded-xl font-headline-sm font-bold shadow-xl">Use Template</span>
+</div>
+</div>
+<div class="px-1">
+<h3 class="font-headline-sm text-on-surface font-bold text-lg mb-1">The Editorial Classic</h3>
+<p class="text-body-sm text-on-surface-variant">Timeless Serif headers suited for executive and academic roles.</p>
+</div>
+</div>
+<!-- Template Card 2 -->
+<div class="group bg-surface-container-lowest rounded-2xl shadow-[0_4px_20px_rgba(0,0,0,0.03)] hover:shadow-[0_20px_40px_rgba(0,0,0,0.08)] border border-surface-container transition-all duration-300 p-5 flex flex-col gap-4 cursor-pointer">
+<div class="w-full h-80 rounded-xl bg-surface-container-low bg-cover bg-center overflow-hidden relative shadow-inner" data-alt="A modern tech-focused resume template layout with structured grids, skill badges, and clear hierarchy." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDC_PubVybf5PUddDM8e3m1lqylNG7oe9CMCxzy48HV2MZhLdcUef_iuLZ0g0VZqSsZb2vuqttI_oPwW9VIa80smtlQD5ALdQIOsNAC2V7C8LXUVLaJnRayln-tWb-bQDFG3Kwd7-SgOYM7ABtOWp41lOHZXH3NrCKh_wGsHZGlNcAteAPvhnIlaBBWvqJ4p_-v3gRWHGPREmnkusLzH4ct0jiTfoqQP0O0BaEZKQuHIsFKITpkWHNV')">
+<div class="absolute inset-0 bg-primary/0 group-hover:bg-primary/10 backdrop-blur-[2px] transition-all duration-300 flex items-center justify-center">
+<span class="opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0 bg-surface-container-lowest text-on-surface px-6 py-3 rounded-xl font-headline-sm font-bold shadow-xl">Use Template</span>
+</div>
+</div>
+<div class="px-1">
+<h3 class="font-headline-sm text-on-surface font-bold text-lg mb-1">Silicon Modern</h3>
+<p class="text-body-sm text-on-surface-variant">Clean sans-serif design optimized for software engineers and product managers.</p>
+</div>
+</div>
+<!-- Template Card 3 -->
+<div class="group bg-surface-container-lowest rounded-2xl shadow-[0_4px_20px_rgba(0,0,0,0.03)] hover:shadow-[0_20px_40px_rgba(0,0,0,0.08)] border border-surface-container transition-all duration-300 p-5 flex flex-col gap-4 cursor-pointer">
+<div class="w-full h-80 rounded-xl bg-surface-container-low bg-cover bg-center overflow-hidden relative shadow-inner" data-alt="A bold, creative resume template layout featuring asymmetrical headers and strong visual emphasis for designers." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuB9u3BqNbbfJrFUntwbOpCCbcfmclQ-5uw8TC4Uqme7phGvGcTiPCoJSZ7_d1z7Ye6947ahZv2DEysUmECQW91Ok1jtLsyQFEmigok9uqLiH1lqdD2vHF-xdM84plNBM2bid3jbTmaUS3haNLWZhNOEMc4tGLStisYLdvLcwYEXMjA3rWOf2bvvdpwGWoM_WzRwFB4TAc4_bakVqMNpMZsGf1IxtHLpvPv71mCdDC_ETtLWeBOf1Vmk')">
+<div class="absolute inset-0 bg-primary/0 group-hover:bg-primary/10 backdrop-blur-[2px] transition-all duration-300 flex items-center justify-center">
+<span class="opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0 bg-surface-container-lowest text-on-surface px-6 py-3 rounded-xl font-headline-sm font-bold shadow-xl">Use Template</span>
+</div>
+</div>
+<div class="px-1">
+<h3 class="font-headline-sm text-on-surface font-bold text-lg mb-1">Vanguard Creative</h3>
+<p class="text-body-sm text-on-surface-variant">Asymmetric accents crafted for designers, writers, and creative directors.</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Workflow Section: Three Steps -->
+<section class="py-28 bg-surface-container-low px-gutter w-full border-y border-surface-container">
+<div class="max-w-7xl mx-auto flex flex-col items-center">
+<span class="text-label-sm text-primary uppercase tracking-widest font-bold mb-space-xs">Simple Process</span>
+<h2 class="text-3xl lg:text-4xl font-extrabold text-on-surface text-center mb-16 tracking-tight">From Experience to Opportunity</h2>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-8 w-full">
+<!-- Step 1 -->
+<div class="bg-surface-container-lowest p-8 rounded-2xl shadow-[0_10px_30px_rgba(0,0,0,0.03)] border border-surface-container flex flex-col gap-6 relative overflow-hidden group hover:border-primary/40 transition-all duration-300">
+<div class="text-6xl font-black bg-gradient-to-br from-primary/20 to-primary/5 bg-clip-text text-transparent absolute top-4 right-6 select-none font-display-lg">01</div>
+<div class="w-14 h-14 rounded-xl bg-primary text-on-primary flex items-center justify-center shadow-lg shadow-primary/20">
+<span class="material-symbols-outlined text-[24px]">edit_document</span>
+</div>
+<div class="flex flex-col gap-2">
+<h3 class="font-headline-md text-on-surface font-bold text-xl">Import or Build</h3>
+<p class="text-body-md text-on-surface-variant leading-relaxed">Paste your existing resume or start fresh with our guided questionnaire. Our editor formats everything instantly.</p>
+</div>
+</div>
+<!-- Step 2 -->
+<div class="bg-surface-container-lowest p-8 rounded-2xl shadow-[0_10px_30px_rgba(0,0,0,0.03)] border border-surface-container flex flex-col gap-6 relative overflow-hidden group hover:border-primary/40 transition-all duration-300">
+<div class="text-6xl font-black bg-gradient-to-br from-primary/20 to-primary/5 bg-clip-text text-transparent absolute top-4 right-6 select-none font-display-lg">02</div>
+<div class="w-14 h-14 rounded-xl bg-primary text-on-primary flex items-center justify-center shadow-lg shadow-primary/20">
+<span class="material-symbols-outlined text-[24px]">insights</span>
+</div>
+<div class="flex flex-col gap-2">
+<h3 class="font-headline-md text-on-surface font-bold text-xl">ATS Optimization</h3>
+<p class="text-body-md text-on-surface-variant leading-relaxed">Paste the job description and watch our AI scan for missing keywords, suggesting precise enhancements.</p>
+</div>
+</div>
+<!-- Step 3 -->
+<div class="bg-surface-container-lowest p-8 rounded-2xl shadow-[0_10px_30px_rgba(0,0,0,0.03)] border border-surface-container flex flex-col gap-6 relative overflow-hidden group hover:border-primary/40 transition-all duration-300">
+<div class="text-6xl font-black bg-gradient-to-br from-primary/20 to-primary/5 bg-clip-text text-transparent absolute top-4 right-6 select-none font-display-lg">03</div>
+<div class="w-14 h-14 rounded-xl bg-primary text-on-primary flex items-center justify-center shadow-lg shadow-primary/20">
+<span class="material-symbols-outlined text-[24px]">rocket_launch</span>
+</div>
+<div class="flex flex-col gap-2">
+<h3 class="font-headline-md text-on-surface font-bold text-xl">Export &amp; Apply</h3>
+<p class="text-body-md text-on-surface-variant leading-relaxed">Download pixel-perfect PDFs or generate tailored link shares that track recruiter engagement.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Product Feature Showcase: Alternating Layouts -->
+<section class="py-28 px-gutter max-w-7xl mx-auto w-full flex flex-col gap-28">
+<!-- Feature 1 -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+<div class="lg:col-span-6 flex flex-col gap-6">
+<span class="text-label-sm text-primary uppercase tracking-widest font-bold">Real-Time Scoring</span>
+<h2 class="text-3xl lg:text-4xl font-extrabold text-on-surface tracking-tight">Know your score before you hit submit.</h2>
+<p class="text-body-lg text-on-surface-variant text-lg leading-relaxed">Our proprietary ATS simulator evaluates your resume against industry parsers. Spot missing keywords, formatting traps, and readability issues instantly.</p>
+<div class="flex items-center gap-space-lg pt-space-xs">
+<div class="flex items-center gap-space-sm text-on-surface">
+<div class="w-6 h-6 rounded-full bg-primary/10 text-primary flex items-center justify-center">
+<span class="material-symbols-outlined text-[16px]">check</span>
+</div>
+<span class="text-body-md font-semibold">Keyword Density Checker</span>
+</div>
+<div class="flex items-center gap-space-sm text-on-surface">
+<div class="w-6 h-6 rounded-full bg-primary/10 text-primary flex items-center justify-center">
+<span class="material-symbols-outlined text-[16px]">check</span>
+</div>
+<span class="text-body-md font-semibold">Layout Parser Test</span>
+</div>
+</div>
+</div>
+<div class="lg:col-span-6 bg-surface-container-low rounded-2xl p-8 border border-surface-container shadow-inner flex flex-col gap-6">
+<div class="bg-surface-container-lowest p-5 rounded-xl shadow-[0_4px_20px_rgba(0,0,0,0.03)] flex items-center justify-between border border-surface-container-high/60">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center text-primary font-bold text-lg">98%</div>
+<div>
+<h4 class="font-headline-sm text-on-surface font-bold">Software Engineering Role</h4>
+<p class="text-body-sm text-on-surface-variant">Matched against 24 key requirements</p>
+</div>
+</div>
+<span class="text-label-sm px-3 py-1.5 bg-secondary-container text-on-secondary-container rounded-full font-bold">Ready</span>
+</div>
+<div class="bg-surface-container-lowest p-5 rounded-xl shadow-[0_4px_20px_rgba(0,0,0,0.03)] flex flex-col gap-3 border border-surface-container-high/60">
+<div class="flex justify-between text-body-sm">
+<span class="text-on-surface font-bold">Required Keywords Found</span>
+<span class="text-primary font-extrabold">18 / 19</span>
+</div>
+<div class="w-full h-3 bg-surface-container rounded-full overflow-hidden p-0.5">
+<div class="bg-primary h-full rounded-full w-[94%] shadow-sm"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Feature 2 -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+<div class="lg:col-span-6 order-2 lg:order-1 bg-surface-container-low rounded-2xl p-8 border border-surface-container shadow-inner flex flex-col gap-6">
+<div class="bg-surface-container-lowest p-6 rounded-xl shadow-[0_4px_20px_rgba(0,0,0,0.03)] flex flex-col gap-3 border border-surface-container-high/60">
+<div class="flex items-center justify-between">
+<span class="text-label-md text-primary font-bold tracking-wide uppercase">AI Rewrite Suggestion</span>
+<span class="text-label-sm text-on-surface-variant font-medium">Impact-driven</span>
+</div>
+<p class="text-body-sm text-on-surface font-mono bg-surface-container-low p-4 rounded-xl border border-surface-container leading-relaxed">"Managed team projects" → "Spearheaded cross-functional engineering initiatives, accelerating deployment velocity by 34%."</p>
+</div>
+</div>
+<div class="lg:col-span-6 order-1 lg:order-2 flex flex-col gap-6">
+<span class="text-label-sm text-primary uppercase tracking-widest font-bold">AI Content Tailoring</span>
+<h2 class="text-3xl lg:text-4xl font-extrabold text-on-surface tracking-tight">Transform passive duties into quantified impact.</h2>
+<p class="text-body-lg text-on-surface-variant text-lg leading-relaxed">Stuck on bullet points? Our writing assistant rewrites your work history using powerful action verbs and metric-driven phrasing tailored to senior positions.</p>
+<div class="flex items-center gap-space-lg pt-space-xs">
+<div class="flex items-center gap-space-sm text-on-surface">
+<div class="w-6 h-6 rounded-full bg-primary/10 text-primary flex items-center justify-center">
+<span class="material-symbols-outlined text-[16px]">check</span>
+</div>
+<span class="text-body-md font-semibold">One-Click Bullet Enhancer</span>
+</div>
+<div class="flex items-center gap-space-sm text-on-surface">
+<div class="w-6 h-6 rounded-full bg-primary/10 text-primary flex items-center justify-center">
+<span class="material-symbols-outlined text-[16px]">check</span>
+</div>
+<span class="text-body-md font-semibold">Tone &amp; Style Tuning</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Before and After Comparison Section -->
+<section class="py-28 bg-surface-container-low px-gutter w-full border-y border-surface-container">
+<div class="max-w-7xl mx-auto flex flex-col items-center">
+<span class="text-label-sm text-primary uppercase tracking-widest font-bold mb-space-xs">Transformation</span>
+<h2 class="text-3xl lg:text-4xl font-extrabold text-on-surface text-center mb-16 tracking-tight">The ResumeLoops Effect</h2>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8 w-full">
+<!-- Before -->
+<div class="bg-surface-container-lowest p-8 rounded-2xl shadow-[0_10px_30px_rgba(0,0,0,0.03)] border border-error/20 flex flex-col gap-6 relative">
+<div class="flex items-center justify-between">
+<span class="text-label-md px-4 py-1.5 bg-error-container text-on-error-container rounded-full font-bold">Before ResumeLoops</span>
+<span class="text-body-sm text-on-surface-variant font-medium">ATS Score: <strong class="text-error font-bold">42/100</strong></span>
+</div>
+<ul class="space-y-4 text-body-md text-on-surface-variant">
+<li class="flex items-start gap-3">
+<div class="w-6 h-6 rounded-full bg-error-container text-error flex items-center justify-center shrink-0 mt-0.5">
+<span class="material-symbols-outlined text-[16px]">close</span>
+</div>
+<span class="leading-relaxed">Generic bullet points lacking measurable results or metrics.</span>
+</li>
+<li class="flex items-start gap-3">
+<div class="w-6 h-6 rounded-full bg-error-container text-error flex items-center justify-center shrink-0 mt-0.5">
+<span class="material-symbols-outlined text-[16px]">close</span>
+</div>
+<span class="leading-relaxed">Incompatible multi-column layout causing parsing errors in ATS.</span>
+</li>
+<li class="flex items-start gap-3">
+<div class="w-6 h-6 rounded-full bg-error-container text-error flex items-center justify-center shrink-0 mt-0.5">
+<span class="material-symbols-outlined text-[16px]">close</span>
+</div>
+<span class="leading-relaxed">Missing critical industry keywords required by recruiters.</span>
+</li>
+</ul>
+</div>
+<!-- After -->
+<div class="bg-surface-container-lowest p-8 rounded-2xl shadow-[0_15px_40px_rgba(55,36,205,0.08)] border-2 border-primary/30 flex flex-col gap-6 relative">
+<div class="absolute -top-3.5 right-8 bg-primary text-on-primary text-label-sm font-bold px-4 py-1 rounded-full uppercase tracking-wider shadow-sm">Optimized</div>
+<div class="flex items-center justify-between">
+<span class="text-label-md px-4 py-1.5 bg-secondary-container text-on-secondary-container rounded-full font-bold">After ResumeLoops</span>
+<span class="text-body-sm text-primary font-bold">ATS Score: <strong class="text-primary font-black text-base">96/100</strong></span>
+</div>
+<ul class="space-y-4 text-body-md text-on-surface font-medium">
+<li class="flex items-start gap-3">
+<div class="w-6 h-6 rounded-full bg-primary/10 text-primary flex items-center justify-center shrink-0 mt-0.5">
+<span class="material-symbols-outlined text-[16px]">check</span>
+</div>
+<span class="leading-relaxed">Quantified achievements highlighting efficiency and revenue growth.</span>
+</li>
+<li class="flex items-start gap-3">
+<div class="w-6 h-6 rounded-full bg-primary/10 text-primary flex items-center justify-center shrink-0 mt-0.5">
+<span class="material-symbols-outlined text-[16px]">check</span>
+</div>
+<span class="leading-relaxed">Clean, single-column structured format fully compliant with major ATS software.</span>
+</li>
+<li class="flex items-start gap-3">
+<div class="w-6 h-6 rounded-full bg-primary/10 text-primary flex items-center justify-center shrink-0 mt-0.5">
+<span class="material-symbols-outlined text-[16px]">check</span>
+</div>
+<span class="leading-relaxed">Precisely targeted keywords matching job description requirements.</span>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</section>
+<!-- Pricing Section -->
+<section class="py-28 px-gutter max-w-7xl mx-auto w-full" id="pricing">
+<div class="flex flex-col items-center mb-16">
+<span class="text-label-sm text-primary uppercase tracking-widest font-bold mb-space-xs">Simple Investment</span>
+<h2 class="text-3xl lg:text-4xl font-extrabold text-on-surface text-center mb-4 tracking-tight">Transparent Pricing for Every Career Stage</h2>
+<p class="text-body-md text-on-surface-variant text-center max-w-md text-base">Choose the plan that fits your job search needs. Cancel anytime.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+<!-- Monthly Plan -->
+<div class="bg-surface-container-lowest rounded-2xl shadow-[0_10px_30px_rgba(0,0,0,0.03)] border border-surface-container p-10 flex flex-col justify-between transition-all hover:shadow-[0_20px_40px_rgba(0,0,0,0.06)]">
+<div>
+<span class="text-label-md text-on-surface-variant uppercase tracking-widest font-bold">Starter Plan</span>
+<div class="flex items-baseline gap-1 my-6">
+<span class="text-5xl font-black text-on-surface tracking-tight">$19</span>
+<span class="text-body-sm text-on-surface-variant font-medium">/ month</span>
+</div>
+<p class="text-body-md text-on-surface-variant mb-8 leading-relaxed">Ideal for active job seekers looking to land interviews quickly.</p>
+<ul class="space-y-4 text-body-md text-on-surface mb-10 font-medium">
+<li class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary">check_circle</span>
+<span class="">Unlimited resume &amp; cover letter edits</span>
+</li>
+<li class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary">check_circle</span>
+<span class="">Advanced ATS Compatibility Checker</span>
+</li>
+<li class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary">check_circle</span>
+<span class="">AI Bullet Point Rewriter</span>
+</li>
+</ul>
+</div>
+<a class="w-full py-4 bg-surface-container hover:bg-surface-container-high text-on-surface font-headline-sm font-bold rounded-xl text-center transition-colors shadow-2xs" href="#">Get Started</a>
+</div>
+<!-- Pro Annual Plan -->
+<div class="bg-surface-container-lowest rounded-2xl shadow-[0_20px_50px_rgba(55,36,205,0.08)] p-10 flex flex-col justify-between border-2 border-primary relative">
+<div class="absolute -top-3.5 right-8 bg-primary text-on-primary text-label-sm font-bold px-4 py-1.5 rounded-full uppercase tracking-wider shadow-md">Most Popular</div>
+<div>
+<span class="text-label-md text-primary uppercase tracking-widest font-bold">Professional Annual</span>
+<div class="flex items-baseline gap-1 my-6">
+<span class="text-5xl font-black text-on-surface tracking-tight">$12</span>
+<span class="text-body-sm text-on-surface-variant font-medium">/ month billed annually</span>
+</div>
+<p class="text-body-md text-on-surface-variant mb-8 leading-relaxed">For career professionals aiming for top-tier tech and enterprise roles.</p>
+<ul class="space-y-4 text-body-md text-on-surface mb-10 font-medium">
+<li class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary">check_circle</span>
+<span class="">Everything in Starter, plus:</span>
+</li>
+<li class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary">check_circle</span>
+<span class="">Personalized LinkedIn Profile Review</span>
+</li>
+<li class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary">check_circle</span>
+<span class="">Recruiter share links with view analytics</span>
+</li>
+<li class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary">check_circle</span>
+<span class="">Priority 24/7 AI support</span>
+</li>
+</ul>
+</div>
+<a class="w-full py-4 bg-primary text-on-primary font-headline-sm font-bold rounded-xl text-center hover:bg-primary-container transition-all shadow-[0_10px_25px_rgba(55,36,205,0.3)] hover:shadow-[0_15px_30px_rgba(55,36,205,0.4)]" href="#">Start Pro Access</a>
+</div>
+</div>
+</section>
+<!-- FAQ Section -->
+<section class="py-28 bg-surface-container-low px-gutter w-full border-t border-surface-container">
+<div class="max-w-4xl mx-auto flex flex-col items-center">
+<span class="text-label-sm text-primary uppercase tracking-widest font-bold mb-space-xs">Questions &amp; Answers</span>
+<h2 class="text-3xl lg:text-4xl font-extrabold text-on-surface text-center mb-16 tracking-tight">Frequently Asked Questions</h2>
+<div class="space-y-4 w-full">
+<!-- FAQ Item 1 -->
+<div class="bg-surface-container-lowest p-8 rounded-2xl shadow-[0_4px_20px_rgba(0,0,0,0.03)] border border-surface-container transition-all hover:border-primary/30">
+<h3 class="font-headline-sm text-on-surface font-bold text-lg mb-2">What is an ATS and why does ResumeLoops optimize for it?</h3>
+<p class="text-body-md text-on-surface-variant leading-relaxed">Applicant Tracking Systems (ATS) are software programs used by companies to collect, sort, and scan resumes. If your resume lacks proper formatting or keywords, it gets filtered out before a human ever sees it. ResumeLoops ensures 100% compatibility.</p>
+</div>
+<!-- FAQ Item 2 -->
+<div class="bg-surface-container-lowest p-8 rounded-2xl shadow-[0_4px_20px_rgba(0,0,0,0.03)] border border-surface-container transition-all hover:border-primary/30">
+<h3 class="font-headline-sm text-on-surface font-bold text-lg mb-2">Can I export my resume to PDF and Word formats?</h3>
+<p class="text-body-md text-on-surface-variant leading-relaxed">Yes! You can instantly export your resume as a clean, highly formatted PDF or a Microsoft Word document with a single click.</p>
+</div>
+<!-- FAQ Item 3 -->
+<div class="bg-surface-container-lowest p-8 rounded-2xl shadow-[0_4px_20px_rgba(0,0,0,0.03)] border border-surface-container transition-all hover:border-primary/30">
+<h3 class="font-headline-sm text-on-surface font-bold text-lg mb-2">How does the AI bullet point rewriter work?</h3>
+<p class="text-body-md text-on-surface-variant leading-relaxed">Our AI analyzes your experience level and job description to suggest action-oriented, metric-backed bullet points that highlight your professional achievements effectively.</p>
+</div>
+</div>
+</div>
+</section>
+</div></main><footer class="w-full bg-surface-container-low border-t border-surface-container py-12"><div class="max-w-7xl mx-auto px-gutter text-center text-on-surface-variant text-body-sm font-medium">© 2024 ResumeLoops. All rights reserved.</div></footer>
+</body></html>
