@@ -192,7 +192,7 @@ function AtsAnalyzerContent() {
           </p>
         </div>
 
-        <div className="flex items-center gap-2.5 self-start sm:self-auto">
+        <div className="no-print flex items-center gap-2.5 self-start sm:self-auto">
           <Button
             variant="secondary"
             size="sm"

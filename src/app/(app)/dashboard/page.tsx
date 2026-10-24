@@ -14,6 +14,7 @@ import {
   Trash2,
   RefreshCw,
   FolderOpen,
+  ShieldCheck,
 } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
@@ -394,6 +395,19 @@ export default function DashboardPage() {
                 </span>
               </div>
             </div>
+          </div>
+
+          {/* Local Storage & Privacy Notice */}
+          <div className="bg-surface-container-lowest rounded-2xl p-5 shadow-xs border border-border-subtle">
+            <div className="flex items-center gap-2 mb-2">
+              <ShieldCheck className="w-4 h-4 text-primary" />
+              <h3 className="font-bold text-xs uppercase tracking-wider text-on-surface">
+                Private Local Storage
+              </h3>
+            </div>
+            <p className="text-[11px] text-on-surface-variant leading-relaxed">
+              Your resume drafts are saved locally in this browser. They are not cloud-synchronized and will be lost if you clear your browser site data or cookies.
+            </p>
           </div>
         </div>
       </div>

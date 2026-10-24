@@ -40,7 +40,7 @@ export function AppHeader({ onMobileMenuOpen }: AppHeaderProps) {
   };
 
   return (
-    <header className="sticky top-0 z-20 w-full h-16 bg-surface/85 backdrop-blur-md border-b border-border-subtle flex items-center justify-between px-4 sm:px-8 transition-colors">
+    <header className="no-print sticky top-0 z-20 w-full h-16 bg-surface/85 backdrop-blur-md border-b border-border-subtle flex items-center justify-between px-4 sm:px-8 transition-colors">
       <div className="flex items-center gap-3">
         {/* Mobile menu trigger */}
         <button

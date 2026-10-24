@@ -108,7 +108,7 @@ export function AppSidebar({
     <>
       {/* Desktop Persistent Sidebar */}
       <aside
-        className="hidden lg:flex fixed left-0 top-0 bottom-0 w-64 bg-surface-container-low border-r border-border-subtle z-30 flex-col"
+        className="no-print hidden lg:flex fixed left-0 top-0 bottom-0 w-64 bg-surface-container-low border-r border-border-subtle z-30 flex-col"
         aria-label="Application Sidebar"
       >
         {sidebarContent}
@@ -117,7 +117,7 @@ export function AppSidebar({
       {/* Mobile Drawer Backdrop and Overlay */}
       {mobileOpen && (
         <div
-          className="fixed inset-0 bg-black/40 z-40 lg:hidden backdrop-blur-xs transition-opacity"
+          className="no-print fixed inset-0 bg-black/40 z-40 lg:hidden backdrop-blur-xs transition-opacity"
           onClick={onMobileClose}
           aria-hidden="true"
         />
@@ -125,7 +125,7 @@ export function AppSidebar({
 
       {/* Mobile Drawer Panel */}
       <aside
-        className={`fixed inset-y-0 left-0 w-72 bg-surface-container-low border-r border-border-subtle z-50 transform transition-transform duration-200 ease-in-out lg:hidden ${
+        className={`no-print fixed inset-y-0 left-0 w-72 bg-surface-container-low border-r border-border-subtle z-50 transform transition-transform duration-200 ease-in-out lg:hidden ${
           mobileOpen ? "translate-x-0" : "-translate-x-full"
         }`}
         aria-label="Mobile Application Sidebar"

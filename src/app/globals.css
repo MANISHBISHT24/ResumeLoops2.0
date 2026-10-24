@@ -98,29 +98,53 @@
   body {
     background-color: #ffffff !important;
     color: #000000 !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
   }
 
-  header,
+  /* Hide navigation, sidebars, builder forms, and decorative controls */
+  .no-print,
+  header.no-print,
   aside,
   nav,
-  .no-print,
   [role="navigation"] {
     display: none !important;
+  }
+
+  /* Reset layout offsets */
+  .lg\:pl-64 {
+    padding-left: 0 !important;
   }
 
   main {
     padding: 0 !important;
     margin: 0 !important;
+    max-width: 100% !important;
     background: transparent !important;
   }
 
+  /* Ensure resume document container takes full width cleanly */
   .print-container {
     width: 100% !important;
     max-width: 100% !important;
+    min-height: auto !important;
     margin: 0 !important;
     padding: 0 !important;
     box-shadow: none !important;
     border: none !important;
+  }
+
+  /* Preserve resume document header inside preview */
+  #resume-document-preview header,
+  .print-container header {
+    display: flex !important;
+  }
+
+  /* Avoid awkward page break splits within resume sections */
+  section,
+  .print-avoid-break {
+    break-inside: avoid;
+    page-break-inside: avoid;
   }
 
   @page {

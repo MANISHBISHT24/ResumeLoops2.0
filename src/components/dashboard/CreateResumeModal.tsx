@@ -186,7 +186,7 @@ export function CreateResumeModal({
         </div>
 
         {/* Actions */}
-        <div className="flex items-center justify-end gap-3 pt-3 border-t border-border-subtle">
+        <div className="sticky bottom-0 bg-surface-container-lowest flex items-center justify-end gap-3 pt-3 border-t border-border-subtle">
           <Button
             type="button"
             variant="ghost"

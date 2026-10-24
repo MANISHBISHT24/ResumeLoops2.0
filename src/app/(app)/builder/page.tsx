@@ -141,7 +141,7 @@ function ResumeEditor({ resumeId }: ResumeEditorProps) {
   }
 
   return (
-    <div className="min-h-screen flex flex-col -m-6 sm:-m-8">
+    <div className="min-h-screen flex flex-col -m-6 sm:-m-8 print:m-0 print:min-h-0">
       {/* Top Builder Toolbar */}
       <ResumeToolbar
         title={resume.title}
@@ -158,11 +158,11 @@ function ResumeEditor({ resumeId }: ResumeEditorProps) {
       />
 
       {/* Main Workspace Body */}
-      <div className="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+      <div className="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8 print:p-0 print:m-0 print:max-w-none">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start print:block print:w-full">
           {/* Left Column: Section Navigator (3 cols on desktop) */}
           <div
-            className={`lg:col-span-3 space-y-4 ${
+            className={`no-print lg:col-span-3 space-y-4 ${
               mobileView === "preview" ? "hidden lg:block" : "block"
             }`}
           >
@@ -186,7 +186,7 @@ function ResumeEditor({ resumeId }: ResumeEditorProps) {
 
           {/* Center Column: Active Section Form Editor (5 cols on desktop) */}
           <div
-            className={`lg:col-span-5 ${
+            className={`no-print lg:col-span-5 ${
               mobileView === "preview" ? "hidden lg:block" : "block"
             }`}
           >
@@ -260,12 +260,12 @@ function ResumeEditor({ resumeId }: ResumeEditorProps) {
 
           {/* Right Column: Live Document Preview (4 cols on desktop) */}
           <div
-            className={`lg:col-span-4 ${
+            className={`lg:col-span-4 print:w-full print:block ${
               mobileView === "edit" ? "hidden lg:block" : "block"
             }`}
           >
-            <div className="sticky top-20 max-h-[calc(100vh-6rem)] overflow-y-auto rounded-2xl bg-surface-container-low p-2 sm:p-4 border border-border-subtle flex flex-col items-center">
-              <div className="w-full flex items-center justify-between mb-2 px-2 text-xs text-on-surface-variant font-medium">
+            <div className="print:static print:max-h-none print:overflow-visible print:bg-transparent print:border-none print:p-0 print:m-0 sticky top-20 max-h-[calc(100vh-6rem)] overflow-y-auto rounded-2xl bg-surface-container-low p-2 sm:p-4 border border-border-subtle flex flex-col items-center">
+              <div className="no-print w-full flex items-center justify-between mb-2 px-2 text-xs text-on-surface-variant font-medium">
                 <span className="uppercase tracking-wider text-[11px] font-bold">
                   Live A4 Document
                 </span>

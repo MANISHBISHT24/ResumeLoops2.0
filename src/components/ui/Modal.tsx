@@ -67,7 +67,7 @@ export function Modal({
       <div
         ref={modalRef}
         tabIndex={-1}
-        className={`relative w-full max-w-lg bg-surface-container-lowest border border-border-subtle rounded-2xl shadow-xl p-6 text-on-surface focus:outline-none animate-in fade-in zoom-in-95 duration-200 ${className}`}
+        className={`relative w-full max-w-lg max-h-[90vh] overflow-y-auto bg-surface-container-lowest border border-border-subtle rounded-2xl shadow-xl p-6 text-on-surface focus:outline-none animate-in fade-in zoom-in-95 duration-200 ${className}`}
       >
         {/* Header */}
         <div className="flex items-start justify-between gap-4 mb-4">
