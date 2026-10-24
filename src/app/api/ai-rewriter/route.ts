@@ -5,7 +5,11 @@
  */
 
 import { NextRequest, NextResponse } from "next/server";
-import { executeAiRewrite, isAiProviderConfigured } from "@/lib/ai-provider";
+import {
+  executeAiRewrite,
+  isAiProviderConfigured,
+  validateRewriteRequest,
+} from "@/lib/ai-provider";
 import { RewriteGoalId, RewriteRequestBody, RewriteResponseBody } from "@/types/ai-rewriter";
 
 // In-memory rate limiting map for basic abuse prevention
@@ -30,14 +34,6 @@ function checkRateLimit(ip: string): boolean {
   record.count += 1;
   return true;
 }
-
-const ALLOWED_GOALS = new Set<RewriteGoalId>([
-  "professional",
-  "concise",
-  "action",
-  "clear",
-  "tailored",
-]);
 
 /**
  * GET: Checks whether the AI provider is configured without exposing secrets
@@ -85,54 +81,19 @@ export async function POST(req: NextRequest): Promise<NextResponse<RewriteRespon
     );
   }
 
+  const validation = validateRewriteRequest(body);
+  if (!validation.valid) {
+    return NextResponse.json(
+      {
+        success: false,
+        error: (validation.error || "INVALID_INPUT") as RewriteResponseBody["error"],
+        message: validation.message || "Invalid input parameters.",
+      },
+      { status: validation.status || 400 }
+    );
+  }
+
   const { text, goal, jobContext, targetLabel } = body;
-
-  // 1. Text validation
-  if (!text || typeof text !== "string" || text.trim().length < 5) {
-    return NextResponse.json(
-      {
-        success: false,
-        error: "INVALID_INPUT",
-        message: "Source text must contain at least 5 characters.",
-      },
-      { status: 400 }
-    );
-  }
-
-  if (text.length > 1500) {
-    return NextResponse.json(
-      {
-        success: false,
-        error: "INVALID_INPUT",
-        message: "Source text exceeds maximum character limit of 1,500 characters.",
-      },
-      { status: 400 }
-    );
-  }
-
-  // 2. Goal validation
-  if (!goal || !ALLOWED_GOALS.has(goal as RewriteGoalId)) {
-    return NextResponse.json(
-      {
-        success: false,
-        error: "INVALID_INPUT",
-        message: "Invalid rewrite goal specified.",
-      },
-      { status: 400 }
-    );
-  }
-
-  // 3. Job context length limit
-  if (jobContext && typeof jobContext === "string" && jobContext.length > 2500) {
-    return NextResponse.json(
-      {
-        success: false,
-        error: "INVALID_INPUT",
-        message: "Job description context exceeds maximum limit of 2,500 characters.",
-      },
-      { status: 400 }
-    );
-  }
 
   // 4. Provider configuration check
   if (!isAiProviderConfigured()) {
@@ -149,7 +110,7 @@ export async function POST(req: NextRequest): Promise<NextResponse<RewriteRespon
 
   try {
     const result = await executeAiRewrite({
-      text: text.trim(),
+      text: text!.trim(),
       goal: goal as RewriteGoalId,
       jobContext: jobContext?.trim(),
       targetLabel: targetLabel?.trim().slice(0, 100),

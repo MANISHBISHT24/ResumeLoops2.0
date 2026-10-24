@@ -15,6 +15,7 @@ import {
   extractRewriteTargets,
   applyRewriteToResume,
   isTargetFresh,
+  getCurrentTargetText,
 } from "@/lib/resume-field-mapper";
 import { TargetSelector } from "@/components/ai-rewriter/TargetSelector";
 import { GoalSelector } from "@/components/ai-rewriter/GoalSelector";
@@ -204,6 +205,15 @@ function AiRewriterContent() {
   const handleUndo = () => {
     if (!proposal?.previousText || !activeTarget || !currentResume) return;
 
+    // Safety guard: ensure the field has not been edited since this proposal was applied
+    const currentText = getCurrentTargetText(currentResume, activeTarget);
+    if (currentText !== null && currentText.trim() !== proposal.proposedText.trim()) {
+      setApiError(
+        "Cannot undo: The field has been modified since this rewrite was applied. Unsafe restoration prevented."
+      );
+      return;
+    }
+
     const reverted = applyRewriteToResume(currentResume, activeTarget, proposal.previousText);
     updateResume(currentResume.id, reverted);
 
@@ -212,6 +222,7 @@ function AiRewriterContent() {
       applied: false,
     });
     setManualSourceOverride({ targetKey: activeTarget.targetKey, text: proposal.previousText });
+    setApiError(null);
   };
 
   // Loading state during SSR / client hydration
@@ -386,7 +397,10 @@ function AiRewriterContent() {
               {jobContext && (
                 <button
                   type="button"
-                  onClick={() => setJobContext("")}
+                  onClick={() => {
+                    setJobContext("");
+                    if (proposal && !proposal.applied) setProposal(null);
+                  }}
                   className="text-[11px] text-on-surface-variant hover:text-error cursor-pointer"
                 >
                   Clear
@@ -396,7 +410,10 @@ function AiRewriterContent() {
 
             <textarea
               value={jobContext}
-              onChange={(e) => setJobContext(e.target.value)}
+              onChange={(e) => {
+                setJobContext(e.target.value);
+                if (proposal && !proposal.applied) setProposal(null);
+              }}
               disabled={isLoading}
               rows={4}
               placeholder="Paste specific job requirements or responsibilities to tailor terminology..."

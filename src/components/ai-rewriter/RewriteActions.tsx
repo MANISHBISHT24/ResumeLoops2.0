@@ -35,16 +35,18 @@ export function RewriteActions({
   onUndo,
 }: RewriteActionsProps) {
   const [copied, setCopied] = useState(false);
+  const [copyFailed, setCopyFailed] = useState(false);
 
   const handleCopy = async () => {
     if (!proposal?.proposedText) return;
     try {
       await navigator.clipboard.writeText(proposal.proposedText);
       setCopied(true);
+      setCopyFailed(false);
       setTimeout(() => setCopied(false), 2000);
     } catch {
-      // Fallback if clipboard API restricted
-      setCopied(false);
+      setCopyFailed(true);
+      setTimeout(() => setCopyFailed(false), 3000);
     }
   };
 
@@ -133,6 +135,11 @@ export function RewriteActions({
               <>
                 <CheckCheck className="w-3.5 h-3.5 mr-1.5 text-emerald-600" />
                 Copied!
+              </>
+            ) : copyFailed ? (
+              <>
+                <X className="w-3.5 h-3.5 mr-1.5 text-error" />
+                <span className="text-error">Copy Failed</span>
               </>
             ) : (
               <>
