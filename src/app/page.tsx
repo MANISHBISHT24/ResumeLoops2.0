@@ -1,4 +1,5 @@
 import React from "react";
+import Link from "next/link";
 import { Header } from "@/components/ui/Header";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
@@ -6,9 +7,9 @@ import {
   CheckCircle2,
   Layers,
   Palette,
-  ShieldCheck,
   FolderGit2,
   Terminal,
+  ArrowRight,
 } from "lucide-react";
 
 export default function HomePage() {
@@ -50,10 +51,12 @@ export default function HomePage() {
             ResumeLoops is isolated as an independent project engineered from the Google Stitch editorial design specification.
           </p>
           <div className="flex flex-wrap items-center gap-3 mt-6">
-            <Button variant="primary">
-              <ShieldCheck className="w-4 h-4" />
-              Scaffold Verified
-            </Button>
+            <Link href="/dashboard">
+              <Button variant="primary">
+                <ArrowRight className="w-4 h-4" />
+                Launch Workspace Dashboard
+              </Button>
+            </Link>
             <Button variant="secondary">
               <FolderGit2 className="w-4 h-4" />
               Independent Git Root
