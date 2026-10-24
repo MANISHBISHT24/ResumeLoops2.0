@@ -9,25 +9,25 @@ interface StructuralChecksProps {
 }
 
 export function StructuralChecks({ checks }: StructuralChecksProps) {
-  // Built-in standard ATS structural rules guaranteed by ResumeLoops engine
-  const standardSystemChecks = [
+  // Built-in design system template specifications
+  const templateConventions = [
     {
       id: "std-layout",
       title: "Single-Column Flow",
-      status: "passed" as const,
-      message: "No multi-column text frames or nested tables that scramble legacy ATS parsers.",
+      badge: "Template Standard",
+      message: "ResumeLoops export templates are architected as single-column layouts to prevent parser column scramble.",
     },
     {
       id: "std-headings",
       title: "Standard Section Headers",
-      status: "passed" as const,
-      message: "Uses standard taxonomy (Experience, Education, Skills) easily indexed by parsers.",
+      badge: "Template Standard",
+      message: "Template headers use standardized taxonomy (Experience, Education, Skills) recognized by applicant tracking systems.",
     },
     {
       id: "std-encoding",
       title: "Clean Typography & Encoding",
-      status: "passed" as const,
-      message: "Standard UTF-8 typography without exotic symbol fonts or unreadable ligatures.",
+      badge: "Template Standard",
+      message: "System and web-safe Inter typography with UTF-8 encoding, avoiding decorative character artifacts.",
     },
   ];
 
@@ -37,26 +37,26 @@ export function StructuralChecks({ checks }: StructuralChecksProps) {
         <div className="flex items-center gap-2 mb-1">
           <ShieldCheck className="w-4 h-4 text-primary" />
           <span className="text-xs font-bold text-primary uppercase tracking-wider">
-            Automated Audit
+            Format & Content Audit
           </span>
         </div>
         <h3 className="text-lg font-bold text-on-surface">Structural & Formatting Compliance</h3>
         <p className="text-xs text-on-surface-variant mt-0.5">
-          Verifying resume data structure for maximum compatibility across modern and legacy applicant tracking systems.
+          Evaluating resume content readiness alongside ResumeLoops template formatting standards.
         </p>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        {/* Core architectural standards */}
-        {standardSystemChecks.map((item) => (
+        {/* Template Design Conventions */}
+        {templateConventions.map((item) => (
           <div
             key={item.id}
             className="p-4 rounded-xl bg-surface-container-low border border-border-subtle/80 flex flex-col justify-between space-y-2"
           >
             <div className="flex items-center justify-between">
-              <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0" />
-              <span className="text-[11px] font-semibold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200/60">
-                Verified
+              <span className="text-xs font-semibold text-primary">By Design</span>
+              <span className="text-[11px] font-semibold text-on-secondary-container bg-secondary-container px-2 py-0.5 rounded-full">
+                {item.badge}
               </span>
             </div>
             <div>
