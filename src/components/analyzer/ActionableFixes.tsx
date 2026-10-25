@@ -7,7 +7,7 @@ import { Lightbulb, Edit3, ArrowRight } from "lucide-react";
 
 interface ActionableFixesProps {
   fixes: ActionableFix[];
-  resumeId: string;
+  resumeId?: string;
 }
 
 export function ActionableFixes({ fixes, resumeId }: ActionableFixesProps) {
@@ -73,14 +73,32 @@ export function ActionableFixes({ fixes, resumeId }: ActionableFixesProps) {
         </div>
       )}
 
-      <Link
-        href={`/builder?id=${encodeURIComponent(resumeId)}`}
-        className="w-full mt-2 py-3 bg-surface-container-high hover:bg-secondary-container text-on-surface hover:text-primary rounded-xl text-xs sm:text-sm font-semibold transition-all flex items-center justify-center gap-2 border border-border-subtle"
-      >
-        <Edit3 className="w-4 h-4" />
-        Edit Resume in Builder
-        <ArrowRight className="w-4 h-4 ml-auto" />
-      </Link>
+      {resumeId ? (
+        <Link
+          href={`/builder?id=${encodeURIComponent(resumeId)}`}
+          className="w-full mt-2 py-3 bg-surface-container-high hover:bg-secondary-container text-on-surface hover:text-primary rounded-xl text-xs sm:text-sm font-semibold transition-all flex items-center justify-center gap-2 border border-border-subtle"
+        >
+          <Edit3 className="w-4 h-4" />
+          Edit Resume in Builder
+          <ArrowRight className="w-4 h-4 ml-auto" />
+        </Link>
+      ) : (
+        <div className="flex flex-col sm:flex-row gap-2 mt-2">
+          <Link
+            href="/builder"
+            className="flex-1 py-2.5 px-3 bg-surface-container-high hover:bg-secondary-container text-on-surface hover:text-primary rounded-xl text-xs font-semibold transition-all flex items-center justify-center gap-2 border border-border-subtle"
+          >
+            <Edit3 className="w-3.5 h-3.5" />
+            ResumeLoops Builder
+          </Link>
+          <Link
+            href="/ai-rewriter"
+            className="flex-1 py-2.5 px-3 bg-surface-container-high hover:bg-secondary-container text-on-surface hover:text-primary rounded-xl text-xs font-semibold transition-all flex items-center justify-center gap-2 border border-border-subtle"
+          >
+            AI Bullet Rewriter
+          </Link>
+        </div>
+      )}
     </div>
   );
 }
