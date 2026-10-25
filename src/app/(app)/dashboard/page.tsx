@@ -20,25 +20,34 @@ import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
 import { Resume } from "@/types/resume";
 import { useResumeStore } from "@/lib/storage";
+import { useAuth } from "@/components/auth/AuthProvider";
+import { SupabaseSetupBanner } from "@/components/auth/SupabaseSetupBanner";
 import { ResumeCard } from "@/components/dashboard/ResumeCard";
 import { CreateResumeModal } from "@/components/dashboard/CreateResumeModal";
 import { DeleteConfirmModal } from "@/components/dashboard/DeleteConfirmModal";
 import { EmptyResumeState } from "@/components/dashboard/EmptyResumeState";
 
 export default function DashboardPage() {
+  const { user, isConfigured } = useAuth();
   const {
     resumes,
     isHydrated,
+    isCloudSynced,
+    hasUnimportedDrafts,
     duplicateResume,
     deleteResume,
     resetToSampleResumes,
     clearAllResumes,
+    importLocalDrafts,
+    dismissLocalDrafts,
+    getLocalDrafts,
   } = useResumeStore();
 
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [quickStartRole, setQuickStartRole] = useState<string | undefined>(undefined);
   const [resumeToDelete, setResumeToDelete] = useState<Resume | null>(null);
   const [feedbackMessage, setFeedbackMessage] = useState<string | null>(null);
+  const [isImportingDrafts, setIsImportingDrafts] = useState(false);
 
   const showFeedback = (msg: string) => {
     setFeedbackMessage(msg);
@@ -47,19 +56,19 @@ export default function DashboardPage() {
     }, 4000);
   };
 
-  const handleDuplicate = (id: string) => {
-    const duplicated = duplicateResume(id);
+  const handleDuplicate = async (id: string) => {
+    const duplicated = await duplicateResume(id);
     if (duplicated) {
-      showFeedback(`Duplicated "${duplicated.title}" to local workspace.`);
+      showFeedback(`Duplicated "${duplicated.title}" to ${isCloudSynced ? "cloud account" : "local workspace"}.`);
     }
   };
 
-  const handleDeleteConfirm = () => {
+  const handleDeleteConfirm = async () => {
     if (!resumeToDelete) return;
     const deletedTitle = resumeToDelete.title;
-    const success = deleteResume(resumeToDelete.id);
+    const success = await deleteResume(resumeToDelete.id);
     if (success) {
-      showFeedback(`Deleted "${deletedTitle}" from local workspace.`);
+      showFeedback(`Deleted "${deletedTitle}" from ${isCloudSynced ? "cloud account" : "local workspace"}.`);
     }
     setResumeToDelete(null);
   };
@@ -69,10 +78,22 @@ export default function DashboardPage() {
     setIsCreateModalOpen(true);
   };
 
-  // Derive summary metrics from actual local resume data
+  const handleImportDrafts = async () => {
+    setIsImportingDrafts(true);
+    const result = await importLocalDrafts();
+    setIsImportingDrafts(false);
+    if (result.importedCount > 0) {
+      showFeedback(`Successfully imported ${result.importedCount} local drafts to your cloud account.`);
+    } else if (result.errors.length > 0) {
+      showFeedback(`Import error: ${result.errors[0]}`);
+    }
+  };
+
+  // Derive summary metrics from actual resume data
   const totalResumes = resumes.length;
   const sampleCount = resumes.filter((r) => r.id.startsWith("sample-")).length;
   const customCount = totalResumes - sampleCount;
+  const localDraftsCount = getLocalDrafts().length;
 
   return (
     <div className="space-y-8 pb-12">
@@ -88,13 +109,69 @@ export default function DashboardPage() {
         </div>
       )}
 
+      {/* Unconfigured Supabase Banner */}
+      {!isConfigured && <SupabaseSetupBanner />}
+
+      {/* Local Draft Import Notice (explicit consent workflow) */}
+      {isCloudSynced && hasUnimportedDrafts && localDraftsCount > 0 && (
+        <div className="bg-primary/5 border border-primary/20 rounded-2xl p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 animate-in fade-in">
+          <div className="flex items-start gap-3">
+            <div className="w-9 h-9 rounded-xl bg-primary/10 text-primary flex items-center justify-center shrink-0 mt-0.5">
+              <FolderOpen className="w-5 h-5" />
+            </div>
+            <div>
+              <h3 className="text-sm font-bold text-on-surface">
+                Local browser drafts detected ({localDraftsCount})
+              </h3>
+              <p className="text-xs text-on-surface-variant mt-0.5 max-w-xl leading-relaxed">
+                You have {localDraftsCount} resume {localDraftsCount === 1 ? "draft" : "drafts"} saved locally in this browser. Would you like to import them into your authenticated cloud account? Local drafts remain safely intact until successful import is verified.
+              </p>
+            </div>
+          </div>
+          <div className="flex items-center gap-2.5 shrink-0 self-end sm:self-center">
+            <button
+              type="button"
+              onClick={dismissLocalDrafts}
+              className="text-xs font-semibold text-on-surface-variant hover:text-on-surface px-3 py-1.5 rounded-lg border border-border-subtle hover:bg-surface-container transition-colors cursor-pointer"
+            >
+              Keep Local Only
+            </button>
+            <Button
+              type="button"
+              variant="primary"
+              size="sm"
+              disabled={isImportingDrafts}
+              onClick={handleImportDrafts}
+              className="text-xs font-semibold"
+            >
+              {isImportingDrafts ? (
+                <>
+                  <div className="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                  <span>Importing...</span>
+                </>
+              ) : (
+                <span>Import to Cloud</span>
+              )}
+            </Button>
+          </div>
+        </div>
+      )}
+
       {/* Top Banner / Workspace Header Area */}
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-4 border-b border-border-subtle">
         <div>
           <div className="flex items-center gap-2 mb-1">
-            <span className="w-2 h-2 rounded-full bg-primary animate-pulse" />
+            <span
+              className={`w-2 h-2 rounded-full ${
+                isCloudSynced ? "bg-emerald-600 animate-pulse" : "bg-primary animate-pulse"
+              }`}
+            />
             <span className="text-xs uppercase tracking-wider font-semibold text-on-surface-variant">
-              Local Workspace Active
+              {isCloudSynced
+                ? `Cloud PostgreSQL Active (${user?.email})`
+                : isConfigured
+                ? "Connecting to Cloud..."
+                : "Local Workspace Active"}
             </span>
           </div>
           <h1 className="text-2xl sm:text-3xl font-extrabold text-on-surface tracking-tight">
@@ -272,7 +349,7 @@ export default function DashboardPage() {
                 </h3>
               </div>
               <span className="text-xs text-on-surface-variant font-mono">
-                Browser Store
+                {isCloudSynced ? "Cloud PostgreSQL" : "Browser Store"}
               </span>
             </div>
 
@@ -397,16 +474,18 @@ export default function DashboardPage() {
             </div>
           </div>
 
-          {/* Local Storage & Privacy Notice */}
+          {/* Storage & Privacy Notice */}
           <div className="bg-surface-container-lowest rounded-2xl p-5 shadow-xs border border-border-subtle">
             <div className="flex items-center gap-2 mb-2">
               <ShieldCheck className="w-4 h-4 text-primary" />
               <h3 className="font-bold text-xs uppercase tracking-wider text-on-surface">
-                Private Local Storage
+                {isCloudSynced ? "Cloud PostgreSQL Storage" : "Private Local Storage"}
               </h3>
             </div>
             <p className="text-[11px] text-on-surface-variant leading-relaxed">
-              Your resume drafts are saved locally in this browser. They are not cloud-synchronized and will be lost if you clear your browser site data or cookies.
+              {isCloudSynced
+                ? "Your resume records are securely synchronized to PostgreSQL with Row Level Security. Only you can read, modify, or delete your resumes."
+                : "Your resume drafts are saved locally in this browser. They are not cloud-synchronized and will be lost if you clear your browser site data or cookies."}
             </p>
           </div>
         </div>

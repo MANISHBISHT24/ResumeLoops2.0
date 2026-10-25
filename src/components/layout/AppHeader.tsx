@@ -1,9 +1,11 @@
 "use client";
 
 import React from "react";
-import { usePathname } from "next/navigation";
-import { Menu, FileText } from "lucide-react";
+import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
+import { Menu, FileText, LogOut } from "lucide-react";
 import { Badge } from "@/components/ui/Badge";
+import { useAuth } from "@/components/auth/AuthProvider";
 
 interface AppHeaderProps {
   onMobileMenuOpen: () => void;
@@ -34,6 +36,14 @@ const pageTitles: Record<string, { title: string; subtitle?: string }> = {
 
 export function AppHeader({ onMobileMenuOpen }: AppHeaderProps) {
   const pathname = usePathname();
+  const router = useRouter();
+  const { user, signOut, isConfigured } = useAuth();
+
+  const handleSignOut = async () => {
+    await signOut();
+    router.push("/login");
+  };
+
   const current = pageTitles[pathname] || {
     title: "ResumeLoops Workspace",
     subtitle: "AI-Powered Editorial Resume Platform",
@@ -75,11 +85,44 @@ export function AppHeader({ onMobileMenuOpen }: AppHeaderProps) {
         </div>
       </div>
 
-      {/* Right Header Status */}
+      {/* Right Header Status & User Action */}
       <div className="flex items-center gap-3">
-        <Badge variant="neutral" className="text-[11px] font-mono">
-          Phase 3B Foundation
-        </Badge>
+        {user ? (
+          <div className="flex items-center gap-2.5">
+            <div className="hidden sm:flex flex-col text-right">
+              <span className="text-xs font-semibold text-on-surface leading-tight">
+                {user.user_metadata?.full_name || user.email}
+              </span>
+              <span className="text-[10px] text-emerald-600 font-medium">
+                Cloud Sync Active
+              </span>
+            </div>
+            <button
+              type="button"
+              onClick={handleSignOut}
+              title="Sign Out"
+              className="p-1.5 rounded-lg border border-border-subtle hover:bg-surface-container-high text-on-surface-variant hover:text-on-surface text-xs font-medium flex items-center gap-1 transition-colors cursor-pointer"
+            >
+              <LogOut className="w-3.5 h-3.5" />
+              <span className="hidden md:inline">Sign Out</span>
+            </button>
+          </div>
+        ) : (
+          <div className="flex items-center gap-2">
+            {!isConfigured ? (
+              <Badge variant="neutral" className="text-[11px] font-mono text-amber-700 bg-amber-500/10 border-amber-500/30">
+                Setup Required
+              </Badge>
+            ) : (
+              <Link
+                href="/login"
+                className="text-xs font-semibold text-primary hover:underline"
+              >
+                Sign In
+              </Link>
+            )}
+          </div>
+        )}
       </div>
     </header>
   );

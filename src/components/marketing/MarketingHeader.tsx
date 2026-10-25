@@ -3,9 +3,11 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { ArrowRight, Menu, X, User } from "lucide-react";
+import { useAuth } from "@/components/auth/AuthProvider";
 
 export function MarketingHeader() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { user } = useAuth();
 
   return (
     <header className="fixed top-0 left-0 right-0 w-full z-50 bg-warm-ivory/90 backdrop-blur-xl border-b border-surface-container/80 shadow-[0_4px_20px_rgba(0,0,0,0.02)] transition-all">
@@ -70,28 +72,48 @@ export function MarketingHeader() {
           </a>
         </nav>
 
-        {/* Right Action: Launch Workspace / User Indicator */}
+        {/* Right Action: Launch Workspace / Auth buttons */}
         <div className="hidden sm:flex items-center gap-3">
-          <Link
-            href="/dashboard"
-            className="inline-flex items-center gap-2 px-4 py-2 bg-primary text-on-primary text-sm font-semibold rounded-xl hover:bg-primary-dark transition-all shadow-[0_4px_14px_rgba(81,69,229,0.25)] hover:shadow-[0_6px_20px_rgba(81,69,229,0.35)] hover:-translate-y-0.5"
-          >
-            <span>Open Workspace</span>
-            <ArrowRight className="w-4 h-4" />
-          </Link>
-          <Link
-            href="/dashboard"
-            aria-label="User Workspace Profile"
-            className="w-10 h-10 rounded-full bg-secondary-container text-primary border border-primary/20 flex items-center justify-center font-bold shadow-inner hover:bg-secondary-container/80 transition-colors"
-          >
-            <User className="w-5 h-5 text-primary" />
-          </Link>
+          {user ? (
+            <>
+              <Link
+                href="/dashboard"
+                className="inline-flex items-center gap-2 px-4 py-2 bg-primary text-on-primary text-sm font-semibold rounded-xl hover:bg-primary-dark transition-all shadow-[0_4px_14px_rgba(81,69,229,0.25)] hover:shadow-[0_6px_20px_rgba(81,69,229,0.35)] hover:-translate-y-0.5"
+              >
+                <span>Open Workspace</span>
+                <ArrowRight className="w-4 h-4" />
+              </Link>
+              <Link
+                href="/dashboard"
+                aria-label="User Workspace Profile"
+                className="w-10 h-10 rounded-full bg-secondary-container text-primary border border-primary/20 flex items-center justify-center font-bold shadow-inner hover:bg-secondary-container/80 transition-colors"
+              >
+                <User className="w-5 h-5 text-primary" />
+              </Link>
+            </>
+          ) : (
+            <>
+              <Link
+                href="/login"
+                className="px-4 py-2 text-sm font-semibold text-on-surface hover:text-primary transition-colors"
+              >
+                Sign In
+              </Link>
+              <Link
+                href="/signup"
+                className="inline-flex items-center gap-2 px-4 py-2 bg-primary text-on-primary text-sm font-semibold rounded-xl hover:bg-primary-dark transition-all shadow-[0_4px_14px_rgba(81,69,229,0.25)] hover:shadow-[0_6px_20px_rgba(81,69,229,0.35)] hover:-translate-y-0.5"
+              >
+                <span>Get Started</span>
+                <ArrowRight className="w-4 h-4" />
+              </Link>
+            </>
+          )}
         </div>
 
         {/* Mobile Menu Button */}
         <div className="flex md:hidden items-center gap-2">
           <Link
-            href="/dashboard"
+            href={user ? "/dashboard" : "/login"}
             aria-label="User Profile"
             className="w-9 h-9 rounded-full bg-secondary-container text-primary flex items-center justify-center font-bold"
           >

@@ -86,12 +86,12 @@ function TemplatesGalleryContent() {
   }, [selectedCategory, searchQuery]);
 
   // Apply template to selected resume
-  const handleApplyTemplate = (templateId: TemplateId) => {
+  const handleApplyTemplate = async (templateId: TemplateId) => {
     if (!targetResume) return;
 
     if (targetResume.templateId === templateId) return;
 
-    const updated = updateResume(targetResume.id, { templateId });
+    const updated = await updateResume(targetResume.id, { templateId });
     if (updated) {
       const templateName = getTemplateById(templateId).name;
       setToastMessage({

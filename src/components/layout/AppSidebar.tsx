@@ -2,7 +2,7 @@
 
 import React from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import {
   LayoutDashboard,
   FileEdit,
@@ -11,7 +11,10 @@ import {
   Gauge,
   X,
   FileText,
+  LogOut,
+  LogIn,
 } from "lucide-react";
+import { useAuth } from "@/components/auth/AuthProvider";
 
 interface AppSidebarProps {
   mobileOpen?: boolean;
@@ -31,6 +34,13 @@ export function AppSidebar({
   onMobileClose,
 }: AppSidebarProps) {
   const pathname = usePathname();
+  const router = useRouter();
+  const { user, signOut, isConfigured } = useAuth();
+
+  const handleSignOut = async () => {
+    await signOut();
+    router.push("/login");
+  };
 
   const sidebarContent = (
     <div className="flex flex-col h-full py-6 px-4">
@@ -91,15 +101,51 @@ export function AppSidebar({
         })}
       </nav>
 
-      {/* Workspace Footer Note */}
+      {/* User Session & Workspace Footer */}
       <div className="pt-4 border-t border-border-subtle px-3 text-xs text-on-surface-variant">
-        <div className="flex items-center gap-2 mb-1">
-          <span className="w-2 h-2 rounded-full bg-emerald-600 inline-block animate-pulse" />
-          <span className="font-medium text-on-surface">Workspace Active</span>
-        </div>
-        <p className="text-[11px] leading-tight text-on-surface-variant/80">
-          Independent Scaffold
-        </p>
+        {user ? (
+          <div className="space-y-3">
+            <div className="flex items-center gap-2.5">
+              <div className="w-8 h-8 rounded-full bg-primary/10 text-primary font-bold flex items-center justify-center text-xs shrink-0 border border-primary/20">
+                {(user.user_metadata?.full_name || user.email || "U").charAt(0).toUpperCase()}
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-xs font-semibold text-on-surface truncate">
+                  {user.user_metadata?.full_name || "Account"}
+                </p>
+                <p className="text-[11px] text-on-surface-variant truncate">
+                  {user.email}
+                </p>
+              </div>
+            </div>
+
+            <button
+              type="button"
+              onClick={handleSignOut}
+              className="w-full py-1.5 px-2.5 rounded-lg border border-border-subtle hover:bg-surface-container-high text-on-surface-variant hover:text-on-surface text-xs font-medium flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
+            >
+              <LogOut className="w-3.5 h-3.5" />
+              <span>Sign Out</span>
+            </button>
+          </div>
+        ) : (
+          <div className="space-y-2">
+            <div className="flex items-center gap-2">
+              <span className={`w-2 h-2 rounded-full ${isConfigured ? "bg-amber-500" : "bg-neutral-400"} inline-block`} />
+              <span className="font-medium text-on-surface">
+                {isConfigured ? "Unauthenticated" : "Setup Required"}
+              </span>
+            </div>
+            <Link
+              href="/login"
+              onClick={() => onMobileClose?.()}
+              className="w-full py-1.5 px-2.5 rounded-lg bg-primary text-white text-xs font-semibold flex items-center justify-center gap-1.5 shadow-xs hover:bg-primary-dark transition-colors"
+            >
+              <LogIn className="w-3.5 h-3.5" />
+              <span>Sign In</span>
+            </Link>
+          </div>
+        )}
       </div>
     </div>
   );

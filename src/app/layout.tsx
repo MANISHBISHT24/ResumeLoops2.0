@@ -14,6 +14,8 @@ export const metadata: Metadata = {
     "Publication-quality resume builder engineered with deterministic ATS scoring and editorial elegance.",
 };
 
+import { AuthProvider } from "@/components/auth/AuthProvider";
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -22,7 +24,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={inter.variable}>
       <body className="min-h-screen bg-warm-ivory text-on-surface antialiased font-sans">
-        {children}
+        <AuthProvider>{children}</AuthProvider>
       </body>
     </html>
   );

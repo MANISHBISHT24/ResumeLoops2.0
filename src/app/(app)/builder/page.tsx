@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { ArrowLeft, AlertCircle, Sparkles } from "lucide-react";
 import { SectionType, Resume, TemplateId } from "@/types/resume";
-import { updateResume, useResumeStore } from "@/lib/storage";
+import { useResumeStore } from "@/lib/storage";
 import { Card, CardContent } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { ResumeToolbar } from "@/components/builder/ResumeToolbar";
@@ -24,7 +24,7 @@ interface ResumeEditorProps {
 }
 
 function ResumeEditor({ resumeId }: ResumeEditorProps) {
-  const { resumes, isHydrated } = useResumeStore();
+  const { resumes, isHydrated, updateResume, isCloudSynced } = useResumeStore();
 
   const [activeSection, setActiveSection] = useState<SectionType>("personal");
   const [mobileView, setMobileView] = useState<"edit" | "preview">("edit");
@@ -55,12 +55,12 @@ function ResumeEditor({ resumeId }: ResumeEditorProps) {
       clearTimeout(debounceTimerRef.current);
     }
 
-    debounceTimerRef.current = setTimeout(() => {
+    debounceTimerRef.current = setTimeout(async () => {
       try {
-        const saved = updateResume(updated.id, updated);
+        const saved = await updateResume(updated.id, updated);
         if (saved) {
           setSaveStatus("saved");
-          setLastSavedText("Saved just now");
+          setLastSavedText(isCloudSynced ? "Saved to cloud" : "Saved locally");
         } else {
           setSaveStatus("unsaved");
         }
@@ -69,7 +69,7 @@ function ResumeEditor({ resumeId }: ResumeEditorProps) {
         setSaveStatus("unsaved");
       }
     }, 500);
-  }, []);
+  }, [updateResume, isCloudSynced]);
 
   // Update helper
   const handleUpdateResume = (partial: Partial<Resume>) => {

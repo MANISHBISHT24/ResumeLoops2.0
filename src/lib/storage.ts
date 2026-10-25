@@ -1,21 +1,29 @@
 "use client";
 
 /**
- * ResumeLoops Client-Side Resume Storage
+ * ResumeLoops Storage Architecture (Phase 3J: Cloud PostgreSQL & Local Fallback)
  *
- * Provides typed, versioned localStorage persistence for resume drafts.
- * - Safe for SSR: avoids accessing window/localStorage during server rendering.
- * - Reactive: updates state within the active tab via CustomEvents and across tabs via storage event.
- * - Resilient: falls back safely when localStorage is missing, full, or corrupt.
- * - Zero sensitive data: strictly stores non-sensitive resume document models.
+ * Integrates Supabase PostgreSQL persistence when authenticated with Row Level Security,
+ * while safely supporting local draft fallback and explicit import workflows.
  */
 
-import { useSyncExternalStore, useCallback } from "react";
-import type { Resume, TemplateId } from "../types/resume";
-import { DEMO_RESUME } from "./sample-data";
+import { useState, useEffect, useCallback, useRef, useSyncExternalStore } from "react";
+import type { Resume, TemplateId } from "../types/resume.ts";
+import { DEMO_RESUME } from "./sample-data.ts";
+import { isSupabaseConfigured } from "./supabase/config.ts";
+import { createClient } from "./supabase/client.ts";
+import {
+  fetchUserResumes,
+  createCloudResume,
+  updateCloudResume,
+  duplicateCloudResume,
+  deleteCloudResume,
+  importDraftsToCloud,
+} from "./resume-service.ts";
 
 const STORAGE_KEY = "resumeloops_resumes_v1";
 const STORAGE_EVENT_NAME = "resumeloops_storage_change";
+const DRAFTS_IMPORTED_FLAG = "resumeloops_drafts_imported_v1";
 
 export interface CreateResumeInput {
   title: string;
@@ -35,7 +43,6 @@ export interface StoredDataSchema {
 
 /**
  * Default sample resumes derived from DEMO_RESUME fixtures.
- * Explicitly tagged with sample IDs so they can be identified as demo fixtures.
  */
 export const INITIAL_SAMPLE_RESUMES: Resume[] = [
   {
@@ -88,13 +95,7 @@ function emitChange() {
 }
 
 /**
- * Cache references to ensure reference equality between getSnapshot calls
- */
-let cachedRaw: string | null = null;
-let cachedResumes: Resume[] = INITIAL_SAMPLE_RESUMES;
-
-/**
- * Pure reader: safely retrieves and validates stored resumes from localStorage
+ * Pure reader: safely retrieves stored resumes from localStorage
  */
 export function getStoredResumes(): Resume[] {
   if (typeof window === "undefined") {
@@ -104,36 +105,24 @@ export function getStoredResumes(): Resume[] {
   try {
     const raw = window.localStorage.getItem(STORAGE_KEY);
     if (!raw) {
-      // First visit: initialize with explicit sample resumes
       const initialPayload: StoredDataSchema = {
         version: 1,
         lastUpdated: new Date().toISOString(),
         resumes: INITIAL_SAMPLE_RESUMES,
       };
       window.localStorage.setItem(STORAGE_KEY, JSON.stringify(initialPayload));
-      cachedRaw = JSON.stringify(initialPayload);
-      cachedResumes = INITIAL_SAMPLE_RESUMES;
       return INITIAL_SAMPLE_RESUMES;
     }
 
-    if (raw === cachedRaw) {
-      return cachedResumes;
-    }
-
-    cachedRaw = raw;
     const parsed = JSON.parse(raw) as Partial<StoredDataSchema>;
     if (parsed && Array.isArray(parsed.resumes)) {
-      cachedResumes = parsed.resumes;
-      return cachedResumes;
+      return parsed.resumes;
     }
 
-    // Corrupted payload recovery
-    console.warn("[ResumeLoops] Stored resumes were malformed. Resetting to initial sample.");
-    cachedResumes = INITIAL_SAMPLE_RESUMES;
     return INITIAL_SAMPLE_RESUMES;
   } catch (error) {
     console.warn("[ResumeLoops] Failed to read from localStorage:", error);
-    return cachedResumes;
+    return INITIAL_SAMPLE_RESUMES;
   }
 }
 
@@ -149,10 +138,7 @@ export function saveStoredResumes(resumes: Resume[]): boolean {
       lastUpdated: new Date().toISOString(),
       resumes,
     };
-    const stringified = JSON.stringify(payload);
-    window.localStorage.setItem(STORAGE_KEY, stringified);
-    cachedRaw = stringified;
-    cachedResumes = resumes;
+    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
     emitChange();
     return true;
   } catch (error) {
@@ -162,7 +148,7 @@ export function saveStoredResumes(resumes: Resume[]): boolean {
 }
 
 /**
- * Retrieve a single resume by ID
+ * Retrieve a single resume by ID from local cache
  */
 export function getResumeById(id: string): Resume | undefined {
   const resumes = getStoredResumes();
@@ -170,7 +156,44 @@ export function getResumeById(id: string): Resume | undefined {
 }
 
 /**
- * Create a new resume
+ * Retrieve unimported local drafts (excluding sample fixtures)
+ */
+export function getLocalDrafts(): Resume[] {
+  if (typeof window === "undefined") return [];
+  const resumes = getStoredResumes();
+  return resumes.filter((r) => !r.id.startsWith("sample-"));
+}
+
+/**
+ * Clear local drafts after successful verified cloud import
+ */
+export function clearLocalDrafts(): void {
+  if (typeof window === "undefined") return;
+  try {
+    window.localStorage.setItem(DRAFTS_IMPORTED_FLAG, "true");
+    saveStoredResumes(INITIAL_SAMPLE_RESUMES);
+  } catch (err) {
+    console.error("[ResumeLoops] Failed to clear local drafts:", err);
+  }
+}
+
+/**
+ * Check whether unimported custom local drafts exist
+ */
+export function hasLocalDrafts(): boolean {
+  if (typeof window === "undefined") return false;
+  try {
+    const isImported = window.localStorage.getItem(DRAFTS_IMPORTED_FLAG);
+    if (isImported === "true") return false;
+    const drafts = getLocalDrafts();
+    return drafts.length > 0;
+  } catch {
+    return false;
+  }
+}
+
+/**
+ * Create a new resume (local standalone fallback)
  */
 export function createResume(input: CreateResumeInput): Resume {
   const resumes = getStoredResumes();
@@ -183,7 +206,7 @@ export function createResume(input: CreateResumeInput): Resume {
     targetCompany: input.targetCompany?.trim() || "",
     templateId: input.templateId,
     lastModified: "Just now",
-    atsScore: undefined, // Honest: no ATS score until real analysis is performed
+    atsScore: undefined,
     sectionOrder: [
       "personal",
       "summary",
@@ -243,7 +266,7 @@ export function createResume(input: CreateResumeInput): Resume {
 }
 
 /**
- * Update an existing resume by ID
+ * Update an existing resume (local standalone fallback)
  */
 export function updateResume(id: string, updates: Partial<Resume>): Resume | undefined {
   const resumes = getStoredResumes();
@@ -254,7 +277,7 @@ export function updateResume(id: string, updates: Partial<Resume>): Resume | und
   const updated: Resume = {
     ...current,
     ...updates,
-    id: current.id, // enforce id immutability
+    id: current.id,
     lastModified: "Just now",
   };
 
@@ -265,7 +288,7 @@ export function updateResume(id: string, updates: Partial<Resume>): Resume | und
 }
 
 /**
- * Duplicate an existing resume
+ * Duplicate an existing resume (local standalone fallback)
  */
 export function duplicateResume(id: string): Resume | undefined {
   const resumes = getStoredResumes();
@@ -286,7 +309,7 @@ export function duplicateResume(id: string): Resume | undefined {
 }
 
 /**
- * Delete a resume by ID
+ * Delete a resume by ID (local standalone fallback)
  */
 export function deleteResume(id: string): boolean {
   const resumes = getStoredResumes();
@@ -298,7 +321,7 @@ export function deleteResume(id: string): boolean {
 }
 
 /**
- * Reset workspace to default sample resumes
+ * Reset workspace to default sample resumes (local standalone fallback)
  */
 export function resetToSampleResumes(): Resume[] {
   saveStoredResumes(INITIAL_SAMPLE_RESUMES);
@@ -306,63 +329,338 @@ export function resetToSampleResumes(): Resume[] {
 }
 
 /**
- * Clear all resumes (for testing empty states)
+ * Clear all resumes (local standalone fallback)
  */
 export function clearAllResumes(): void {
   saveStoredResumes([]);
 }
 
 /**
- * External store subscription helpers for useSyncExternalStore
- */
-const emptyServerResumes: Resume[] = [];
-function getServerSnapshot(): Resume[] {
-  return emptyServerResumes;
-}
-
-function subscribe(callback: () => void): () => void {
-  if (typeof window === "undefined") return () => {};
-
-  const handler = () => {
-    cachedRaw = null;
-    callback();
-  };
-
-  window.addEventListener(STORAGE_EVENT_NAME, handler);
-  window.addEventListener("storage", handler);
-
-  return () => {
-    window.removeEventListener(STORAGE_EVENT_NAME, handler);
-    window.removeEventListener("storage", handler);
-  };
-}
-
-function subscribeHydration(): () => void {
-  return () => {};
-}
-
-/**
  * React Hook: useResumeStore
- * Provides SSR-safe, reactive state synchronized across components and browser tabs.
+ *
+ * Automatically connects to Supabase PostgreSQL when authenticated, providing
+ * asynchronous loading, cloud CRUD, error handling, and clean record isolation.
+ * Automatically clears memory cache when the user signs out or switches accounts.
  */
-export function useResumeStore() {
-  const resumes = useSyncExternalStore(subscribe, getStoredResumes, getServerSnapshot);
-  const isHydrated = useSyncExternalStore(subscribeHydration, () => true, () => false);
+const emptySubscribe = () => () => {};
 
-  const reload = useCallback(() => {
-    cachedRaw = null;
-    emitChange();
+export function useResumeStore() {
+  const isHydrated = useSyncExternalStore(emptySubscribe, () => true, () => false);
+  const [resumes, setResumes] = useState<Resume[]>(() => {
+    if (typeof window !== "undefined") {
+      return getStoredResumes();
+    }
+    return [];
+  });
+  const [isLoading, setIsLoading] = useState(() => isSupabaseConfigured());
+  const [error, setError] = useState<string | null>(null);
+  const [isCloudSynced, setIsCloudSynced] = useState(false);
+  const [hasUnimportedDrafts, setHasUnimportedDrafts] = useState(false);
+
+  const isMountedRef = useRef(true);
+
+  const loadData = useCallback(async () => {
+    const configured = isSupabaseConfigured();
+
+    if (configured) {
+      try {
+        const supabase = createClient();
+        if (supabase) {
+          const {
+            data: { user },
+          } = await supabase.auth.getUser();
+
+          if (user) {
+            const cloudResumes = await fetchUserResumes();
+            if (isMountedRef.current) {
+              setResumes(cloudResumes);
+              setIsCloudSynced(true);
+              setHasUnimportedDrafts(hasLocalDrafts());
+              setIsLoading(false);
+              return;
+            }
+          }
+        }
+      } catch (err: unknown) {
+        console.warn("[ResumeLoops Store] Cloud load error, checking local fallback:", err);
+        if (isMountedRef.current) {
+          setError(err instanceof Error ? err.message : "Cloud database connection failed");
+        }
+      }
+    }
+
+    if (isMountedRef.current) {
+      const local = getStoredResumes();
+      setResumes(local);
+      setIsCloudSynced(false);
+      setHasUnimportedDrafts(false);
+      setIsLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    isMountedRef.current = true;
+
+    // Listen to account logout/switch events to avoid stale cross-user data
+    const handleSignedOut = () => {
+      if (isMountedRef.current) {
+        setResumes([]);
+        setIsCloudSynced(false);
+        setIsLoading(false);
+      }
+    };
+
+    // Listen to storage events for cross-tab local updates
+    const handleStorageChange = () => {
+      if (!isCloudSynced) {
+        setResumes(getStoredResumes());
+      }
+    };
+
+    if (typeof window !== "undefined") {
+      window.addEventListener("resumeloops_auth_signed_out", handleSignedOut);
+      window.addEventListener(STORAGE_EVENT_NAME, handleStorageChange);
+      window.addEventListener("storage", handleStorageChange);
+    }
+
+    // Only initiate cloud fetch if Supabase is configured
+    if (isSupabaseConfigured()) {
+      let isIgnored = false;
+      const initCloud = async () => {
+        try {
+          const supabase = createClient();
+          if (supabase) {
+            const {
+              data: { user },
+            } = await supabase.auth.getUser();
+
+            if (user && !isIgnored) {
+              const cloudResumes = await fetchUserResumes();
+              if (!isIgnored) {
+                setResumes(cloudResumes);
+                setIsCloudSynced(true);
+                setHasUnimportedDrafts(hasLocalDrafts());
+                setIsLoading(false);
+                return;
+              }
+            }
+          }
+        } catch (err: unknown) {
+          console.warn("[ResumeLoops Store] Initial cloud sync failed:", err);
+        }
+        if (!isIgnored) {
+          setIsLoading(false);
+        }
+      };
+      void initCloud();
+
+      return () => {
+        isIgnored = true;
+        isMountedRef.current = false;
+        if (typeof window !== "undefined") {
+          window.removeEventListener("resumeloops_auth_signed_out", handleSignedOut);
+          window.removeEventListener(STORAGE_EVENT_NAME, handleStorageChange);
+          window.removeEventListener("storage", handleStorageChange);
+        }
+      };
+    }
+
+    return () => {
+      isMountedRef.current = false;
+      if (typeof window !== "undefined") {
+        window.removeEventListener("resumeloops_auth_signed_out", handleSignedOut);
+        window.removeEventListener(STORAGE_EVENT_NAME, handleStorageChange);
+        window.removeEventListener("storage", handleStorageChange);
+      }
+    };
+  }, [isCloudSynced]);
+
+  // Cloud & local unified create
+  const handleCreateResume = useCallback(
+    async (input: CreateResumeInput): Promise<Resume> => {
+      setError(null);
+      if (isCloudSynced) {
+        try {
+          const created = await createCloudResume(input);
+          setResumes((prev) => [created, ...prev]);
+          return created;
+        } catch (err: unknown) {
+          const msg = err instanceof Error ? err.message : "Failed to create resume in cloud";
+          setError(msg);
+          throw err;
+        }
+      } else {
+        const created = createResume(input);
+        setResumes((prev) => [created, ...prev]);
+        return created;
+      }
+    },
+    [isCloudSynced]
+  );
+
+  // Cloud & local unified update
+  const handleUpdateResume = useCallback(
+    async (id: string, updates: Partial<Resume>): Promise<Resume | undefined> => {
+      setError(null);
+
+      // Optimistic update
+      setResumes((prev) =>
+        prev.map((r) => (r.id === id ? { ...r, ...updates, lastModified: "Just now" } : r))
+      );
+
+      if (isCloudSynced) {
+        try {
+          const updated = await updateCloudResume(id, updates);
+          if (updated) {
+            setResumes((prev) => prev.map((r) => (r.id === id ? updated : r)));
+            return updated;
+          }
+        } catch (err: unknown) {
+          console.error("[ResumeLoops Store] Cloud update failed:", err);
+          setError(err instanceof Error ? err.message : "Failed to save changes to cloud");
+        }
+      } else {
+        return updateResume(id, updates);
+      }
+    },
+    [isCloudSynced]
+  );
+
+  // Cloud & local unified duplicate
+  const handleDuplicateResume = useCallback(
+    async (id: string): Promise<Resume | undefined> => {
+      setError(null);
+      if (isCloudSynced) {
+        try {
+          const cloned = await duplicateCloudResume(id);
+          if (cloned) {
+            setResumes((prev) => [cloned, ...prev]);
+            return cloned;
+          }
+        } catch (err: unknown) {
+          console.error("[ResumeLoops Store] Cloud duplicate failed:", err);
+          setError(err instanceof Error ? err.message : "Failed to duplicate resume in cloud");
+        }
+      } else {
+        const cloned = duplicateResume(id);
+        if (cloned) {
+          setResumes((prev) => [cloned, ...prev]);
+          return cloned;
+        }
+      }
+      return undefined;
+    },
+    [isCloudSynced]
+  );
+
+  // Cloud & local unified delete
+  const handleDeleteResume = useCallback(
+    async (id: string): Promise<boolean> => {
+      setError(null);
+      const previous = [...resumes];
+      // Optimistic removal
+      setResumes((prev) => prev.filter((r) => r.id !== id));
+
+      if (isCloudSynced) {
+        try {
+          const success = await deleteCloudResume(id);
+          if (!success) {
+            setResumes(previous); // Rollback
+            return false;
+          }
+          return true;
+        } catch (err: unknown) {
+          console.error("[ResumeLoops Store] Cloud delete failed:", err);
+          setResumes(previous); // Rollback
+          setError(err instanceof Error ? err.message : "Failed to delete resume from cloud");
+          return false;
+        }
+      } else {
+        return deleteResume(id);
+      }
+    },
+    [isCloudSynced, resumes]
+  );
+
+  // Reset to sample resumes
+  const handleResetToSamples = useCallback(async (): Promise<Resume[]> => {
+    if (isCloudSynced) {
+      const imported = await importDraftsToCloud(INITIAL_SAMPLE_RESUMES);
+      if (imported.importedCount > 0) {
+        const refreshed = await fetchUserResumes();
+        setResumes(refreshed);
+        return refreshed;
+      }
+      return resumes;
+    } else {
+      const reset = resetToSampleResumes();
+      setResumes(reset);
+      return reset;
+    }
+  }, [isCloudSynced, resumes]);
+
+  // Clear all resumes
+  const handleClearAll = useCallback(async (): Promise<void> => {
+    if (isCloudSynced) {
+      for (const r of resumes) {
+        await deleteCloudResume(r.id);
+      }
+      setResumes([]);
+    } else {
+      clearAllResumes();
+      setResumes([]);
+    }
+  }, [isCloudSynced, resumes]);
+
+  // Explicit local draft import workflow
+  const handleImportLocalDrafts = useCallback(async (): Promise<{
+    importedCount: number;
+    errors: string[];
+  }> => {
+    const drafts = getLocalDrafts();
+    if (drafts.length === 0) {
+      return { importedCount: 0, errors: [] };
+    }
+
+    try {
+      const result = await importDraftsToCloud(drafts);
+      if (result.importedCount > 0) {
+        // Verified successful import: safely archive local drafts
+        clearLocalDrafts();
+        setHasUnimportedDrafts(false);
+        const refreshed = await fetchUserResumes();
+        setResumes(refreshed);
+      }
+      return result;
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : "Import failed";
+      return { importedCount: 0, errors: [msg] };
+    }
+  }, []);
+
+  const handleDismissLocalDrafts = useCallback(() => {
+    if (typeof window !== "undefined") {
+      window.localStorage.setItem(DRAFTS_IMPORTED_FLAG, "dismissed");
+    }
+    setHasUnimportedDrafts(false);
   }, []);
 
   return {
     resumes,
     isHydrated,
-    reload,
-    createResume,
-    updateResume,
-    duplicateResume,
-    deleteResume,
-    resetToSampleResumes,
-    clearAllResumes,
+    isLoading,
+    error,
+    isCloudSynced,
+    hasUnimportedDrafts,
+    reload: loadData,
+    createResume: handleCreateResume,
+    updateResume: handleUpdateResume,
+    duplicateResume: handleDuplicateResume,
+    deleteResume: handleDeleteResume,
+    resetToSampleResumes: handleResetToSamples,
+    clearAllResumes: handleClearAll,
+    importLocalDrafts: handleImportLocalDrafts,
+    dismissLocalDrafts: handleDismissLocalDrafts,
+    getLocalDrafts,
   };
 }

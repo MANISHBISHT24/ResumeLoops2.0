@@ -9,7 +9,7 @@ import { Input } from "@/components/ui/Input";
 import { Badge } from "@/components/ui/Badge";
 import { TemplateId } from "@/types/resume";
 import { TEMPLATES, DEFAULT_TEMPLATE_ID } from "@/lib/templates";
-import { createResume } from "@/lib/storage";
+import { useResumeStore } from "@/lib/storage";
 
 export interface CreateResumeModalProps {
   isOpen: boolean;
@@ -27,6 +27,7 @@ export function CreateResumeModal({
   defaultTemplate,
 }: CreateResumeModalProps) {
   const router = useRouter();
+  const { createResume } = useResumeStore();
 
   const [title, setTitle] = useState(defaultRole ? `${defaultRole} Resume` : "");
   const [targetRole, setTargetRole] = useState(defaultRole || "");
@@ -37,7 +38,7 @@ export function CreateResumeModal({
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     const trimmedTitle = title.trim();
@@ -50,7 +51,7 @@ export function CreateResumeModal({
     setError(null);
 
     try {
-      const newResume = createResume({
+      const newResume = await createResume({
         title: trimmedTitle,
         targetRole: targetRole.trim() || undefined,
         targetCompany: targetCompany.trim() || undefined,

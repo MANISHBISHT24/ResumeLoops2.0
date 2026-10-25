@@ -179,12 +179,12 @@ function AiRewriterContent() {
   };
 
   // Apply proposal directly to stored resume
-  const handleApplyRewrite = () => {
+  const handleApplyRewrite = async () => {
     if (!proposal || !activeTarget || !currentResume || isStale) return;
 
     const previous = activeTarget.originalText;
     const updated = applyRewriteToResume(currentResume, activeTarget, proposal.proposedText);
-    updateResume(currentResume.id, updated);
+    await updateResume(currentResume.id, updated);
 
     // Update proposal state
     setProposal({
@@ -202,7 +202,7 @@ function AiRewriterContent() {
   };
 
   // Undo applied rewrite
-  const handleUndo = () => {
+  const handleUndo = async () => {
     if (!proposal?.previousText || !activeTarget || !currentResume) return;
 
     // Safety guard: ensure the field has not been edited since this proposal was applied
@@ -215,7 +215,7 @@ function AiRewriterContent() {
     }
 
     const reverted = applyRewriteToResume(currentResume, activeTarget, proposal.previousText);
-    updateResume(currentResume.id, reverted);
+    await updateResume(currentResume.id, reverted);
 
     setProposal({
       ...proposal,
