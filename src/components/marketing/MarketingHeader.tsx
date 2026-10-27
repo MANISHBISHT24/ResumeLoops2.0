@@ -10,173 +10,161 @@ export function MarketingHeader() {
   const { user } = useAuth();
 
   return (
-    <header className="fixed top-0 left-0 right-0 w-full z-50 bg-warm-ivory/90 backdrop-blur-xl border-b border-surface-container/80 shadow-[0_4px_20px_rgba(0,0,0,0.02)] transition-all">
-      <div className="h-20 max-w-7xl mx-auto px-6 flex items-center justify-between">
+    <header className="fixed top-0 left-0 right-0 w-full z-50 bg-surface/90 backdrop-blur-md border-b border-border-subtle transition-all">
+      <div className="h-16 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-6">
         {/* Brand Logo & Name */}
-        <Link
-          href="/"
-          className="flex items-center gap-3 group focus:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded-lg p-1"
-        >
-          <div className="w-9 h-9 rounded-xl bg-primary text-on-primary flex items-center justify-center font-bold shadow-md shadow-primary/20 group-hover:scale-105 transition-transform">
-            <svg
-              className="w-5 h-5 text-white"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
+        <div className="flex items-center gap-6 lg:gap-8">
+          <Link
+            href="/"
+            className="flex items-center gap-2 group text-inherit no-underline focus:outline-none"
+          >
+            <span className="font-title-md text-title-md tracking-tight text-on-surface">
+              ResumeLoops
+            </span>
+            <span className="font-label-xs text-label-xs tracking-widest uppercase px-1.5 py-0.5 rounded bg-surface-container-high text-on-surface-variant font-medium">
+              Editions
+            </span>
+          </Link>
+
+          {/* Desktop Navigation */}
+          <nav
+            aria-label="Main Navigation"
+            className="hidden lg:flex items-center gap-6 text-sm"
+          >
+            <a
+              href="#templates"
+              className="font-label-md text-label-md text-on-surface-variant hover:text-on-surface tracking-normal transition-colors py-1"
             >
-              <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83" />
-            </svg>
-          </div>
-          <span className="font-extrabold text-xl text-on-surface tracking-tight">
-            ResumeLoops
-          </span>
-        </Link>
+              Templates
+            </a>
+            <a
+              href="#philosophy"
+              className="font-label-md text-label-md text-on-surface-variant hover:text-on-surface tracking-normal transition-colors py-1"
+            >
+              Principles
+            </a>
+            <a
+              href="#diagnostics"
+              className="font-label-md text-label-md text-on-surface-variant hover:text-on-surface tracking-normal transition-colors py-1"
+            >
+              Diagnostics
+            </a>
+            <a
+              href="#pricing"
+              className="font-label-md text-label-md text-on-surface-variant hover:text-on-surface tracking-normal transition-colors py-1"
+            >
+              Pricing
+            </a>
+            <a
+              href="#faq"
+              className="font-label-md text-label-md text-on-surface-variant hover:text-on-surface tracking-normal transition-colors py-1"
+            >
+              FAQ
+            </a>
+          </nav>
+        </div>
 
-        {/* Desktop Navigation Pill */}
-        <nav
-          aria-label="Main Navigation"
-          className="hidden md:flex items-center gap-1 bg-surface-container-low p-1.5 rounded-full border border-surface-container shadow-2xs"
-        >
-          <a
-            href="#"
-            className="transition-all px-4 py-1.5 bg-primary text-on-primary font-medium text-sm rounded-full shadow-sm"
-          >
-            Home
-          </a>
-          <a
-            href="#templates"
-            className="text-sm text-on-surface-variant hover:text-on-surface transition-colors px-4 py-1.5 font-medium rounded-full hover:bg-surface-container"
-          >
-            Templates
-          </a>
-          <a
-            href="#features"
-            className="text-sm text-on-surface-variant hover:text-on-surface transition-colors px-4 py-1.5 font-medium rounded-full hover:bg-surface-container"
-          >
-            Features
-          </a>
-          <a
-            href="#pricing"
-            className="text-sm text-on-surface-variant hover:text-on-surface transition-colors px-4 py-1.5 font-medium rounded-full hover:bg-surface-container"
-          >
-            Pricing
-          </a>
-          <a
-            href="#faq"
-            className="text-sm text-on-surface-variant hover:text-on-surface transition-colors px-4 py-1.5 font-medium rounded-full hover:bg-surface-container"
-          >
-            FAQ
-          </a>
-        </nav>
-
-        {/* Right Action: Launch Workspace / Auth buttons */}
-        <div className="hidden sm:flex items-center gap-3">
+        {/* Right Action: Studio Links & Auth */}
+        <div className="flex items-center gap-3">
           {user ? (
             <>
               <Link
                 href="/dashboard"
-                className="inline-flex items-center gap-2 px-4 py-2 bg-primary text-on-primary text-sm font-semibold rounded-xl hover:bg-primary-dark transition-all shadow-[0_4px_14px_rgba(81,69,229,0.25)] hover:shadow-[0_6px_20px_rgba(81,69,229,0.35)] hover:-translate-y-0.5"
+                className="hidden sm:inline-flex items-center font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-colors"
               >
-                <span>Open Workspace</span>
-                <ArrowRight className="w-4 h-4" />
+                Enter Studio
+              </Link>
+              <Link
+                href="/dashboard"
+                className="h-9 px-4 rounded bg-primary text-on-primary font-label-md text-label-md flex items-center justify-center transition-colors hover:bg-neutral-800 shadow-xs"
+              >
+                <span>Workspace</span>
+                <ArrowRight className="w-3.5 h-3.5 ml-1.5" />
               </Link>
               <Link
                 href="/dashboard"
                 aria-label="User Workspace Profile"
-                className="w-10 h-10 rounded-full bg-secondary-container text-primary border border-primary/20 flex items-center justify-center font-bold shadow-inner hover:bg-secondary-container/80 transition-colors"
+                className="w-8 h-8 rounded-full bg-surface-container text-on-surface border border-border-subtle flex items-center justify-center shadow-xs"
               >
-                <User className="w-5 h-5 text-primary" />
+                <User className="w-4 h-4 text-on-surface" />
               </Link>
             </>
           ) : (
             <>
               <Link
                 href="/login"
-                className="px-4 py-2 text-sm font-semibold text-on-surface hover:text-primary transition-colors"
+                className="hidden sm:inline-flex items-center font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-colors"
               >
                 Sign In
               </Link>
               <Link
                 href="/signup"
-                className="inline-flex items-center gap-2 px-4 py-2 bg-primary text-on-primary text-sm font-semibold rounded-xl hover:bg-primary-dark transition-all shadow-[0_4px_14px_rgba(81,69,229,0.25)] hover:shadow-[0_6px_20px_rgba(81,69,229,0.35)] hover:-translate-y-0.5"
+                className="h-9 px-4 rounded bg-primary text-on-primary font-label-md text-label-md flex items-center justify-center transition-colors hover:bg-neutral-800 shadow-xs"
               >
-                <span>Get Started</span>
-                <ArrowRight className="w-4 h-4" />
+                Get Started
               </Link>
             </>
           )}
-        </div>
 
-        {/* Mobile Menu Button */}
-        <div className="flex md:hidden items-center gap-2">
-          <Link
-            href={user ? "/dashboard" : "/login"}
-            aria-label="User Profile"
-            className="w-9 h-9 rounded-full bg-secondary-container text-primary flex items-center justify-center font-bold"
-          >
-            <User className="w-4 h-4 text-primary" />
-          </Link>
+          {/* Mobile Menu Button */}
           <button
             type="button"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="p-2 rounded-xl text-on-surface hover:bg-surface-container transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+            className="p-1.5 rounded text-on-surface hover:bg-surface-container transition-colors lg:hidden"
             aria-expanded={mobileMenuOpen}
             aria-label="Toggle navigation menu"
           >
-            {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
           </button>
         </div>
       </div>
 
-      {/* Mobile Dropdown Menu */}
+      {/* Mobile Menu */}
       {mobileMenuOpen && (
-        <div className="md:hidden bg-warm-ivory border-b border-surface-container px-6 py-6 shadow-xl animate-in fade-in duration-200">
-          <nav className="flex flex-col gap-3">
-            <a
-              href="#"
-              onClick={() => setMobileMenuOpen(false)}
-              className="px-4 py-2.5 rounded-xl bg-primary text-on-primary font-medium text-sm"
-            >
-              Home
-            </a>
+        <div className="lg:hidden bg-surface border-b border-border-subtle px-6 py-4 shadow-lg animate-in fade-in duration-150">
+          <nav className="flex flex-col gap-2">
             <a
               href="#templates"
               onClick={() => setMobileMenuOpen(false)}
-              className="px-4 py-2.5 rounded-xl text-on-surface font-medium text-sm hover:bg-surface-container transition-colors"
+              className="py-2 text-sm text-on-surface font-medium hover:text-brand transition-colors"
             >
               Curated Templates
             </a>
             <a
-              href="#features"
+              href="#philosophy"
               onClick={() => setMobileMenuOpen(false)}
-              className="px-4 py-2.5 rounded-xl text-on-surface font-medium text-sm hover:bg-surface-container transition-colors"
+              className="py-2 text-sm text-on-surface font-medium hover:text-brand transition-colors"
             >
-              Platform Features
+              Our Principles
+            </a>
+            <a
+              href="#diagnostics"
+              onClick={() => setMobileMenuOpen(false)}
+              className="py-2 text-sm text-on-surface font-medium hover:text-brand transition-colors"
+            >
+              Diagnostics Suite
             </a>
             <a
               href="#pricing"
               onClick={() => setMobileMenuOpen(false)}
-              className="px-4 py-2.5 rounded-xl text-on-surface font-medium text-sm hover:bg-surface-container transition-colors"
+              className="py-2 text-sm text-on-surface font-medium hover:text-brand transition-colors"
             >
-              Pricing &amp; Plans
+              Pricing &amp; Membership
             </a>
             <a
               href="#faq"
               onClick={() => setMobileMenuOpen(false)}
-              className="px-4 py-2.5 rounded-xl text-on-surface font-medium text-sm hover:bg-surface-container transition-colors"
+              className="py-2 text-sm text-on-surface font-medium hover:text-brand transition-colors"
             >
-              Frequently Asked Questions
+              FAQ
             </a>
-            <div className="pt-3 border-t border-surface-container flex flex-col gap-2">
+            <div className="pt-3 border-t border-border-subtle flex flex-col gap-2">
               <Link
-                href="/dashboard"
+                href={user ? "/dashboard" : "/signup"}
                 onClick={() => setMobileMenuOpen(false)}
-                className="w-full py-3 bg-primary text-on-primary font-semibold text-center rounded-xl shadow-md flex items-center justify-center gap-2"
+                className="w-full py-2.5 bg-primary text-on-primary text-sm font-medium text-center rounded transition-colors hover:bg-neutral-800 flex items-center justify-center gap-1.5"
               >
-                <span>Launch Workspace</span>
+                <span>{user ? "Enter Studio" : "Get Started"}</span>
                 <ArrowRight className="w-4 h-4" />
               </Link>
             </div>

@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_dashboard" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { "colors": { "on-tertiary": "#ffffff", "on-error": "#ffffff", "on-surface": "#1b1c1a", "tertiary-container": "#1c1b1a", "on-secondary-container": "#65655f", "on-secondary": "#ffffff", "secondary-fixed-dim": "#c8c7bf", "on-tertiary-fixed-variant": "#484645", "error": "#ba1a1a", "secondary": "#5f5f59", "surface-container-lowest": "#ffffff", "surface-container": "#efeeea", "primary": "#000000", "inverse-primary": "#c8c6c5", "secondary-container": "#e4e3db", "surface-tint": "#5f5e5e", "surface-bright": "#faf9f5", "surface-dim": "#dbdad6", "outline": "#747878", "surface-container-low": "#f4f4f0", "outline-variant": "#c4c7c7", "on-secondary-fixed": "#1b1c17", "surface-container-highest": "#e3e2df", "primary-container": "#1c1b1b", "surface-container-high": "#e9e8e4", "inverse-on-surface": "#f2f1ed", "on-primary-fixed": "#1c1b1b", "tertiary-fixed": "#e6e2df", "surface-variant": "#e3e2df", "on-tertiary-container": "#868382", "background": "#faf9f5", "on-error-container": "#93000a", "on-primary-fixed-variant": "#474746", "on-primary-container": "#858383", "on-surface-variant": "#444748", "error-container": "#ffdad6", "on-primary": "#ffffff", "tertiary": "#000000", "on-secondary-fixed-variant": "#474742", "primary-fixed-dim": "#c8c6c5", "tertiary-fixed-dim": "#cac6c4", "inverse-surface": "#2f312e", "on-background": "#1b1c1a", "surface": "#faf9f5", "on-tertiary-fixed": "#1c1b1a", "primary-fixed": "#e5e2e1", "secondary-fixed": "#e4e3db" }, "borderRadius": { "DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem" }, "spacing": { "gutter-sm": "1rem", "space-xs": "0.25rem", "space-md": "1rem", "margin-mobile": "1.25rem", "space-xl": "2.5rem", "space-sm": "0.5rem", "space-lg": "1.5rem", "gutter": "1.5rem", "margin": "3rem" }, "fontFamily": { "display-xl-mobile": [ "Inter" ], "body-lg": [ "Inter" ], "headline-lg-mobile": [ "Inter" ], "headline-md": [ "Inter" ], "title-md": [ "Inter" ], "headline-sm": [ "Inter" ], "label-xs": [ "Inter" ], "label-md": [ "Inter" ], "headline-lg": [ "Inter" ], "display-xl": [ "Inter" ], "body-md": [ "Inter" ], "body-sm": [ "Inter" ] }, "fontSize": { "display-xl-mobile": [ "36px", { "lineHeight": "44px", "letterSpacing": "-0.03em", "fontWeight": "400" } ], "body-lg": [ "16px", { "lineHeight": "26px", "letterSpacing": "-0.005em", "fontWeight": "400" } ], "headline-lg-mobile": [ "28px", { "lineHeight": "36px", "letterSpacing": "-0.025em", "fontWeight": "500" } ], "headline-md": [ "28px", { "lineHeight": "36px", "letterSpacing": "-0.02em", "fontWeight": "500" } ], "title-md": [ "16px", { "lineHeight": "24px", "letterSpacing": "-0.01em", "fontWeight": "600" } ], "headline-sm": [ "20px", { "lineHeight": "28px", "letterSpacing": "-0.015em", "fontWeight": "600" } ], "label-xs": [ "11px", { "lineHeight": "14px", "letterSpacing": "0.05em", "fontWeight": "600" } ], "label-md": [ "12px", { "lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "500" } ], "headline-lg": [ "40px", { "lineHeight": "48px", "letterSpacing": "-0.03em", "fontWeight": "500" } ], "display-xl": [ "56px", { "lineHeight": "64px", "letterSpacing": "-0.035em", "fontWeight": "400" } ], "body-md": [ "14px", { "lineHeight": "22px", "letterSpacing": "0em", "fontWeight": "400" } ], "body-sm": [ "13px", { "lineHeight": "20px", "letterSpacing": "0em", "fontWeight": "400" } ] } } } };</script></head><body class="bg-surface font-body-md text-body-md text-on-surface antialiased"><header class="fixed top-0 left-0 right-0 z-50 bg-surface/90 backdrop-blur-md border-b border-outline-variant/40"><div class="h-16 w-full px-gutter flex items-center justify-between gap-space-lg"><div class="flex items-center gap-space-lg"><a class="flex items-center gap-space-sm group text-inherit no-underline" href="#"><span class="font-title-md text-title-md tracking-tight text-on-surface">ResumeLoops</span></a><span class="h-4 w-px bg-outline-variant/50 hidden md:block"></span><nav class="hidden xl:flex items-center gap-space-lg" data-active-classes="text-on-surface font-title-md"><a aria-current="page" class="tracking-normal transition-colors text-on-surface font-title-md" data-path="workspace" href="#">Workspace</a><a class="font-label-md text-label-md text-on-surface-variant hover:text-on-surface tracking-normal transition-colors" data-path="editor" href="#">Editor</a><a class="font-label-md text-label-md text-on-surface-variant hover:text-on-surface tracking-normal transition-colors" data-path="templates" href="#">Templates</a><a class="font-label-md text-label-md text-on-surface-variant hover:text-on-surface tracking-normal transition-colors" data-path="ats-diagnostics" href="#">ATS Diagnostics</a><a class="font-label-md text-label-md text-on-surface-variant hover:text-on-surface tracking-normal transition-colors" data-path="job-match" href="#">Job Match</a><a class="font-label-md text-label-md text-on-surface-variant hover:text-on-surface tracking-normal transition-colors" data-path="pricing" href="#">Pricing</a></nav></div><div class="flex items-center gap-space-md"><div class="relative hidden sm:flex items-center"><span class="material-symbols-outlined absolute left-2.5 text-on-surface-variant text-[18px]">search</span><input class="h-8 pl-8 pr- space-sm text-body-sm font-body-sm bg-surface-container-low border border-outline-variant/50 rounded focus:outline-none focus:border-on-surface text-on-surface placeholder:text-on-surface-variant/60 w-44 lg:w-56 transition-all" placeholder="Search archives..." type="text"/></div><div class="flex items-center gap-1.5 px-2 py-1 rounded bg-surface-container border border-outline-variant/40"><span class="w-1.5 h-1.5 rounded-full bg-[#3d7a5a]"></span><span class="font-label-xs text-label-xs text-on-surface-variant uppercase tracking-wider">ATS 98%</span></div><img alt="Profile" class="w-8 h-8 rounded-full object-cover ring-1 ring-outline-variant/50" src="https://lh3.googleusercontent.com/aida/AEtjO1WpxWl3lfaKHQV7dCcMOCp0q5U9b62hH5iNxTKvyAI4kyfliGaD7bmIU5TN1akqWSf6_wddCsXE-r3VYH3eOVzXxdbP1ZjNBuoEQBI8UUW463QbfqJiTgX3NBro-lXVlgazlR3s8EO_0c8yHJrb-oSGcY_mwQrYN6HCI66uDocnKtJ0hbghrKHZbciehidzY-BFLHAfS_Pi-TQEVfq4w0nUsEuqD0ZZZ0H31A8qbzKI-NpIGclxrBm8TJU"/></div></div></header><aside class="fixed left-0 top-16 bottom-0 w-64 bg-surface border-r border-outline-variant/40 z-40 hidden md:flex flex-col justify-between py-space-lg"><div class="flex flex-col gap-space-lg px-space-md"><div class="px-space-sm"><span class="font-label-xs text-label-xs uppercase tracking-widest text-on-surface-variant">Studio Engine</span></div><nav class="flex flex-col gap-1" data-active-classes="bg-surface-container text-on-surface font-title-md"><a aria-current="page" class="flex items-center gap-space-sm px-space-sm py-2 rounded transition-all bg-surface-container text-on-surface font-title-md" data-path="workspace" href="#"><span class="material-symbols-outlined text-[20px]">grid_view</span><span class="font-label-md text-label-md">Workspace</span></a><a class="flex items-center gap-space-sm px-space-sm py-2 rounded text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface transition-all" data-path="editor" href="#"><span class="material-symbols-outlined text-[20px]">edit_note</span><span class="font-label-md text-label-md">Live Editor</span></a><a class="flex items-center gap-space-sm px-space-sm py-2 rounded text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface transition-all" data-path="templates" href="#"><span class="material-symbols-outlined text-[20px]">style</span><span class="font-label-md text-label-md">Templates</span></a><a class="flex items-center gap-space-sm px-space-sm py-2 rounded text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface transition-all" data-path="ats-diagnostics" href="#"><span class="material-symbols-outlined text-[20px]">policy</span><span class="font-label-md text-label-md">ATS Diagnostics</span></a><a class="flex items-center gap-space-sm px-space-sm py-2 rounded text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface transition-all" data-path="job-match" href="#"><span class="material-symbols-outlined text-[20px]">compare_arrows</span><span class="font-label-md text-label-md">Job Match</span></a></nav></div><div class="px-space-md flex flex-col gap-space-xs border-t border-outline-variant/30 pt-space-md"><div class="flex items-center justify-between px-space-sm py-1"><span class="font-label-xs text-label-xs uppercase text-on-surface-variant">Format</span><span class="font-label-xs text-label-xs text-on-surface">US Letter / 120gsm</span></div><div class="flex items-center justify-between px-space-sm py-1"><span class="font-label-xs text-label-xs uppercase text-on-surface-variant">Typography</span><span class="font-label-xs text-label-xs text-on-surface">Inter Pro</span></div></div></aside><div class="md:pl-64"><main class="relative pt-16 bg-surface min-h-screen"><div class="flex flex-col w-full">
+<div class="px-space-md sm:px-gutter lg:px-margin py-space-xl flex flex-col gap-space-xl max-w-7xl mx-auto w-full">
+<!-- Workspace Header & Core Actions -->
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-space-lg">
+<div class="flex flex-col gap-space-xs max-w-2xl">
+<div class="flex items-center gap-2">
+<span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
+<span class="font-label-xs text-label-xs uppercase tracking-widest text-on-surface-variant">Archival Studio / Oct 2024</span>
+</div>
+<h1 class="font-headline-lg text-headline-lg text-on-surface tracking-tight">Your career workspace.</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant">
+          Manage tailored documents, track version iterations, and diagnose target role alignment with editorial precision.
+        </p>
+</div>
+<div class="flex items-center gap-space-sm flex-wrap">
+<button class="h-10 px- space-md bg-surface-container hover:bg-surface-container-high text-on-surface font-label-md text-label-md rounded flex items-center gap-2 transition-all">
+<span class="material-symbols-outlined text-[18px]">upload_file</span>
+<span>Import existing document</span>
+</button>
+<button class="h-10 px- space-lg bg-primary hover:bg-[#2c2c2c] text-on-primary font-label-md text-label-md rounded flex items-center gap-2 transition-all shadow-sm">
+<span class="material-symbols-outlined text-[18px]">add</span>
+<span>+ Create new resume</span>
+</button>
+</div>
+</div>
+<!-- Featured Document Hero Banner (Asymmetrical Split Stage) -->
+<div class="bg-surface-container-low rounded-xl p-space-lg lg:p-space-xl flex flex-col xl:flex-row gap-space-xl items-stretch relative overflow-hidden shadow-sm">
+<div class="absolute -right-20 -bottom-20 w-96 h-96 bg-surface-container rounded-full blur-3xl pointer-events-none opacity-60"></div>
+<!-- Left Content & Diagnostics -->
+<div class="flex-1 flex flex-col justify-between gap-space-lg relative z-10">
+<div class="flex flex-col gap-space-md">
+<div class="flex items-center gap-space-sm flex-wrap">
+<span class="px-2.5 py-1 bg-surface-container-highest text-on-surface font-label-xs text-label-xs uppercase tracking-wider rounded">Primary Active Document</span>
+<span class="px-2.5 py-1 bg-surface-container text-on-surface-variant font-label-xs text-label-xs rounded flex items-center gap-1.5">
+<span class="w-1.5 h-1.5 rounded-full bg-[#2e7d32]"></span>
+              ATS Alignment: 94%
+            </span>
+</div>
+<div class="flex flex-col gap-space-xs">
+<h2 class="font-headline-md text-headline-md text-on-surface">Principal Product Architect — Stripe &amp; OpenAI</h2>
+<p class="font-body-md text-body-md text-on-surface-variant">
+              Fine-tuned for Tier-1 infrastructure and platform UX leadership. Structured around dual-track metric achievements and organizational systems scale.
+            </p>
+</div>
+<div class="grid grid-cols-2 sm:grid-cols-3 gap-space-md pt-space-xs">
+<div class="bg-surface-container-lowest p-space-md rounded">
+<span class="font-label-xs text-label-xs uppercase tracking-wider text-on-surface-variant block mb-1">Last Edited</span>
+<span class="font-title-md text-title-md text-on-surface">2 hours ago</span>
+</div>
+<div class="bg-surface-container-lowest p-space-md rounded">
+<span class="font-label-xs text-label-xs uppercase tracking-wider text-on-surface-variant block mb-1">Target Roles</span>
+<span class="font-title-md text-title-md text-on-surface">2 JDs Linked</span>
+</div>
+<div class="bg-surface-container-lowest p-space-md rounded col-span-2 sm:col-span-1">
+<span class="font-label-xs text-label-xs uppercase tracking-wider text-on-surface-variant block mb-1">Print Density</span>
+<span class="font-title-md text-title-md text-on-surface">1 Page (98%)</span>
+</div>
+</div>
+</div>
+<div class="flex flex-wrap items-center gap-space-sm pt-space-sm">
+<button class="h-10 px-space-lg bg-primary text-on-primary hover:bg-[#2c2c2c] font-label-md text-label-md rounded flex items-center gap-2 transition-all">
+<span class="material-symbols-outlined text-[18px]">edit_note</span>
+<span>Open Editor</span>
+</button>
+<button class="h-10 px-space-md bg-surface-container-lowest text-on-surface hover:bg-surface-container font-label-md text-label-md rounded flex items-center gap-2 transition-all">
+<span class="material-symbols-outlined text-[18px]">content_copy</span>
+<span>Duplicate</span>
+</button>
+<button class="h-10 px-space-md bg-surface-container-lowest text-on-surface hover:bg-surface-container font-label-md text-label-md rounded flex items-center gap-2 transition-all">
+<span class="material-symbols-outlined text-[18px]">history</span>
+<span>Version History (v4.2)</span>
+</button>
+<button class="h-10 px-space-md bg-surface-container-lowest text-on-surface hover:bg-surface-container font-label-md text-label-md rounded flex items-center gap-2 transition-all">
+<span class="material-symbols-outlined text-[18px]">download</span>
+<span>Export PDF</span>
+</button>
+</div>
+</div>
+<!-- Right Visual: Tactile Paper Preview Canvas -->
+<div class="w-full xl:w-[420px] flex items-center justify-center p-space-md bg-surface-container rounded-lg relative">
+<div class="w-full max-w-[340px] aspect-[8.5/11] bg-surface-bright rounded p-6 shadow-md flex flex-col justify-between select-none relative overflow-hidden transition-transform hover:-translate-y-1 duration-300">
+<div class="flex flex-col gap-3">
+<!-- Simulated Header -->
+<div class="flex justify-between items-start pb-2">
+<div>
+<span class="font-title-md text-title-md text-on-surface tracking-tight block">ALEXANDER VANCE</span>
+<span class="font-label-xs text-label-xs uppercase tracking-wider text-on-surface-variant block">Staff Systems &amp; Product Architect</span>
+</div>
+<span class="font-label-xs text-label-xs text-on-surface-variant text-right">San Francisco, CA<br/>alex@vance.systems</span>
+</div>
+<!-- Decorative Paper Micro Rule -->
+<div class="h-px w-full bg-outline-variant/60"></div>
+<!-- Section 1 -->
+<div class="flex flex-col gap-1.5">
+<span class="font-label-xs text-label-xs uppercase tracking-widest text-on-surface-variant font-semibold">Executive Narrative</span>
+<p class="font-body-sm text-[10px] leading-relaxed text-on-surface-variant line-clamp-3">
+                Architectural leadership with 11+ years guiding distributed infrastructure, zero-friction developer experience, and foundational design tokens for hyper-growth platforms.
+              </p>
+</div>
+<!-- Section 2 -->
+<div class="flex flex-col gap-1.5">
+<div class="flex justify-between items-baseline">
+<span class="font-label-xs text-label-xs uppercase tracking-widest text-on-surface-variant font-semibold">Experience</span>
+<span class="font-label-xs text-[9px] text-on-surface-variant">2021 — PRESENT</span>
+</div>
+<div>
+<span class="font-body-sm text-[11px] font-semibold text-on-surface block">Stripe — Principal Systems Lead</span>
+<p class="font-body-sm text-[9px] leading-normal text-on-surface-variant line-clamp-2 mt-0.5">
+                  • Championed next-generation checkout surface reducing render latency by 420ms across 8.4M daily payment flows.
+                </p>
+</div>
+</div>
+<div class="flex flex-col gap-1">
+<div class="flex justify-between items-baseline">
+<span class="font-body-sm text-[11px] font-semibold text-on-surface">OpenAI — Consulting Architect</span>
+<span class="font-label-xs text-[9px] text-on-surface-variant">2023 — 2024</span>
+</div>
+<p class="font-body-sm text-[9px] leading-normal text-on-surface-variant line-clamp-2">
+                • Synthesized enterprise multimodal control schemas adopted across Fortune 50 API deployments.
+              </p>
+</div>
+</div>
+<!-- Simulated Paper Footer Status -->
+<div class="flex justify-between items-center pt-2">
+<span class="font-label-xs text-[8px] uppercase tracking-widest text-on-surface-variant">Format: 120gsm US Letter</span>
+<span class="font-label-xs text-[8px] text-on-surface-variant">ATS Engine: Inter Pro Neo</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Live Document Catalogue & Variations -->
+<div class="flex flex-col gap-space-md">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-space-sm">
+<div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Tailored Document Variations</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Iterated compositions optimized for specific career trajectories and venture profiles.</p>
+</div>
+<div class="flex items-center gap-space-xs">
+<button class="px-3 py-1.5 bg-surface-container text-on-surface font-label-md text-label-md rounded">All Documents (6)</button>
+<button class="px-3 py-1.5 hover:bg-surface-container-low text-on-surface-variant font-label-md text-label-md rounded">Resumes (4)</button>
+<button class="px-3 py-1.5 hover:bg-surface-container-low text-on-surface-variant font-label-md text-label-md rounded">Cover Dossiers (2)</button>
+</div>
+</div>
+<!-- Catalogue Table / Row List -->
+<div class="flex flex-col gap-space-xs">
+<!-- Document Item 1 -->
+<div class="group bg-surface-container-low hover:bg-surface-container p-space-md rounded-lg flex flex-col md:flex-row md:items-center justify-between gap-space-md transition-all shadow-sm">
+<div class="flex items-start gap-space-md min-w-0">
+<div class="w-10 h-12 bg-surface-bright rounded flex items-center justify-center text-on-surface shadow-sm shrink-0">
+<span class="material-symbols-outlined text-[20px]">description</span>
+</div>
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-space-sm flex-wrap">
+<span class="font-title-md text-title-md text-on-surface truncate">Design Leadership / VP Product</span>
+<span class="px-2 py-0.5 bg-surface-container-highest text-on-surface font-label-xs text-label-xs rounded">Tailored for Figma</span>
+<span class="px-2 py-0.5 bg-[#e8f5e9] text-[#2e7d32] font-label-xs text-label-xs rounded font-medium">Ready</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">Updated yesterday • 1 Page Letter • Inter Display / Seravek mix</span>
+</div>
+</div>
+<div class="flex items-center gap-space-md shrink-0 justify-between md:justify-end">
+<div class="flex items-center gap-2 px-2.5 py-1 bg-surface-container-lowest rounded shadow-sm">
+<span class="w-2 h-2 rounded-full bg-[#2e7d32]"></span>
+<span class="font-label-md text-label-md text-on-surface font-medium">96% ATS</span>
+</div>
+<div class="flex items-center gap-1">
+<button class="w-9 h-9 rounded bg-surface-container-lowest hover:bg-primary hover:text-on-primary text-on-surface flex items-center justify-center transition-colors" title="Edit">
+<span class="material-symbols-outlined text-[18px]">edit</span>
+</button>
+<button class="w-9 h-9 rounded bg-surface-container-lowest hover:bg-surface-container-high text-on-surface flex items-center justify-center transition-colors" title="Duplicate">
+<span class="material-symbols-outlined text-[18px]">content_copy</span>
+</button>
+<button class="w-9 h-9 rounded bg-surface-container-lowest hover:bg-surface-container-high text-on-surface flex items-center justify-center transition-colors" title="Rename">
+<span class="material-symbols-outlined text-[18px]">drive_file_rename_outline</span>
+</button>
+<button class="w-9 h-9 rounded bg-surface-container-lowest hover:bg-surface-container-high text-on-surface flex items-center justify-center transition-colors" title="More options">
+<span class="material-symbols-outlined text-[18px]">more_vert</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Document Item 2 -->
+<div class="group bg-surface-container-low hover:bg-surface-container p-space-md rounded-lg flex flex-col md:flex-row md:items-center justify-between gap-space-md transition-all shadow-sm">
+<div class="flex items-start gap-space-md min-w-0">
+<div class="w-10 h-12 bg-surface-bright rounded flex items-center justify-center text-on-surface shadow-sm shrink-0">
+<span class="material-symbols-outlined text-[20px]">description</span>
+</div>
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-space-sm flex-wrap">
+<span class="font-title-md text-title-md text-on-surface truncate">Founding Designer</span>
+<span class="px-2 py-0.5 bg-surface-container-highest text-on-surface font-label-xs text-label-xs rounded">Tailored for Early-stage AI Studio</span>
+<span class="px-2 py-0.5 bg-[#fff8e1] text-[#f57f17] font-label-xs text-label-xs rounded font-medium">Needs Review</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">Updated Oct 12 • 2 Missing critical keywords: Vector DBs, Latency profiling</span>
+</div>
+</div>
+<div class="flex items-center gap-space-md shrink-0 justify-between md:justify-end">
+<div class="flex items-center gap-2 px-2.5 py-1 bg-surface-container-lowest rounded shadow-sm">
+<span class="w-2 h-2 rounded-full bg-[#f57f17]"></span>
+<span class="font-label-md text-label-md text-on-surface font-medium">81% ATS</span>
+</div>
+<div class="flex items-center gap-1">
+<button class="w-9 h-9 rounded bg-surface-container-lowest hover:bg-primary hover:text-on-primary text-on-surface flex items-center justify-center transition-colors" title="Edit">
+<span class="material-symbols-outlined text-[18px]">edit</span>
+</button>
+<button class="w-9 h-9 rounded bg-surface-container-lowest hover:bg-surface-container-high text-on-surface flex items-center justify-center transition-colors" title="Duplicate">
+<span class="material-symbols-outlined text-[18px]">content_copy</span>
+</button>
+<button class="w-9 h-9 rounded bg-surface-container-lowest hover:bg-surface-container-high text-on-surface flex items-center justify-center transition-colors" title="Rename">
+<span class="material-symbols-outlined text-[18px]">drive_file_rename_outline</span>
+</button>
+<button class="w-9 h-9 rounded bg-surface-container-lowest hover:bg-surface-container-high text-on-surface flex items-center justify-center transition-colors" title="More options">
+<span class="material-symbols-outlined text-[18px]">more_vert</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Document Item 3 -->
+<div class="group bg-surface-container-low hover:bg-surface-container p-space-md rounded-lg flex flex-col md:flex-row md:items-center justify-between gap-space-md transition-all shadow-sm">
+<div class="flex items-start gap-space-md min-w-0">
+<div class="w-10 h-12 bg-surface-bright rounded flex items-center justify-center text-on-surface shadow-sm shrink-0">
+<span class="material-symbols-outlined text-[20px]">article</span>
+</div>
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-space-sm flex-wrap">
+<span class="font-title-md text-title-md text-on-surface truncate">Executive Summary &amp; Bios</span>
+<span class="px-2 py-0.5 bg-surface-container-highest text-on-surface font-label-xs text-label-xs rounded">General Portfolio Dossier</span>
+<span class="px-2 py-0.5 bg-surface-container text-on-surface-variant font-label-xs text-label-xs rounded font-medium">Archived</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">Updated Sep 28 • Long-form bio dossier with speaking credits</span>
+</div>
+</div>
+<div class="flex items-center gap-space-md shrink-0 justify-between md:justify-end">
+<div class="flex items-center gap-2 px-2.5 py-1 bg-surface-container-lowest rounded shadow-sm">
+<span class="w-2 h-2 rounded-full bg-secondary"></span>
+<span class="font-label-md text-label-md text-on-surface font-medium">Baseline</span>
+</div>
+<div class="flex items-center gap-1">
+<button class="w-9 h-9 rounded bg-surface-container-lowest hover:bg-primary hover:text-on-primary text-on-surface flex items-center justify-center transition-colors" title="Edit">
+<span class="material-symbols-outlined text-[18px]">edit</span>
+</button>
+<button class="w-9 h-9 rounded bg-surface-container-lowest hover:bg-surface-container-high text-on-surface flex items-center justify-center transition-colors" title="Duplicate">
+<span class="material-symbols-outlined text-[18px]">content_copy</span>
+</button>
+<button class="w-9 h-9 rounded bg-surface-container-lowest hover:bg-surface-container-high text-on-surface flex items-center justify-center transition-colors" title="Rename">
+<span class="material-symbols-outlined text-[18px]">drive_file_rename_outline</span>
+</button>
+<button class="w-9 h-9 rounded bg-surface-container-lowest hover:bg-surface-container-high text-on-surface flex items-center justify-center transition-colors" title="More options">
+<span class="material-symbols-outlined text-[18px]">more_vert</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Quick Studio Shortcuts (Tonal Architectural Panels) -->
+<div class="flex flex-col gap-space-md pt-space-sm">
+<div class="flex items-center justify-between">
+<div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Studio Diagnostic Suites</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Editorial and parsing engines running parallel verification loops.</p>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-space-md">
+<!-- Shortcut 1: ATS Diagnostics Studio -->
+<a class="group bg-surface-container-low hover:bg-surface-container p-space-lg rounded-xl flex flex-col justify-between gap-space-lg transition-all shadow-sm text-inherit no-underline" href="#">
+<div class="flex flex-col gap-space-sm">
+<div class="w-10 h-10 rounded bg-surface-container-highest flex items-center justify-center text-on-surface group-hover:bg-primary group-hover:text-on-primary transition-colors">
+<span class="material-symbols-outlined text-[22px]">policy</span>
+</div>
+<div class="flex flex-col gap-1">
+<span class="font-title-md text-title-md text-on-surface group-hover:text-primary transition-colors">ATS Diagnostics Studio</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+                Run pre-flight checks against Taleo, Greenhouse, and Workday hiring filters with zero formatting degradation.
+              </p>
+</div>
+</div>
+<div class="flex items-center justify-between pt-space-xs text-on-surface font-label-md text-label-md">
+<span>Launch diagnostic runner</span>
+<span class="material-symbols-outlined text-[18px] group-hover:translate-x-1 transition-transform">arrow_forward</span>
+</div>
+</a>
+<!-- Shortcut 2: Job Match Analyzer -->
+<a class="group bg-surface-container-low hover:bg-surface-container p-space-lg rounded-xl flex flex-col justify-between gap-space-lg transition-all shadow-sm text-inherit no-underline" href="#">
+<div class="flex flex-col gap-space-sm">
+<div class="w-10 h-10 rounded bg-surface-container-highest flex items-center justify-center text-on-surface group-hover:bg-primary group-hover:text-on-primary transition-colors">
+<span class="material-symbols-outlined text-[22px]">compare_arrows</span>
+</div>
+<div class="flex flex-col gap-1">
+<span class="font-title-md text-title-md text-on-surface group-hover:text-primary transition-colors">Job Match Analyzer</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+                Compare resume bullet proof-points against specific target role descriptions to reveal missing competencies.
+              </p>
+</div>
+</div>
+<div class="flex items-center justify-between pt-space-xs text-on-surface font-label-md text-label-md">
+<span>Inspect target match</span>
+<span class="material-symbols-outlined text-[18px] group-hover:translate-x-1 transition-transform">arrow_forward</span>
+</div>
+</a>
+<!-- Shortcut 3: Editorial Typography Presets -->
+<a class="group bg-surface-container-low hover:bg-surface-container p-space-lg rounded-xl flex flex-col justify-between gap-space-lg transition-all shadow-sm text-inherit no-underline" href="#">
+<div class="flex flex-col gap-space-sm">
+<div class="w-10 h-10 rounded bg-surface-container-highest flex items-center justify-center text-on-surface group-hover:bg-primary group-hover:text-on-primary transition-colors">
+<span class="material-symbols-outlined text-[22px]">format_shapes</span>
+</div>
+<div class="flex flex-col gap-1">
+<span class="font-title-md text-title-md text-on-surface group-hover:text-primary transition-colors">Editorial Typography</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+                Explore curated letterform combinations and architectural leading rules crafted for unyielding legibility.
+              </p>
+</div>
+</div>
+<div class="flex items-center justify-between pt-space-xs text-on-surface font-label-md text-label-md">
+<span>Browse type foundry</span>
+<span class="material-symbols-outlined text-[18px] group-hover:translate-x-1 transition-transform">arrow_forward</span>
+</div>
+</a>
+</div>
+</div>
+</div>
+</div></main></div></body></html>

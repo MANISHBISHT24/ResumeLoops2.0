@@ -345,19 +345,19 @@ export function clearAllResumes(): void {
 const emptySubscribe = () => () => {};
 
 export function useResumeStore() {
-  const isHydrated = useSyncExternalStore(emptySubscribe, () => true, () => false);
-  const [resumes, setResumes] = useState<Resume[]>(() => {
-    if (typeof window !== "undefined") {
-      return getStoredResumes();
-    }
-    return [];
-  });
-  const [isLoading, setIsLoading] = useState(() => isSupabaseConfigured());
+  const isClientHydrated = useSyncExternalStore(emptySubscribe, () => true, () => false);
+  const [resumes, setResumes] = useState<Resume[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [isCloudSynced, setIsCloudSynced] = useState(false);
   const [hasUnimportedDrafts, setHasUnimportedDrafts] = useState(false);
 
   const isMountedRef = useRef(true);
+  const isCloudSyncedRef = useRef(isCloudSynced);
+
+  useEffect(() => {
+    isCloudSyncedRef.current = isCloudSynced;
+  }, [isCloudSynced]);
 
   const loadData = useCallback(async () => {
     const configured = isSupabaseConfigured();
@@ -410,70 +410,46 @@ export function useResumeStore() {
       }
     };
 
+    // Listen to account sign in to reload cloud resumes
+    const handleSignedIn = () => {
+      if (isMountedRef.current) {
+        setIsLoading(true);
+        void loadData();
+      }
+    };
+
     // Listen to storage events for cross-tab local updates
     const handleStorageChange = () => {
-      if (!isCloudSynced) {
+      if (!isCloudSyncedRef.current) {
         setResumes(getStoredResumes());
       }
     };
 
     if (typeof window !== "undefined") {
       window.addEventListener("resumeloops_auth_signed_out", handleSignedOut);
+      window.addEventListener("resumeloops_auth_signed_in", handleSignedIn);
       window.addEventListener(STORAGE_EVENT_NAME, handleStorageChange);
       window.addEventListener("storage", handleStorageChange);
     }
 
-    // Only initiate cloud fetch if Supabase is configured
-    if (isSupabaseConfigured()) {
-      let isIgnored = false;
-      const initCloud = async () => {
-        try {
-          const supabase = createClient();
-          if (supabase) {
-            const {
-              data: { user },
-            } = await supabase.auth.getUser();
-
-            if (user && !isIgnored) {
-              const cloudResumes = await fetchUserResumes();
-              if (!isIgnored) {
-                setResumes(cloudResumes);
-                setIsCloudSynced(true);
-                setHasUnimportedDrafts(hasLocalDrafts());
-                setIsLoading(false);
-                return;
-              }
-            }
-          }
-        } catch (err: unknown) {
-          console.warn("[ResumeLoops Store] Initial cloud sync failed:", err);
-        }
-        if (!isIgnored) {
-          setIsLoading(false);
-        }
-      };
-      void initCloud();
-
-      return () => {
-        isIgnored = true;
-        isMountedRef.current = false;
-        if (typeof window !== "undefined") {
-          window.removeEventListener("resumeloops_auth_signed_out", handleSignedOut);
-          window.removeEventListener(STORAGE_EVENT_NAME, handleStorageChange);
-          window.removeEventListener("storage", handleStorageChange);
-        }
-      };
-    }
+    // Trigger initial data load after mount
+    const timer = setTimeout(() => {
+      if (isMountedRef.current) {
+        void loadData();
+      }
+    }, 0);
 
     return () => {
+      clearTimeout(timer);
       isMountedRef.current = false;
       if (typeof window !== "undefined") {
         window.removeEventListener("resumeloops_auth_signed_out", handleSignedOut);
+        window.removeEventListener("resumeloops_auth_signed_in", handleSignedIn);
         window.removeEventListener(STORAGE_EVENT_NAME, handleStorageChange);
         window.removeEventListener("storage", handleStorageChange);
       }
     };
-  }, [isCloudSynced]);
+  }, [loadData]);
 
   // Cloud & local unified create
   const handleCreateResume = useCallback(
@@ -645,9 +621,13 @@ export function useResumeStore() {
     setHasUnimportedDrafts(false);
   }, []);
 
+  const isHydrated = isClientHydrated && !isLoading;
+
   return {
     resumes,
     isHydrated,
+    isClientHydrated,
+    isReady: isHydrated,
     isLoading,
     error,
     isCloudSynced,

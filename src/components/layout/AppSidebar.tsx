@@ -4,13 +4,12 @@ import React from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import {
-  LayoutDashboard,
+  Grid,
   FileEdit,
-  LayoutTemplate,
-  Sparkles,
-  Gauge,
+  Layers,
+  ShieldAlert,
+  GitCompare,
   X,
-  FileText,
   LogOut,
   LogIn,
 } from "lucide-react";
@@ -22,11 +21,11 @@ interface AppSidebarProps {
 }
 
 const navItems = [
-  { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
-  { href: "/builder", label: "Resume Builder", icon: FileEdit },
-  { href: "/templates", label: "Templates", icon: LayoutTemplate },
-  { href: "/ai-rewriter", label: "AI Tailoring", icon: Sparkles },
-  { href: "/ats-analyzer", label: "ATS Analyzer", icon: Gauge },
+  { href: "/dashboard", label: "Workspace", icon: Grid },
+  { href: "/builder", label: "Live Editor", icon: FileEdit },
+  { href: "/templates", label: "Templates", icon: Layers },
+  { href: "/ats-analyzer", label: "ATS Diagnostics", icon: ShieldAlert },
+  { href: "/ai-rewriter", label: "Job Match", icon: GitCompare },
 ];
 
 export function AppSidebar({
@@ -43,109 +42,97 @@ export function AppSidebar({
   };
 
   const sidebarContent = (
-    <div className="flex flex-col h-full py-6 px-4">
-      {/* Brand Header */}
-      <div className="flex items-center justify-between px-3 mb-8">
-        <Link
-          href="/dashboard"
-          className="flex items-center gap-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded p-1"
-          aria-label="ResumeLoops Dashboard"
-        >
-          <div className="w-8 h-8 rounded bg-primary flex items-center justify-center text-white shadow-sm">
-            <FileText className="w-4 h-4" />
-          </div>
-          <span className="font-semibold text-lg tracking-tight text-on-surface">
-            ResumeLoops
+    <div className="flex flex-col h-full justify-between py-6">
+      <div className="flex flex-col gap-6 px-4">
+        {/* Brand & Overline */}
+        <div className="flex items-center justify-between px-2">
+          <span className="font-label-xs text-label-xs uppercase tracking-widest text-on-surface-variant font-medium">
+            Studio Engine
           </span>
-        </Link>
+          {onMobileClose && (
+            <button
+              type="button"
+              onClick={onMobileClose}
+              className="p-1 rounded text-on-surface-variant hover:text-on-surface lg:hidden"
+              aria-label="Close navigation sidebar"
+            >
+              <X className="w-5 h-5" />
+            </button>
+          )}
+        </div>
 
-        {/* Mobile close button */}
-        {onMobileClose && (
-          <button
-            type="button"
-            onClick={onMobileClose}
-            className="p-1.5 rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high lg:hidden focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
-            aria-label="Close navigation sidebar"
-          >
-            <X className="w-5 h-5" />
-          </button>
-        )}
+        {/* Navigation Items */}
+        <nav className="flex flex-col gap-1" aria-label="Studio Navigation">
+          {navItems.map((item) => {
+            const Icon = item.icon;
+            const isActive = pathname === item.href;
+
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                onClick={() => onMobileClose?.()}
+                aria-current={isActive ? "page" : undefined}
+                className={`flex items-center gap-2.5 px-3 py-2 rounded transition-all font-label-md text-sm ${
+                  isActive
+                    ? "bg-surface-container text-on-surface font-semibold shadow-2xs border border-border-subtle/50"
+                    : "text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface"
+                }`}
+              >
+                <Icon className={`w-4 h-4 shrink-0 ${isActive ? "text-on-surface" : "text-on-surface-variant"}`} />
+                <span>{item.label}</span>
+              </Link>
+            );
+          })}
+        </nav>
       </div>
 
-      {/* Main Navigation */}
-      <nav className="flex-1 space-y-1.5" aria-label="Main Application Navigation">
-        {navItems.map((item) => {
-          const Icon = item.icon;
-          const isActive = pathname === item.href;
+      {/* Footer Metadata & User Controls */}
+      <div className="px-4 flex flex-col gap-3 border-t border-border-subtle pt-4 text-xs">
+        <div className="flex items-center justify-between px-2 py-0.5">
+          <span className="font-label-xs text-label-xs uppercase text-on-surface-variant font-medium">Format</span>
+          <span className="font-label-xs text-label-xs text-on-surface font-mono">US Letter / 120gsm</span>
+        </div>
+        <div className="flex items-center justify-between px-2 py-0.5">
+          <span className="font-label-xs text-label-xs uppercase text-on-surface-variant font-medium">Typography</span>
+          <span className="font-label-xs text-label-xs text-on-surface font-mono">Inter Pro</span>
+        </div>
 
-          return (
-            <Link
-              key={item.href}
-              href={item.href}
-              onClick={() => onMobileClose?.()}
-              aria-current={isActive ? "page" : undefined}
-              className={`flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-sm transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${
-                isActive
-                  ? "bg-secondary-container text-primary font-semibold shadow-xs"
-                  : "text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high font-medium"
-              }`}
-            >
-              <Icon
-                className={`w-4 h-4 shrink-0 ${
-                  isActive ? "text-primary" : "text-on-surface-variant"
-                }`}
-              />
-              <span>{item.label}</span>
-            </Link>
-          );
-        })}
-      </nav>
-
-      {/* User Session & Workspace Footer */}
-      <div className="pt-4 border-t border-border-subtle px-3 text-xs text-on-surface-variant">
-        {user ? (
-          <div className="space-y-3">
-            <div className="flex items-center gap-2.5">
-              <div className="w-8 h-8 rounded-full bg-primary/10 text-primary font-bold flex items-center justify-center text-xs shrink-0 border border-primary/20">
-                {(user.user_metadata?.full_name || user.email || "U").charAt(0).toUpperCase()}
-              </div>
-              <div className="flex-1 min-w-0">
-                <p className="text-xs font-semibold text-on-surface truncate">
-                  {user.user_metadata?.full_name || "Account"}
+        <div className="pt-2 border-t border-border-subtle/50 px-2">
+          {user ? (
+            <div className="flex items-center justify-between gap-2">
+              <div className="min-w-0">
+                <p className="font-label-xs text-xs font-semibold text-on-surface truncate">
+                  {user.user_metadata?.full_name || user.email?.split("@")[0]}
                 </p>
-                <p className="text-[11px] text-on-surface-variant truncate">
+                <p className="text-[10px] text-on-surface-variant truncate font-mono">
                   {user.email}
                 </p>
               </div>
+              <button
+                type="button"
+                onClick={handleSignOut}
+                title="Sign Out"
+                className="p-1.5 rounded hover:bg-surface-container text-on-surface-variant hover:text-on-surface transition-colors cursor-pointer"
+              >
+                <LogOut className="w-3.5 h-3.5" />
+              </button>
             </div>
-
-            <button
-              type="button"
-              onClick={handleSignOut}
-              className="w-full py-1.5 px-2.5 rounded-lg border border-border-subtle hover:bg-surface-container-high text-on-surface-variant hover:text-on-surface text-xs font-medium flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
-            >
-              <LogOut className="w-3.5 h-3.5" />
-              <span>Sign Out</span>
-            </button>
-          </div>
-        ) : (
-          <div className="space-y-2">
-            <div className="flex items-center gap-2">
-              <span className={`w-2 h-2 rounded-full ${isConfigured ? "bg-amber-500" : "bg-neutral-400"} inline-block`} />
-              <span className="font-medium text-on-surface">
-                {isConfigured ? "Unauthenticated" : "Setup Required"}
+          ) : (
+            <div className="flex items-center justify-between gap-2">
+              <span className="text-[11px] text-on-surface-variant">
+                {isConfigured ? "Guest" : "Setup Mode"}
               </span>
+              <Link
+                href="/login"
+                className="inline-flex items-center gap-1 text-xs font-medium text-brand hover:underline"
+              >
+                <LogIn className="w-3 h-3" />
+                <span>Sign In</span>
+              </Link>
             </div>
-            <Link
-              href="/login"
-              onClick={() => onMobileClose?.()}
-              className="w-full py-1.5 px-2.5 rounded-lg bg-primary text-white text-xs font-semibold flex items-center justify-center gap-1.5 shadow-xs hover:bg-primary-dark transition-colors"
-            >
-              <LogIn className="w-3.5 h-3.5" />
-              <span>Sign In</span>
-            </Link>
-          </div>
-        )}
+          )}
+        </div>
       </div>
     </div>
   );
@@ -154,27 +141,25 @@ export function AppSidebar({
     <>
       {/* Desktop Persistent Sidebar */}
       <aside
-        className="no-print hidden lg:flex fixed left-0 top-0 bottom-0 w-64 bg-surface-container-low border-r border-border-subtle z-30 flex-col"
-        aria-label="Application Sidebar"
+        className="no-print hidden md:flex fixed left-0 top-16 bottom-0 w-64 bg-surface border-r border-border-subtle z-40 flex-col"
+        aria-label="Studio Engine Navigation"
       >
         {sidebarContent}
       </aside>
 
-      {/* Mobile Drawer Backdrop and Overlay */}
+      {/* Mobile Drawer */}
       {mobileOpen && (
         <div
-          className="no-print fixed inset-0 bg-black/40 z-40 lg:hidden backdrop-blur-xs transition-opacity"
+          className="no-print fixed inset-0 bg-black/40 z-50 md:hidden backdrop-blur-xs transition-opacity"
           onClick={onMobileClose}
           aria-hidden="true"
         />
       )}
-
-      {/* Mobile Drawer Panel */}
       <aside
-        className={`no-print fixed inset-y-0 left-0 w-72 bg-surface-container-low border-r border-border-subtle z-50 transform transition-transform duration-200 ease-in-out lg:hidden ${
+        className={`no-print fixed inset-y-0 left-0 w-64 bg-surface border-r border-border-subtle z-50 transform transition-transform duration-200 ease-in-out md:hidden ${
           mobileOpen ? "translate-x-0" : "-translate-x-full"
         }`}
-        aria-label="Mobile Application Sidebar"
+        aria-label="Mobile Navigation Sidebar"
         aria-hidden={!mobileOpen}
       >
         {sidebarContent}

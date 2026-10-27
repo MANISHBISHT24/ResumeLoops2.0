@@ -15,7 +15,6 @@ import {
   extractRewriteTargets,
   applyRewriteToResume,
   isTargetFresh,
-  getCurrentTargetText,
 } from "@/lib/resume-field-mapper";
 import { TargetSelector } from "@/components/ai-rewriter/TargetSelector";
 import { GoalSelector } from "@/components/ai-rewriter/GoalSelector";
@@ -178,81 +177,94 @@ function AiRewriterContent() {
     }
   };
 
-  // Apply proposal directly to stored resume
+  // Apply proposed rewrite to the active resume
   const handleApplyRewrite = async () => {
-    if (!proposal || !activeTarget || !currentResume || isStale) return;
+    if (!proposal || !currentResume || !activeTarget || isStale) {
+      return;
+    }
 
-    const previous = activeTarget.originalText;
-    const updated = applyRewriteToResume(currentResume, activeTarget, proposal.proposedText);
-    await updateResume(currentResume.id, updated);
+    try {
+      const updatedResume = applyRewriteToResume(
+        currentResume,
+        activeTarget,
+        proposal.proposedText
+      );
 
-    // Update proposal state
-    setProposal({
-      ...proposal,
-      applied: true,
-      previousText: previous,
-    });
-    setManualSourceOverride({ targetKey: activeTarget.targetKey, text: proposal.proposedText });
+      const success = await updateResume(currentResume.id, updatedResume);
+      if (success) {
+        setProposal((prev) => (prev ? { ...prev, applied: true } : null));
+        setManualSourceOverride({
+          targetKey: activeTarget.targetKey,
+          text: proposal.proposedText,
+        });
+      }
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : "Failed to apply rewrite";
+      setApiError(msg);
+    }
   };
 
-  // Discard proposal
+  // Reject / discard proposal
   const handleReject = () => {
     setProposal(null);
     setApiError(null);
   };
 
-  // Undo applied rewrite
+  // Undo applied rewrite and restore original text
   const handleUndo = async () => {
-    if (!proposal?.previousText || !activeTarget || !currentResume) return;
-
-    // Safety guard: ensure the field has not been edited since this proposal was applied
-    const currentText = getCurrentTargetText(currentResume, activeTarget);
-    if (currentText !== null && currentText.trim() !== proposal.proposedText.trim()) {
-      setApiError(
-        "Cannot undo: The field has been modified since this rewrite was applied. Unsafe restoration prevented."
-      );
+    if (!proposal || !currentResume || !activeTarget || !proposal.applied) {
       return;
     }
 
-    const reverted = applyRewriteToResume(currentResume, activeTarget, proposal.previousText);
-    await updateResume(currentResume.id, reverted);
+    try {
+      const revertedResume = applyRewriteToResume(
+        currentResume,
+        activeTarget,
+        proposal.originalText
+      );
 
-    setProposal({
-      ...proposal,
-      applied: false,
-    });
-    setManualSourceOverride({ targetKey: activeTarget.targetKey, text: proposal.previousText });
-    setApiError(null);
+      const success = await updateResume(currentResume.id, revertedResume);
+      if (success) {
+        setProposal((prev) => (prev ? { ...prev, applied: false } : null));
+        setManualSourceOverride({
+          targetKey: activeTarget.targetKey,
+          text: proposal.originalText,
+        });
+      }
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : "Failed to undo rewrite";
+      setApiError(msg);
+    }
   };
 
-  // Loading state during SSR / client hydration
+  // Loading state during SSR / initial hydration
   if (!isHydrated) {
     return (
       <div className="py-24 flex flex-col items-center justify-center space-y-4 text-center">
         <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin" />
-        <p className="text-sm text-on-surface-variant font-medium">
+        <p className="font-body-sm text-body-sm text-on-surface-variant font-medium">
           Loading AI Rewriter workspace...
         </p>
       </div>
     );
   }
 
-  // Empty state: No resumes exist
+  // Empty state: No resumes exist in workspace
   if (resumes.length === 0) {
     return (
-      <div className="py-20 max-w-lg mx-auto text-center space-y-5">
-        <div className="w-14 h-14 rounded-2xl bg-secondary-container flex items-center justify-center mx-auto text-primary">
-          <FileText className="w-7 h-7" />
+      <div className="py-20 max-w-lg mx-auto text-center space-y-5 bg-surface-container-lowest p-8 rounded-xl border border-outline-variant/40">
+        <div className="w-12 h-12 rounded-xl bg-surface-container flex items-center justify-center mx-auto text-primary">
+          <FileText className="w-6 h-6 text-secondary" />
         </div>
-        <h2 className="text-2xl font-bold text-on-surface">No Resumes Found</h2>
-        <p className="text-sm text-on-surface-variant leading-relaxed">
-          The AI Rewriter refines existing structured resume drafts. Create your first resume in the
+        <h2 className="font-title-md text-title-md text-on-surface">No Documents Found</h2>
+        <p className="font-body-sm text-body-sm text-on-surface-variant leading-relaxed">
+          You don&apos;t have any resumes in your workspace archive yet. Create a draft in the
           builder to begin tailoring achievements.
         </p>
         <Link href="/builder">
           <Button variant="primary" size="md">
             <Sparkles className="w-4 h-4 mr-2" />
-            Create First Resume
+            Create First Document
           </Button>
         </Link>
       </div>
@@ -262,12 +274,12 @@ function AiRewriterContent() {
   // Invalid ID state: ?id= was provided but no resume matches
   if (resumeIdParam && !currentResume) {
     return (
-      <div className="py-20 max-w-lg mx-auto text-center space-y-5">
-        <div className="w-14 h-14 rounded-2xl bg-amber-50 border border-amber-200 flex items-center justify-center mx-auto text-amber-700">
-          <AlertCircle className="w-7 h-7" />
+      <div className="py-20 max-w-lg mx-auto text-center space-y-5 bg-surface-container-lowest p-8 rounded-xl border border-outline-variant/40">
+        <div className="w-12 h-12 rounded-xl bg-rose-50 border border-rose-200 flex items-center justify-center mx-auto text-rose-700">
+          <AlertCircle className="w-6 h-6" />
         </div>
-        <h2 className="text-2xl font-bold text-on-surface">Resume Not Found</h2>
-        <p className="text-sm text-on-surface-variant leading-relaxed">
+        <h2 className="font-title-md text-title-md text-on-surface">Document Not Found</h2>
+        <p className="font-body-sm text-body-sm text-on-surface-variant leading-relaxed">
           The requested resume ID (<code className="text-xs bg-surface-container px-1.5 py-0.5 rounded font-mono">{resumeIdParam}</code>) was not found in storage.
         </p>
         <div className="flex items-center justify-center gap-3">
@@ -280,7 +292,7 @@ function AiRewriterContent() {
           </Button>
           <Link href="/dashboard">
             <Button variant="outline" size="sm">
-              Back to Dashboard
+              Back to Workspace
             </Button>
           </Link>
         </div>
@@ -293,25 +305,25 @@ function AiRewriterContent() {
   }
 
   return (
-    <div className="space-y-8 pb-16">
+    <div className="space-y-space-xl pb-16">
       {/* Top Banner Toolbar */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-border-subtle">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-outline-variant/30">
         <div className="space-y-1">
           <div className="flex items-center gap-2">
             <Link
               href="/dashboard"
-              className="inline-flex items-center text-xs font-semibold text-on-surface-variant hover:text-primary transition-colors"
+              className="inline-flex items-center font-label-xs text-label-xs font-semibold text-on-surface-variant hover:text-on-surface transition-colors"
             >
-              <ChevronLeft className="w-3.5 h-3.5 mr-0.5" /> Back to Dashboard
+              <ChevronLeft className="w-3.5 h-3.5 mr-0.5" /> Back to Workspace
             </Link>
-            <span className="text-border-subtle text-xs">•</span>
-            <span className="px-2 py-0.5 bg-secondary-container text-on-secondary-container rounded text-[11px] uppercase tracking-wider font-bold">
-              AI Tailoring &amp; Smart Rewriter
+            <span className="text-outline-variant/60 text-xs">•</span>
+            <span className="px-2 py-0.5 bg-surface-container text-on-surface rounded font-label-xs text-[10px] uppercase tracking-wider font-semibold">
+              AI Tailoring &amp; Differential Engine
             </span>
           </div>
 
           <div className="flex flex-wrap items-center gap-3 pt-0.5">
-            <h1 className="text-2xl sm:text-3xl font-extrabold text-on-surface tracking-tight">
+            <h1 className="font-headline-sm text-headline-sm text-on-surface tracking-tight">
               {currentResume.title}
             </h1>
 
@@ -319,7 +331,7 @@ function AiRewriterContent() {
             <select
               value={currentResume.id}
               onChange={(e) => handleSelectResume(e.target.value)}
-              className="text-xs font-semibold bg-surface border border-border-subtle rounded-lg px-2.5 py-1.5 text-on-surface hover:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all cursor-pointer"
+              className="font-label-md text-label-md font-semibold bg-surface-container-low border border-outline-variant/40 rounded px-2.5 py-1 text-on-surface hover:border-on-surface focus:outline-none transition-all cursor-pointer"
               aria-label="Select resume to rewrite"
             >
               {resumes.map((r) => (
@@ -330,7 +342,7 @@ function AiRewriterContent() {
             </select>
           </div>
 
-          <p className="text-xs sm:text-sm text-on-surface-variant">
+          <p className="font-body-sm text-body-sm text-on-surface-variant">
             Targeting:{" "}
             <strong className="text-on-surface">
               {currentResume.targetRole || currentResume.personalInfo.title || "General Professional"}
@@ -346,7 +358,7 @@ function AiRewriterContent() {
         <div className="flex items-center gap-2.5 self-start sm:self-auto">
           <Link href={`/builder?id=${encodeURIComponent(currentResume.id)}`}>
             <Button variant="outline" size="sm" className="text-xs font-semibold">
-              <Edit3 className="w-3.5 h-3.5 mr-1.5" /> Open in Builder
+              <Edit3 className="w-3.5 h-3.5 mr-1.5" /> Open in Editor
             </Button>
           </Link>
         </div>
@@ -356,11 +368,11 @@ function AiRewriterContent() {
       {providerConfigured === false && <ProviderConfigNotice />}
 
       {/* Main Workspace Layout (Two Columns) */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-space-lg items-start">
         {/* Left Column (4 cols): Targeting, Goals, Optional Job Context */}
-        <div className="lg:col-span-4 space-y-6">
+        <div className="lg:col-span-5 flex flex-col gap-space-md">
           {/* Target Section Selector */}
-          <div className="bg-surface rounded-2xl p-5 border border-border-subtle shadow-sm space-y-4">
+          <div className="bg-surface-container-lowest rounded-xl p-space-md border border-outline-variant/40 shadow-xs space-y-3">
             <TargetSelector
               targets={targets}
               selectedKey={selectedTargetKey}
@@ -368,7 +380,7 @@ function AiRewriterContent() {
               disabled={isLoading}
             />
 
-            <div className="p-3 rounded-xl bg-surface-container-low border border-border-subtle/80 text-[11px] text-on-surface-variant flex items-start gap-2">
+            <div className="p-2.5 rounded bg-surface-container-low border border-outline-variant/30 text-[11px] text-on-surface-variant flex items-start gap-2">
               <ShieldCheck className="w-4 h-4 text-primary shrink-0 mt-0.5" />
               <span>
                 <strong>Mapped Field:</strong> Changes will be committed precisely to &quot;{activeTarget.label}&quot; without altering other sections.
@@ -377,7 +389,7 @@ function AiRewriterContent() {
           </div>
 
           {/* Goal Selector */}
-          <div className="bg-surface rounded-2xl p-5 border border-border-subtle shadow-sm">
+          <div className="bg-surface-container-lowest rounded-xl p-space-md border border-outline-variant/40 shadow-xs">
             <GoalSelector
               selectedGoal={selectedGoal}
               onSelectGoal={(goal) => {
@@ -389,10 +401,10 @@ function AiRewriterContent() {
           </div>
 
           {/* Optional Job Context */}
-          <div className="bg-surface rounded-2xl p-5 border border-border-subtle shadow-sm space-y-3">
+          <div className="bg-surface-container-lowest rounded-xl p-space-md border border-outline-variant/40 shadow-xs space-y-2.5">
             <div className="flex items-center justify-between">
-              <label className="text-xs font-bold text-on-surface flex items-center gap-1.5">
-                <Search className="w-3.5 h-3.5 text-primary" /> Target Job Context (Optional)
+              <label className="font-label-xs text-label-xs uppercase tracking-wider text-on-surface font-semibold flex items-center gap-1.5">
+                <Search className="w-3.5 h-3.5 text-secondary" /> Target Requisition Context (Optional)
               </label>
               {jobContext && (
                 <button
@@ -401,7 +413,7 @@ function AiRewriterContent() {
                     setJobContext("");
                     if (proposal && !proposal.applied) setProposal(null);
                   }}
-                  className="text-[11px] text-on-surface-variant hover:text-error cursor-pointer"
+                  className="font-label-xs text-[11px] text-on-surface-variant hover:text-rose-700 cursor-pointer"
                 >
                   Clear
                 </button>
@@ -417,24 +429,24 @@ function AiRewriterContent() {
               disabled={isLoading}
               rows={4}
               placeholder="Paste specific job requirements or responsibilities to tailor terminology..."
-              className="w-full text-xs font-normal text-on-surface bg-surface-container-lowest border border-border-subtle rounded-xl p-3 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all resize-y placeholder:text-on-surface-variant/50"
+              className="w-full font-body-sm text-body-sm text-on-surface bg-surface-container-low border border-outline-variant/40 rounded p-2.5 focus:outline-none focus:border-on-surface transition-all resize-y placeholder:text-on-surface-variant/50"
             />
 
-            <div className="text-[11px] text-on-surface-variant/70 italic flex items-center gap-1">
+            <div className="font-label-xs text-label-xs text-on-surface-variant/70 italic flex items-center gap-1">
               <Lock className="w-3 h-3" />
               <span>Job context is used strictly for phrase alignment and is never stored permanently.</span>
             </div>
           </div>
         </div>
 
-        {/* Right Column (8 cols): Before-and-After Comparison & Actions */}
-        <div className="lg:col-span-8 space-y-6">
+        {/* Right Column (7 cols): Before-and-After Comparison & Actions */}
+        <div className="lg:col-span-7 flex flex-col gap-space-md">
           {/* Error Banner */}
           {apiError && (
-            <div className="p-4 bg-rose-50 border border-rose-200 rounded-2xl flex items-start gap-3 text-xs text-rose-900">
+            <div className="p-3.5 bg-rose-50 border border-rose-200 rounded-lg flex items-start gap-2.5 font-body-sm text-xs text-rose-800">
               <AlertCircle className="w-4 h-4 text-rose-600 shrink-0 mt-0.5" />
-              <div className="space-y-1">
-                <p className="font-bold">Rewrite Request Notice</p>
+              <div className="space-y-0.5">
+                <p className="font-semibold">Rewrite Request Notice</p>
                 <p className="leading-relaxed">{apiError}</p>
               </div>
             </div>
@@ -468,9 +480,9 @@ function AiRewriterContent() {
           />
 
           {/* Privacy & Factual Guarantee Disclosure */}
-          <div className="p-4 rounded-xl bg-surface-container-low border border-border-subtle/80 flex items-start gap-3 text-xs text-on-surface-variant">
-            <Lock className="w-4 h-4 text-primary shrink-0 mt-0.5" />
-            <div className="space-y-1 leading-relaxed">
+          <div className="p-3.5 rounded-lg bg-surface-container-low border border-outline-variant/30 flex items-start gap-3 text-body-sm text-on-surface-variant">
+            <Lock className="w-4 h-4 text-secondary shrink-0 mt-0.5" />
+            <div className="space-y-0.5 leading-relaxed text-[12px]">
               <p className="font-semibold text-on-surface">Privacy &amp; Data Safeguards</p>
               <p>
                 Only the selected section text and any supplied job context are transmitted to the server
@@ -491,7 +503,7 @@ export default function AiRewriterPage() {
       fallback={
         <div className="py-24 flex flex-col items-center justify-center space-y-4 text-center">
           <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin" />
-          <p className="text-sm text-on-surface-variant font-medium">
+          <p className="font-body-sm text-body-sm text-on-surface-variant font-medium">
             Loading AI Rewriter Workspace...
           </p>
         </div>

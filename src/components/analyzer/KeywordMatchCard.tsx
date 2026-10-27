@@ -2,8 +2,7 @@
 
 import React from "react";
 import { JobMatchResult } from "@/lib/ats-analysis";
-import { Plus, Check, Info, AlertTriangle } from "lucide-react";
-import { Badge } from "@/components/ui/Badge";
+import { Check, Info, AlertCircle, Plus } from "lucide-react";
 
 interface KeywordMatchCardProps {
   jobMatch: JobMatchResult | null;
@@ -13,14 +12,13 @@ interface KeywordMatchCardProps {
 export function KeywordMatchCard({ jobMatch, targetRole }: KeywordMatchCardProps) {
   if (!jobMatch) {
     return (
-      <div className="bg-surface rounded-2xl p-6 sm:p-8 border border-border-subtle shadow-sm flex flex-col items-center text-center space-y-3">
-        <div className="w-12 h-12 rounded-full bg-secondary-container flex items-center justify-center text-primary">
-          <Info className="w-6 h-6" />
+      <div className="bg-surface-container-lowest rounded-xl p-space-lg border border-outline-variant/40 shadow-xs flex flex-col items-center text-center gap-3">
+        <div className="w-10 h-10 rounded-full bg-surface-container flex items-center justify-center text-primary">
+          <Info className="w-5 h-5" />
         </div>
-        <h4 className="text-base font-bold text-on-surface">Job Match Score Withheld</h4>
-        <p className="text-xs sm:text-sm text-on-surface-variant max-w-md leading-relaxed">
-          Provide a job description above to extract relevant domain keywords and calculate a
-          transparent keyword alignment match against your resume.
+        <h4 className="font-title-md text-title-md text-on-surface">Target Keyword Match Withheld</h4>
+        <p className="font-body-sm text-body-sm text-on-surface-variant max-w-md leading-relaxed">
+          Supply a target job requisition or job description to extract domain competencies and compute verifiable keyword alignment.
         </p>
       </div>
     );
@@ -30,62 +28,52 @@ export function KeywordMatchCard({ jobMatch, targetRole }: KeywordMatchCardProps
     jobMatch;
 
   return (
-    <div className="bg-surface rounded-2xl p-6 sm:p-8 border border-border-subtle shadow-sm space-y-6">
+    <div className="bg-surface-container-lowest rounded-xl p-space-lg border border-outline-variant/40 shadow-xs flex flex-col gap-space-md">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-border-subtle">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-outline-variant/30">
         <div>
           <div className="flex items-center gap-2 mb-1">
-            <Badge variant={matchPercentage >= 75 ? "success" : matchPercentage >= 50 ? "warning" : "neutral"}>
-              {matchPercentage}% Keyword Alignment
-            </Badge>
+            <span className="font-label-xs text-label-xs uppercase tracking-wider bg-surface-container text-on-surface px-2 py-0.5 rounded font-mono font-semibold">
+              {matchPercentage}% Semantic Match
+            </span>
             {targetRole && (
-              <span className="text-xs text-on-surface-variant font-medium truncate max-w-xs">
-                Targeting: <strong className="text-on-surface">{targetRole}</strong>
+              <span className="font-body-sm text-body-sm text-on-surface-variant truncate max-w-xs">
+                Target: <strong className="text-on-surface">{targetRole}</strong>
               </span>
             )}
           </div>
-          <h3 className="text-lg font-bold text-on-surface">Keyword Match Breakdown</h3>
-          <p className="text-xs text-on-surface-variant mt-0.5">
-            Frequency and occurrence of key terms extracted from the supplied job description.
+          <h3 className="font-headline-sm text-headline-sm text-on-surface">Domain Keyword Alignment</h3>
+          <p className="font-body-sm text-body-sm text-on-surface-variant mt-0.5">
+            Frequency and occurrence of key architectural terms extracted from the requisition.
           </p>
         </div>
 
-        <span className="px-3 py-1 bg-emerald-50 text-emerald-800 border border-emerald-200 rounded-full text-xs font-semibold self-start sm:self-auto">
-          {matchedCount} / {totalKeywordsAnalyzed} Matched
+        <span className="font-label-xs text-label-xs font-mono text-on-surface bg-surface-container px-3 py-1 rounded-full self-start sm:self-auto border border-outline-variant/30">
+          {matchedCount} of {totalKeywordsAnalyzed} Matched
         </span>
       </div>
 
       {/* Matched keywords list */}
-      <div className="space-y-3 max-h-80 overflow-y-auto pr-1">
+      <div className="flex flex-col gap-2.5 max-h-80 overflow-y-auto pr-1">
         {matchedKeywords.length === 0 ? (
-          <p className="text-xs text-on-surface-variant italic py-2">
-            No extracted keywords from the job description were found in the current resume.
+          <p className="font-body-sm text-body-sm text-on-surface-variant italic py-2">
+            No extracted keywords from the target requisition were detected in the current text.
           </p>
         ) : (
           matchedKeywords.map((item) => (
-            <div key={item.term} className="space-y-1">
-              <div className="flex items-center justify-between text-xs font-medium">
-                <span className="text-on-surface capitalize font-semibold flex items-center gap-1.5">
-                  <Check className="w-3.5 h-3.5 text-emerald-600" />
+            <div key={item.term} className="flex flex-col gap-1 p-2 bg-surface-container-low rounded border border-outline-variant/30">
+              <div className="flex items-center justify-between text-body-sm font-body-sm">
+                <span className="text-on-surface font-semibold flex items-center gap-1.5 capitalize">
+                  <Check className="w-3.5 h-3.5 text-[#276a45]" />
                   {item.term}
                 </span>
-                <span
-                  className={
-                    item.matchStrength === "high"
-                      ? "text-emerald-700 font-semibold"
-                      : "text-primary font-medium"
-                  }
-                >
-                  {item.matchStrength === "high"
-                    ? `Strong Match (${item.count} mentions)`
-                    : `Matched (${item.count} ${item.count === 1 ? "mention" : "mentions"})`}
+                <span className="font-label-xs text-label-xs font-mono text-on-surface-variant">
+                  {item.count} {item.count === 1 ? "mention" : "mentions"}
                 </span>
               </div>
-              <div className="w-full h-1.5 bg-surface-container rounded-full overflow-hidden">
+              <div className="w-full h-1 bg-surface-container-highest rounded-full overflow-hidden">
                 <div
-                  className={`h-full rounded-full transition-all duration-500 ${
-                    item.matchStrength === "high" ? "bg-emerald-600" : "bg-primary"
-                  }`}
+                  className="h-full bg-on-surface rounded-full transition-all duration-500"
                   style={{ width: `${item.percentage}%` }}
                 />
               </div>
@@ -96,32 +84,33 @@ export function KeywordMatchCard({ jobMatch, targetRole }: KeywordMatchCardProps
 
       {/* Missing Keywords Section */}
       {missingKeywords.length > 0 && (
-        <div className="pt-4 border-t border-border-subtle space-y-3">
+        <div className="pt-3 border-t border-outline-variant/30 flex flex-col gap-2">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-bold text-on-surface-variant uppercase tracking-wider">
-              Missing Keywords from Job Posting ({missingKeywords.length}):
+            <div className="flex items-center gap-1.5">
+              <AlertCircle className="w-4 h-4 text-rose-600" />
+              <span className="font-label-xs text-label-xs uppercase tracking-wider text-on-surface font-semibold">
+                Missing Target Keywords
+              </span>
+            </div>
+            <span className="font-label-xs text-label-xs text-rose-700 font-mono bg-rose-50 px-2 py-0.5 rounded border border-rose-200">
+              {missingKeywords.length} Priority Deficits
             </span>
           </div>
 
-          <div className="flex flex-wrap gap-2">
-            {missingKeywords.map((term) => (
+          <p className="font-body-sm text-body-sm text-on-surface-variant">
+            These terms frequently appear in requisitions matching your target profile:
+          </p>
+
+          <div className="flex flex-wrap gap-1.5 pt-1">
+            {missingKeywords.map((kw) => (
               <span
-                key={term}
-                className="inline-flex items-center gap-1 px-2.5 py-1 bg-rose-50 text-rose-800 border border-rose-200/60 rounded-lg text-xs font-medium"
+                key={kw}
+                className="px-2.5 py-1 rounded bg-surface-container-low border border-outline-variant/40 font-body-sm text-body-sm text-on-surface flex items-center gap-1"
               >
-                <Plus className="w-3 h-3 text-rose-600" />
-                <span className="capitalize">{term}</span>
+                <Plus className="w-3 h-3 text-secondary" />
+                {kw}
               </span>
             ))}
-          </div>
-
-          <div className="p-3 bg-surface-container-low rounded-xl border border-border-subtle flex items-start gap-2 text-xs text-on-surface-variant">
-            <AlertTriangle className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
-            <p className="leading-relaxed">
-              <strong>Ethical Notice:</strong> Consider incorporating missing terms into your summary, experience,
-              or skills <em>only if they genuinely represent your real qualifications and project background</em>.
-              Never fabricate skills to game keyword filters.
-            </p>
           </div>
         </div>
       )}

@@ -80,6 +80,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         if (typeof window !== "undefined") {
           window.dispatchEvent(new CustomEvent("resumeloops_auth_signed_out"));
         }
+      } else if (event === "SIGNED_IN") {
+        // Dispatch sign-in event to reload cloud resume stores
+        if (typeof window !== "undefined") {
+          window.dispatchEvent(new CustomEvent("resumeloops_auth_signed_in"));
+        }
       }
     });
 

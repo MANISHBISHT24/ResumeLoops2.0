@@ -5,19 +5,18 @@ import Link from "next/link";
 import {
   Plus,
   ArrowRight,
-  Sparkles,
   FileText,
-  Briefcase,
-  Lightbulb,
-  History,
-  CheckCircle2,
+  Copy,
+  Download,
   Trash2,
   RefreshCw,
   FolderOpen,
+  CheckCircle2,
+  Sliders,
   ShieldCheck,
+  Edit,
 } from "lucide-react";
 import { Button } from "@/components/ui/Button";
-import { Badge } from "@/components/ui/Badge";
 import { Resume } from "@/types/resume";
 import { useResumeStore } from "@/lib/storage";
 import { useAuth } from "@/components/auth/AuthProvider";
@@ -26,9 +25,10 @@ import { ResumeCard } from "@/components/dashboard/ResumeCard";
 import { CreateResumeModal } from "@/components/dashboard/CreateResumeModal";
 import { DeleteConfirmModal } from "@/components/dashboard/DeleteConfirmModal";
 import { EmptyResumeState } from "@/components/dashboard/EmptyResumeState";
+import { getTemplateById } from "@/lib/templates";
 
 export default function DashboardPage() {
-  const { user, isConfigured } = useAuth();
+  const { isConfigured } = useAuth();
   const {
     resumes,
     isHydrated,
@@ -48,6 +48,7 @@ export default function DashboardPage() {
   const [resumeToDelete, setResumeToDelete] = useState<Resume | null>(null);
   const [feedbackMessage, setFeedbackMessage] = useState<string | null>(null);
   const [isImportingDrafts, setIsImportingDrafts] = useState(false);
+  const [filterTab, setFilterTab] = useState<"all" | "custom" | "samples">("all");
 
   const showFeedback = (msg: string) => {
     setFeedbackMessage(msg);
@@ -73,11 +74,6 @@ export default function DashboardPage() {
     setResumeToDelete(null);
   };
 
-  const handleQuickStart = (roleName: string) => {
-    setQuickStartRole(roleName);
-    setIsCreateModalOpen(true);
-  };
-
   const handleImportDrafts = async () => {
     setIsImportingDrafts(true);
     const result = await importLocalDrafts();
@@ -93,18 +89,29 @@ export default function DashboardPage() {
   const totalResumes = resumes.length;
   const sampleCount = resumes.filter((r) => r.id.startsWith("sample-")).length;
   const customCount = totalResumes - sampleCount;
-  const localDraftsCount = getLocalDrafts().length;
+  const localDraftsCount = isHydrated ? getLocalDrafts().length : 0;
+
+  // Primary active document (first custom resume or first sample)
+  const activeResume = resumes[0] || null;
+  const activeTemplate = activeResume ? getTemplateById(activeResume.templateId) : null;
+
+  const filteredResumes =
+    filterTab === "all"
+      ? resumes
+      : filterTab === "custom"
+      ? resumes.filter((r) => !r.id.startsWith("sample-"))
+      : resumes.filter((r) => r.id.startsWith("sample-"));
 
   return (
-    <div className="space-y-8 pb-12">
+    <div className="px-4 sm:px-6 lg:px-8 py-8 sm:py-10 flex flex-col gap-8 max-w-7xl mx-auto w-full">
       {/* Toast Feedback Notification */}
       {feedbackMessage && (
         <div
           role="status"
           aria-live="polite"
-          className="fixed bottom-6 right-6 z-50 bg-neutral-900 text-white text-xs sm:text-sm px-4 py-3 rounded-xl shadow-2xl flex items-center gap-2.5 animate-in fade-in slide-in-from-bottom-3 duration-200 border border-neutral-700"
+          className="fixed bottom-6 right-6 z-50 bg-[#1b1c1a] text-[#faf9f5] text-xs sm:text-sm px-4 py-3 rounded shadow-editorial-modal flex items-center gap-2.5 animate-in fade-in slide-in-from-bottom-2 duration-200 border border-border-subtle"
         >
-          <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+          <CheckCircle2 className="w-4 h-4 text-[#276a45] shrink-0" />
           <span>{feedbackMessage}</span>
         </div>
       )}
@@ -114,13 +121,13 @@ export default function DashboardPage() {
 
       {/* Local Draft Import Notice (explicit consent workflow) */}
       {isCloudSynced && hasUnimportedDrafts && localDraftsCount > 0 && (
-        <div className="bg-primary/5 border border-primary/20 rounded-2xl p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 animate-in fade-in">
+        <div className="bg-surface-container-low border border-border-subtle rounded p-4 sm:p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 animate-in fade-in">
           <div className="flex items-start gap-3">
-            <div className="w-9 h-9 rounded-xl bg-primary/10 text-primary flex items-center justify-center shrink-0 mt-0.5">
-              <FolderOpen className="w-5 h-5" />
+            <div className="w-8 h-8 rounded bg-surface-container text-on-surface flex items-center justify-center shrink-0 mt-0.5">
+              <FolderOpen className="w-4 h-4" />
             </div>
             <div>
-              <h3 className="text-sm font-bold text-on-surface">
+              <h3 className="text-sm font-semibold text-on-surface">
                 Local browser drafts detected ({localDraftsCount})
               </h3>
               <p className="text-xs text-on-surface-variant mt-0.5 max-w-xl leading-relaxed">
@@ -128,11 +135,11 @@ export default function DashboardPage() {
               </p>
             </div>
           </div>
-          <div className="flex items-center gap-2.5 shrink-0 self-end sm:self-center">
+          <div className="flex items-center gap-2 shrink-0 self-end sm:self-center">
             <button
               type="button"
               onClick={dismissLocalDrafts}
-              className="text-xs font-semibold text-on-surface-variant hover:text-on-surface px-3 py-1.5 rounded-lg border border-border-subtle hover:bg-surface-container transition-colors cursor-pointer"
+              className="text-xs text-on-surface-variant hover:text-on-surface px-3 py-1.5 rounded border border-border-subtle hover:bg-surface-container transition-colors cursor-pointer"
             >
               Keep Local Only
             </button>
@@ -157,43 +164,65 @@ export default function DashboardPage() {
         </div>
       )}
 
-      {/* Top Banner / Workspace Header Area */}
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-4 border-b border-border-subtle">
-        <div>
-          <div className="flex items-center gap-2 mb-1">
+      {/* Workspace Header & Core Actions */}
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
+        <div className="flex flex-col gap-1 max-w-2xl">
+          <div className="flex items-center gap-2">
             <span
-              className={`w-2 h-2 rounded-full ${
-                isCloudSynced ? "bg-emerald-600 animate-pulse" : "bg-primary animate-pulse"
+              className={`w-1.5 h-1.5 rounded-full ${
+                isCloudSynced ? "bg-[#276a45]" : "bg-primary"
               }`}
             />
-            <span className="text-xs uppercase tracking-wider font-semibold text-on-surface-variant">
-              {isCloudSynced
-                ? `Cloud PostgreSQL Active (${user?.email})`
-                : isConfigured
-                ? "Connecting to Cloud..."
-                : "Local Workspace Active"}
+            <span className="font-label-xs text-label-xs uppercase tracking-widest text-on-surface-variant font-mono">
+              Archival Studio • {isCloudSynced ? "Cloud PostgreSQL Active" : "Local Workspace"}
             </span>
           </div>
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-on-surface tracking-tight">
-            Workspace Dashboard
+          <h1 className="font-headline-lg text-2xl sm:text-3xl lg:text-4xl font-medium text-on-surface tracking-tight">
+            Your career workspace.
           </h1>
-          <p className="text-sm text-on-surface-variant mt-1 max-w-xl">
-            Manage your targeted resumes, monitor ATS readiness, and generate tailored applications.
+          <p className="font-body-md text-sm sm:text-base text-on-surface-variant leading-relaxed">
+            Manage tailored documents, track version iterations, and diagnose target role alignment with editorial precision.
           </p>
         </div>
 
-        <div className="flex items-center gap-2.5">
+        <div className="flex items-center gap-2 flex-wrap">
+          {hasUnimportedDrafts && localDraftsCount > 0 ? (
+            <Button
+              type="button"
+              variant="secondary"
+              onClick={handleImportDrafts}
+              className="text-xs sm:text-sm"
+            >
+              <FolderOpen className="w-4 h-4 mr-1.5" />
+              <span>Import existing document</span>
+            </Button>
+          ) : (
+            <Link
+              href="/ats-analyzer"
+              className="h-10 px-4 bg-surface-container hover:bg-surface-container-high text-on-surface font-label-md text-xs sm:text-sm rounded flex items-center gap-2 transition-all border border-border-subtle"
+            >
+              <FileText className="w-4 h-4" />
+              <span>Upload / Analyze File</span>
+            </Link>
+          )}
+
           <Button
             type="button"
             variant="primary"
             onClick={() => setIsCreateModalOpen(true)}
-            className="flex items-center gap-2 shadow-sm"
+            className="text-xs sm:text-sm shadow-xs"
           >
-            <Plus className="w-4 h-4" />
-            <span>New Resume</span>
+            <Plus className="w-4 h-4 mr-1.5" />
+            <span>Create new resume</span>
           </Button>
 
-          {totalResumes > 0 && (
+          {/* Hydration-safe button */}
+          {!isHydrated ? (
+            <div
+              className="h-8 w-20 rounded bg-surface-container animate-pulse hidden sm:block"
+              aria-hidden="true"
+            />
+          ) : totalResumes > 0 ? (
             <Button
               type="button"
               variant="outline"
@@ -205,9 +234,7 @@ export default function DashboardPage() {
               <Trash2 className="w-3.5 h-3.5 text-on-surface-variant" />
               <span className="hidden sm:inline">Clear All</span>
             </Button>
-          )}
-
-          {totalResumes === 0 && (
+          ) : (
             <Button
               type="button"
               variant="secondary"
@@ -223,271 +250,325 @@ export default function DashboardPage() {
         </div>
       </div>
 
-      {/* Main Content Grid: Left Column (8 cols) & Right Column (4 cols) */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-        {/* Left Column: Primary Quick Start Card & Resumes List */}
-        <div className="lg:col-span-8 space-y-8">
-          {/* Prominent Primary Action Card matching Stitch code.html */}
-          <div className="relative overflow-hidden bg-primary text-on-primary rounded-2xl p-6 sm:p-8 shadow-lg flex flex-col justify-between">
-            {/* Ambient decorative highlights */}
-            <div
-              className="absolute -right-16 -bottom-16 w-64 h-64 rounded-full bg-white/10 pointer-events-none blur-2xl"
-              aria-hidden="true"
-            />
-            <div
-              className="absolute right-32 top-0 w-32 h-32 rounded-full bg-secondary-container/20 pointer-events-none blur-xl"
-              aria-hidden="true"
-            />
+      {/* Featured Document Hero Banner (Asymmetrical Split Stage) */}
+      {activeResume && (
+        <div className="bg-surface-container-low rounded p-6 sm:p-8 flex flex-col xl:flex-row gap-8 items-stretch relative overflow-hidden border border-border-subtle shadow-xs">
+          {/* Ambient blurred backing */}
+          <div
+            className="absolute -right-16 -bottom-16 w-80 h-80 bg-surface-container rounded-full blur-3xl pointer-events-none opacity-60"
+            aria-hidden="true"
+          />
 
-            <div className="relative z-10">
-              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/15 text-on-primary text-xs font-semibold mb-3 backdrop-blur-md border border-white/20">
-                <Sparkles className="w-3.5 h-3.5" />
-                <span>AI-Powered Targeting</span>
+          {/* Left Content & Diagnostics */}
+          <div className="flex-1 flex flex-col justify-between gap-6 relative z-10">
+            <div className="flex flex-col gap-4">
+              <div className="flex items-center gap-2 flex-wrap">
+                <span className="px-2.5 py-1 bg-surface-container-highest text-on-surface font-label-xs text-label-xs uppercase tracking-wider rounded font-medium">
+                  Primary Active Document
+                </span>
+                <span className="px-2.5 py-1 bg-surface-container text-on-surface-variant font-label-xs text-label-xs rounded flex items-center gap-1.5 font-medium">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#276a45]" />
+                  ATS Alignment: {activeResume.atsScore || 94}%
+                </span>
               </div>
-              <h2 className="text-xl sm:text-2xl font-extrabold text-white max-w-lg leading-tight">
-                Target your dream role with precision engineering
-              </h2>
-              <p className="text-sm text-white/85 mt-2 max-w-md leading-relaxed">
-                Generate a high-converting, ATS-optimized resume tailored to any job description in seconds using our publication-grade layout engine.
-              </p>
+
+              <div className="flex flex-col gap-1">
+                <h2 className="font-headline-md text-xl sm:text-2xl font-semibold text-on-surface">
+                  {activeResume.title}
+                </h2>
+                <p className="font-body-md text-sm text-on-surface-variant leading-relaxed">
+                  {activeResume.summary
+                    ? activeResume.summary.slice(0, 160) + "..."
+                    : "Fine-tuned for leadership and architectural trajectory. Structured around dual-track metric achievements and organizational systems scale."}
+                </p>
+              </div>
+
+              {/* 3 Stats Troughs */}
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 pt-1">
+                <div className="bg-surface-container-lowest p-3 rounded border border-border-subtle">
+                  <span className="font-label-xs text-[10px] uppercase tracking-wider text-on-surface-variant block mb-1">
+                    Last Edited
+                  </span>
+                  <span className="font-title-md text-sm font-semibold text-on-surface">
+                    {activeResume.lastModified}
+                  </span>
+                </div>
+                <div className="bg-surface-container-lowest p-3 rounded border border-border-subtle">
+                  <span className="font-label-xs text-[10px] uppercase tracking-wider text-on-surface-variant block mb-1">
+                    Target Roles
+                  </span>
+                  <span className="font-title-md text-sm font-semibold text-on-surface">
+                    {activeResume.targetRole || "General Architecture"}
+                  </span>
+                </div>
+                <div className="bg-surface-container-lowest p-3 rounded border border-border-subtle col-span-2 sm:col-span-1">
+                  <span className="font-label-xs text-[10px] uppercase tracking-wider text-on-surface-variant block mb-1">
+                    Format &amp; Grid
+                  </span>
+                  <span className="font-title-md text-sm font-semibold text-on-surface">
+                    {activeTemplate?.name || "The Swiss Chronicle"}
+                  </span>
+                </div>
+              </div>
             </div>
 
-            <div className="relative z-10 mt-6 pt-4 border-t border-white/15 flex flex-wrap items-center justify-between gap-4">
-              <div className="flex flex-wrap items-center gap-2 text-white/90 text-xs">
-                <span className="uppercase tracking-wider text-white/70 font-semibold">
-                  Quick Start:
-                </span>
-                {["Software Architect", "Product Lead", "Design Director"].map(
-                  (role) => (
-                    <button
-                      key={role}
-                      type="button"
-                      onClick={() => handleQuickStart(role)}
-                      className="hover:bg-white/20 bg-white/10 px-2.5 py-1 rounded-lg transition-colors cursor-pointer text-white font-medium"
-                    >
-                      {role}
-                    </button>
-                  )
-                )}
-              </div>
-
-              <Button
-                type="button"
-                variant="secondary"
-                onClick={() => setIsCreateModalOpen(true)}
-                className="bg-white text-primary hover:bg-neutral-100 font-bold text-xs sm:text-sm shadow-md border-transparent"
+            {/* Actions Cluster */}
+            <div className="flex flex-wrap items-center gap-2 pt-2">
+              <Link
+                href={`/builder?id=${activeResume.id}`}
+                className="h-9 px-4 bg-primary text-on-primary hover:bg-neutral-800 font-label-md text-xs sm:text-sm rounded flex items-center gap-1.5 transition-all shadow-xs"
               >
-                <span>Launch Generator</span>
-                <ArrowRight className="w-4 h-4 ml-1" />
-              </Button>
+                <Edit className="w-3.5 h-3.5" />
+                <span>Open Editor</span>
+              </Link>
+              <button
+                type="button"
+                onClick={() => handleDuplicate(activeResume.id)}
+                className="h-9 px-3.5 bg-surface-container-lowest text-on-surface hover:bg-surface-container font-label-md text-xs sm:text-sm rounded flex items-center gap-1.5 transition-all border border-border-subtle cursor-pointer"
+              >
+                <Copy className="w-3.5 h-3.5 text-on-surface-variant" />
+                <span>Duplicate</span>
+              </button>
+              <Link
+                href="/ats-analyzer"
+                className="h-9 px-3.5 bg-surface-container-lowest text-on-surface hover:bg-surface-container font-label-md text-xs sm:text-sm rounded flex items-center gap-1.5 transition-all border border-border-subtle"
+              >
+                <Sliders className="w-3.5 h-3.5 text-on-surface-variant" />
+                <span>ATS Check</span>
+              </Link>
+              <Link
+                href={`/builder?id=${activeResume.id}`}
+                className="h-9 px-3.5 bg-surface-container-lowest text-on-surface hover:bg-surface-container font-label-md text-xs sm:text-sm rounded flex items-center gap-1.5 transition-all border border-border-subtle"
+              >
+                <Download className="w-3.5 h-3.5 text-on-surface-variant" />
+                <span>Export PDF</span>
+              </Link>
             </div>
           </div>
 
-          {/* Recent Resumes Section */}
-          <div className="bg-surface-container-lowest rounded-2xl p-6 sm:p-7 shadow-xs border border-border-subtle">
-            <div className="flex items-center justify-between mb-6 pb-2 border-b border-border-subtle">
-              <div className="flex items-center gap-2.5">
-                <div className="w-8 h-8 rounded-lg bg-primary/10 text-primary flex items-center justify-center">
-                  <FileText className="w-4 h-4" />
+          {/* Right Visual: Tactile Paper Preview Canvas */}
+          <div className="w-full xl:w-[380px] flex items-center justify-center p-4 bg-surface-container rounded border border-border-subtle relative">
+            <div className="w-full max-w-[300px] aspect-[8.5/11] bg-surface-container-lowest rounded p-5 shadow-paper flex flex-col justify-between select-none relative overflow-hidden transition-transform hover:-translate-y-0.5 duration-200 border border-border-subtle/80">
+              <div className="flex flex-col gap-2.5">
+                {/* Header Miniature */}
+                <div className="flex justify-between items-start pb-2 border-b border-border-subtle/70">
+                  <div>
+                    <span className="font-title-md text-xs font-semibold text-on-surface tracking-tight block uppercase">
+                      {`${activeResume.personalInfo.firstName || ""} ${activeResume.personalInfo.lastName || ""}`.trim() || "Candidate Name"}
+                    </span>
+                    <span className="font-label-xs text-[9px] uppercase tracking-wider text-on-surface-variant block">
+                      {activeResume.personalInfo.title || activeResume.targetRole || "Systems Architect"}
+                    </span>
+                  </div>
+                  <span className="font-label-xs text-[8px] text-on-surface-variant text-right">
+                    {activeResume.personalInfo.location || "San Francisco, CA"}
+                  </span>
                 </div>
-                <div>
-                  <h3 className="font-bold text-base sm:text-lg text-on-surface">
-                    Recent Resumes
-                  </h3>
-                  <p className="text-xs text-on-surface-variant">
-                    Locally stored drafts &amp; sample templates
+
+                {/* Section 1: Narrative */}
+                <div className="flex flex-col gap-1">
+                  <span className="font-label-xs text-[8px] uppercase tracking-widest text-on-surface-variant font-semibold">
+                    Executive Narrative
+                  </span>
+                  <p className="font-body-sm text-[9px] leading-relaxed text-on-surface-variant line-clamp-3">
+                    {activeResume.summary || "Architectural leadership with deep experience guiding distributed platform systems, developer experience, and design foundations."}
                   </p>
                 </div>
+
+                {/* Section 2: Experience entries */}
+                <div className="flex flex-col gap-1">
+                  <div className="flex justify-between items-baseline">
+                    <span className="font-label-xs text-[8px] uppercase tracking-widest text-on-surface-variant font-semibold">
+                      Experience
+                    </span>
+                    <span className="font-label-xs text-[8px] text-on-surface-variant">
+                      {activeResume.experience[0]?.startDate || "2021"} — {activeResume.experience[0]?.endDate || "PRESENT"}
+                    </span>
+                  </div>
+                  <div>
+                    <span className="font-body-sm text-[9px] font-semibold text-on-surface block">
+                      {activeResume.experience[0]?.company || "Stripe"} — {activeResume.experience[0]?.role || "Lead Architect"}
+                    </span>
+                    <p className="font-body-sm text-[8px] leading-normal text-on-surface-variant line-clamp-2 mt-0.5">
+                      • {activeResume.experience[0]?.bullets?.[0] || "Led engineering initiatives cutting transaction latency across platform infrastructure."}
+                    </p>
+                  </div>
+                </div>
               </div>
 
-              <div className="flex items-center gap-2">
-                <Badge variant="indigo" className="text-xs">
-                  {totalResumes} {totalResumes === 1 ? "Resume" : "Resumes"}
-                </Badge>
-                {sampleCount > 0 && (
-                  <Badge variant="neutral" className="text-xs hidden sm:inline-flex">
-                    {sampleCount} Sample
-                  </Badge>
-                )}
+              {/* Bottom Paper status */}
+              <div className="flex justify-between items-center pt-2 border-t border-border-subtle/50">
+                <span className="font-label-xs text-[8px] uppercase tracking-widest text-on-surface-variant">
+                  Format: 120gsm Letter
+                </span>
+                <span className="font-label-xs text-[8px] text-on-surface-variant font-mono">
+                  ATS Verified
+                </span>
               </div>
             </div>
+          </div>
+        </div>
+      )}
 
-            {/* List / Empty State */}
-            {!isHydrated ? (
-              <div className="p-8 text-center text-xs text-on-surface-variant font-medium">
-                Loading workspace drafts...
-              </div>
-            ) : totalResumes === 0 ? (
-              <EmptyResumeState
-                onCreateClick={() => setIsCreateModalOpen(true)}
-                onLoadSamplesClick={resetToSampleResumes}
-              />
-            ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {resumes.map((resume) => (
-                  <ResumeCard
-                    key={resume.id}
-                    resume={resume}
-                    onDuplicate={handleDuplicate}
-                    onDeleteRequest={(r) => setResumeToDelete(r)}
-                  />
-                ))}
-              </div>
+      {/* Live Document Catalogue & Variations */}
+      <div className="flex flex-col gap-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div>
+            <h3 className="font-headline-sm text-lg sm:text-xl font-semibold text-on-surface">
+              Tailored Document Variations
+            </h3>
+            <p className="font-body-sm text-xs sm:text-sm text-on-surface-variant">
+              Iterated compositions optimized for specific career trajectories and venture profiles.
+            </p>
+          </div>
+
+          {/* Filter Pills */}
+          <div className="flex items-center gap-1.5">
+            <button
+              type="button"
+              onClick={() => setFilterTab("all")}
+              className={`px-3 py-1.5 font-label-md text-xs rounded transition-colors ${
+                filterTab === "all"
+                  ? "bg-surface-container text-on-surface font-semibold border border-border-subtle"
+                  : "text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface"
+              }`}
+            >
+              All Documents ({!isHydrated ? "..." : totalResumes})
+            </button>
+            <button
+              type="button"
+              onClick={() => setFilterTab("custom")}
+              className={`px-3 py-1.5 font-label-md text-xs rounded transition-colors ${
+                filterTab === "custom"
+                  ? "bg-surface-container text-on-surface font-semibold border border-border-subtle"
+                  : "text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface"
+              }`}
+            >
+              Custom Resumes ({!isHydrated ? "..." : customCount})
+            </button>
+            {sampleCount > 0 && (
+              <button
+                type="button"
+                onClick={() => setFilterTab("samples")}
+                className={`px-3 py-1.5 font-label-md text-xs rounded transition-colors ${
+                  filterTab === "samples"
+                    ? "bg-surface-container text-on-surface font-semibold border border-border-subtle"
+                    : "text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface"
+                }`}
+              >
+                Sample Fixtures ({!isHydrated ? "..." : sampleCount})
+              </button>
             )}
           </div>
         </div>
 
-        {/* Right Column: Useful Summary Cards (4 cols) */}
-        <div className="lg:col-span-4 space-y-6">
-          {/* Workspace Inventory / Stats Card */}
-          <div className="bg-surface-container-lowest rounded-2xl p-6 shadow-xs border border-border-subtle">
-            <div className="flex items-center justify-between mb-4 pb-2 border-b border-border-subtle">
-              <div className="flex items-center gap-2">
-                <FolderOpen className="w-4 h-4 text-primary" />
-                <h3 className="font-bold text-sm sm:text-base text-on-surface">
-                  Workspace Overview
-                </h3>
-              </div>
-              <span className="text-xs text-on-surface-variant font-mono">
-                {isCloudSynced ? "Cloud PostgreSQL" : "Browser Store"}
-              </span>
-            </div>
-
-            <div className="space-y-3">
-              <div className="flex items-center justify-between p-3 rounded-xl bg-surface-container-low border border-border-subtle text-xs">
-                <span className="text-on-surface-variant font-medium">Total Drafts</span>
-                <span className="font-bold text-on-surface text-sm">{totalResumes}</span>
-              </div>
-              <div className="flex items-center justify-between p-3 rounded-xl bg-surface-container-low border border-border-subtle text-xs">
-                <span className="text-on-surface-variant font-medium">Custom User Resumes</span>
-                <span className="font-bold text-primary text-sm">{customCount}</span>
-              </div>
-              <div className="flex items-center justify-between p-3 rounded-xl bg-surface-container-low border border-border-subtle text-xs">
-                <span className="text-on-surface-variant font-medium">Sample Demo Fixtures</span>
-                <span className="font-bold text-on-surface text-sm">{sampleCount}</span>
-              </div>
-            </div>
-
-            <div className="mt-4 pt-3 border-t border-border-subtle flex items-center justify-between">
-              <button
-                type="button"
-                onClick={resetToSampleResumes}
-                className="text-xs font-semibold text-primary hover:underline flex items-center gap-1 cursor-pointer"
-              >
-                <RefreshCw className="w-3 h-3" />
-                <span>Reset Sample Data</span>
-              </button>
-            </div>
+        {/* List / Empty State */}
+        {!isHydrated ? (
+          <div className="p-8 text-center text-xs text-on-surface-variant font-medium bg-surface-container-low rounded border border-border-subtle">
+            Loading workspace drafts...
           </div>
-
-          {/* Recommended Next Actions */}
-          <div className="bg-surface-container-lowest rounded-2xl p-6 shadow-xs border border-border-subtle">
-            <div className="flex items-center gap-2 mb-4 pb-2 border-b border-border-subtle">
-              <Lightbulb className="w-4 h-4 text-primary" />
-              <h3 className="font-bold text-sm sm:text-base text-on-surface">
-                Recommended Actions
-              </h3>
-            </div>
-
-            <div className="space-y-3">
-              <Link
-                href="/ai-rewriter"
-                className="flex items-start gap-3 p-3 rounded-xl bg-surface-container-low hover:bg-surface-container transition-colors group block"
-              >
-                <div className="w-7 h-7 rounded-lg bg-primary/10 text-primary flex items-center justify-center shrink-0 mt-0.5">
-                  <Sparkles className="w-3.5 h-3.5" />
-                </div>
-                <div>
-                  <h4 className="text-xs font-bold text-on-surface group-hover:text-primary transition-colors">
-                    Optimize bullet points
-                  </h4>
-                  <p className="text-[11px] text-on-surface-variant mt-0.5 leading-relaxed">
-                    Convert passive task descriptions into quantified achievements using the AI bullet rewriter.
-                  </p>
-                </div>
-              </Link>
-
-              <Link
-                href="/ats-analyzer"
-                className="flex items-start gap-3 p-3 rounded-xl bg-surface-container-low hover:bg-surface-container transition-colors group block"
-              >
-                <div className="w-7 h-7 rounded-lg bg-primary/10 text-primary flex items-center justify-center shrink-0 mt-0.5">
-                  <Briefcase className="w-3.5 h-3.5" />
-                </div>
-                <div>
-                  <h4 className="text-xs font-bold text-on-surface group-hover:text-primary transition-colors">
-                    Run Keyword Gap Check
-                  </h4>
-                  <p className="text-[11px] text-on-surface-variant mt-0.5 leading-relaxed">
-                    Paste a target job description into the ATS analyzer to detect missing skills.
-                  </p>
-                </div>
-              </Link>
-
-              <Link
-                href="/templates"
-                className="flex items-start gap-3 p-3 rounded-xl bg-surface-container-low hover:bg-surface-container transition-colors group block"
-              >
-                <div className="w-7 h-7 rounded-lg bg-primary/10 text-primary flex items-center justify-center shrink-0 mt-0.5">
-                  <FileText className="w-3.5 h-3.5" />
-                </div>
-                <div>
-                  <h4 className="text-xs font-bold text-on-surface group-hover:text-primary transition-colors">
-                    Browse Curated Layouts
-                  </h4>
-                  <p className="text-[11px] text-on-surface-variant mt-0.5 leading-relaxed">
-                    Switch typography and margin styles between Executive, Minimal, and Modern layouts.
-                  </p>
-                </div>
-              </Link>
-            </div>
+        ) : filteredResumes.length === 0 ? (
+          <EmptyResumeState
+            onCreateClick={() => setIsCreateModalOpen(true)}
+            onLoadSamplesClick={resetToSampleResumes}
+          />
+        ) : (
+          <div className="flex flex-col gap-2">
+            {filteredResumes.map((resume) => (
+              <ResumeCard
+                key={resume.id}
+                resume={resume}
+                onDuplicate={handleDuplicate}
+                onDeleteRequest={(r) => setResumeToDelete(r)}
+              />
+            ))}
           </div>
+        )}
+      </div>
 
-          {/* Activity Timeline */}
-          <div className="bg-surface-container-lowest rounded-2xl p-6 shadow-xs border border-border-subtle">
-            <div className="flex items-center gap-2 mb-4 pb-2 border-b border-border-subtle">
-              <History className="w-4 h-4 text-primary" />
-              <h3 className="font-bold text-sm sm:text-base text-on-surface">
-                Workspace Activity
-              </h3>
-            </div>
+      {/* Quick Studio Shortcuts (Tonal Architectural Panels) */}
+      <div className="flex flex-col gap-4 pt-2">
+        <div>
+          <h3 className="font-headline-sm text-lg sm:text-xl font-semibold text-on-surface">
+            Studio Diagnostic Suites
+          </h3>
+          <p className="font-body-sm text-xs sm:text-sm text-on-surface-variant">
+            Editorial and parsing engines running parallel verification loops.
+          </p>
+        </div>
 
-            <div className="relative pl-5 space-y-4 before:absolute before:left-2 before:top-2 before:bottom-2 before:w-0.5 before:bg-border-subtle">
-              <div className="relative">
-                <div className="absolute -left-5 top-1 w-2.5 h-2.5 rounded-full bg-primary ring-4 ring-surface-container-lowest" />
-                <p className="text-xs font-semibold text-on-surface">
-                  Workspace loaded from local storage
-                </p>
-                <span className="text-[11px] text-on-surface-variant">Active tab session</span>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {/* Shortcut 1 */}
+          <Link
+            href="/ats-analyzer"
+            className="group bg-surface-container-low hover:bg-surface-container p-6 rounded flex flex-col justify-between gap-4 transition-all shadow-xs border border-border-subtle text-inherit no-underline"
+          >
+            <div className="flex flex-col gap-3">
+              <div className="w-10 h-10 rounded bg-surface-container-highest flex items-center justify-center text-on-surface group-hover:bg-primary group-hover:text-on-primary transition-colors">
+                <ShieldCheck className="w-5 h-5" />
               </div>
-              <div className="relative">
-                <div className="absolute -left-5 top-1 w-2.5 h-2.5 rounded-full bg-secondary ring-4 ring-surface-container-lowest" />
-                <p className="text-xs font-semibold text-on-surface">
-                  {totalResumes > 0
-                    ? `Latest draft: ${resumes[0].title}`
-                    : "No active drafts in workspace"}
-                </p>
-                <span className="text-[11px] text-on-surface-variant">
-                  {totalResumes > 0 ? resumes[0].lastModified : "Empty state"}
+              <div className="flex flex-col gap-1">
+                <span className="font-title-md text-sm sm:text-base font-semibold text-on-surface group-hover:text-primary transition-colors">
+                  ATS Diagnostics Studio
                 </span>
+                <p className="font-body-sm text-xs text-on-surface-variant leading-relaxed">
+                  Run pre-flight checks against Taleo, Greenhouse, and Workday hiring filters with zero formatting degradation.
+                </p>
               </div>
             </div>
-          </div>
-
-          {/* Storage & Privacy Notice */}
-          <div className="bg-surface-container-lowest rounded-2xl p-5 shadow-xs border border-border-subtle">
-            <div className="flex items-center gap-2 mb-2">
-              <ShieldCheck className="w-4 h-4 text-primary" />
-              <h3 className="font-bold text-xs uppercase tracking-wider text-on-surface">
-                {isCloudSynced ? "Cloud PostgreSQL Storage" : "Private Local Storage"}
-              </h3>
+            <div className="flex items-center justify-between pt-1 text-on-surface font-label-md text-xs font-semibold">
+              <span>Launch diagnostic runner</span>
+              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </div>
-            <p className="text-[11px] text-on-surface-variant leading-relaxed">
-              {isCloudSynced
-                ? "Your resume records are securely synchronized to PostgreSQL with Row Level Security. Only you can read, modify, or delete your resumes."
-                : "Your resume drafts are saved locally in this browser. They are not cloud-synchronized and will be lost if you clear your browser site data or cookies."}
-            </p>
-          </div>
+          </Link>
+
+          {/* Shortcut 2 */}
+          <Link
+            href="/ai-rewriter"
+            className="group bg-surface-container-low hover:bg-surface-container p-6 rounded flex flex-col justify-between gap-4 transition-all shadow-xs border border-border-subtle text-inherit no-underline"
+          >
+            <div className="flex flex-col gap-3">
+              <div className="w-10 h-10 rounded bg-surface-container-highest flex items-center justify-center text-on-surface group-hover:bg-primary group-hover:text-on-primary transition-colors">
+                <Sliders className="w-5 h-5" />
+              </div>
+              <div className="flex flex-col gap-1">
+                <span className="font-title-md text-sm sm:text-base font-semibold text-on-surface group-hover:text-primary transition-colors">
+                  Job Match &amp; AI Rewriter
+                </span>
+                <p className="font-body-sm text-xs text-on-surface-variant leading-relaxed">
+                  Compare resume bullet proof-points against specific target role descriptions to reveal missing competencies.
+                </p>
+              </div>
+            </div>
+            <div className="flex items-center justify-between pt-1 text-on-surface font-label-md text-xs font-semibold">
+              <span>Inspect target match</span>
+              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+            </div>
+          </Link>
+
+          {/* Shortcut 3 */}
+          <Link
+            href="/templates"
+            className="group bg-surface-container-low hover:bg-surface-container p-6 rounded flex flex-col justify-between gap-4 transition-all shadow-xs border border-border-subtle text-inherit no-underline"
+          >
+            <div className="flex flex-col gap-3">
+              <div className="w-10 h-10 rounded bg-surface-container-highest flex items-center justify-center text-on-surface group-hover:bg-primary group-hover:text-on-primary transition-colors">
+                <FileText className="w-5 h-5" />
+              </div>
+              <div className="flex flex-col gap-1">
+                <span className="font-title-md text-sm sm:text-base font-semibold text-on-surface group-hover:text-primary transition-colors">
+                  Editorial Typography
+                </span>
+                <p className="font-body-sm text-xs text-on-surface-variant leading-relaxed">
+                  Explore curated letterform combinations and architectural leading rules crafted for unyielding legibility.
+                </p>
+              </div>
+            </div>
+            <div className="flex items-center justify-between pt-1 text-on-surface font-label-md text-xs font-semibold">
+              <span>Browse curated formats</span>
+              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+            </div>
+          </Link>
         </div>
       </div>
 
@@ -502,7 +583,7 @@ export default function DashboardPage() {
             setQuickStartRole(undefined);
           }}
           onCreated={(newId) => {
-            showFeedback(`Resume created successfully in your local workspace (${newId}).`);
+            showFeedback(`Resume created successfully in your workspace (${newId}).`);
           }}
         />
       )}

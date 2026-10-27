@@ -4,7 +4,6 @@ import React, { Suspense, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
-  FileText,
   Lock,
   Eye,
   EyeOff,
@@ -76,41 +75,38 @@ function ResetPasswordForm() {
   };
 
   return (
-    <div className="min-h-screen bg-warm-ivory flex flex-col justify-between py-12 px-4 sm:px-6 lg:px-8">
-      <div className="w-full max-w-md mx-auto space-y-8">
+    <div className="min-h-screen bg-surface flex flex-col justify-between py-12 px-4 sm:px-6 lg:px-8">
+      <div className="w-full max-w-md mx-auto space-y-6">
         <div className="text-center">
           <Link
             href="/"
-            className="inline-flex items-center gap-3 group focus:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded-xl p-1"
+            className="inline-flex items-center gap-2 group focus:outline-none"
           >
-            <div className="w-10 h-10 rounded-xl bg-primary text-white flex items-center justify-center font-bold shadow-md shadow-primary/20 group-hover:scale-105 transition-transform">
-              <FileText className="w-5 h-5" />
-            </div>
-            <span className="font-extrabold text-2xl text-on-surface tracking-tight">
+            <span className="font-title-md text-title-md font-semibold text-on-surface tracking-tight">
               ResumeLoops
             </span>
           </Link>
-          <div className="mt-6 flex items-center justify-center gap-2">
-            <KeyRound className="w-5 h-5 text-primary" />
-            <h1 className="text-2xl sm:text-3xl font-extrabold text-on-surface tracking-tight">
+          <div className="mt-4 flex items-center justify-center gap-2">
+            <KeyRound className="w-5 h-5 text-secondary" />
+            <h1 className="font-headline-md text-headline-md font-medium text-on-surface tracking-tight">
               Set new password
             </h1>
           </div>
-          <p className="mt-2 text-sm text-on-surface-variant">
-            Enter a secure new password for your ResumeLoops account.
+          <p className="mt-1 font-body-sm text-body-sm text-on-surface-variant">
+            Enter a secure new password for your ResumeLoops archive.
           </p>
         </div>
 
         {!isConfigured && <SupabaseSetupBanner />}
 
-        <div className="bg-surface-container-lowest p-8 rounded-2xl border border-border-subtle shadow-xs">
+        <div className="bg-surface-container-lowest p-8 rounded-xl border border-outline-variant/40 shadow-xs">
           {errorMessage && (
             <div
               role="alert"
-              className="mb-6 p-4 rounded-xl bg-red-500/10 border border-red-500/30 text-red-800 dark:text-red-300 text-xs flex items-center gap-2.5 animate-in fade-in"
+              className="mb-4 p-3.5 rounded-lg bg-rose-50 border border-rose-200 text-rose-800 font-body-sm text-body-sm flex items-start gap-2"
             >
-              <AlertCircle className="w-4 h-4 shrink-0 text-red-600" />
-              <span className="leading-relaxed">{errorMessage}</span>
+              <AlertCircle className="w-4 h-4 shrink-0 mt-0.5 text-rose-600" />
+              <span className="leading-snug">{errorMessage}</span>
             </div>
           )}
 
@@ -118,13 +114,13 @@ function ResetPasswordForm() {
             <div>
               <label
                 htmlFor="new-password"
-                className="block text-xs font-semibold text-on-surface uppercase tracking-wider mb-1.5"
+                className="block font-label-xs text-label-xs uppercase tracking-wider text-on-surface font-semibold mb-1"
               >
                 New Password (min 8 characters)
               </label>
               <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-on-surface-variant">
-                  <Lock className="w-4 h-4" />
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-on-surface-variant">
+                  <Lock className="w-4 h-4 text-secondary" />
                 </div>
                 <input
                   id="new-password"
@@ -135,13 +131,13 @@ function ResetPasswordForm() {
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••••••"
                   disabled={isLoading}
-                  className="w-full pl-10 pr-10 py-2.5 bg-surface-container-low border border-border-subtle rounded-xl text-sm text-on-surface placeholder:text-on-surface-variant/50 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
+                  className="w-full pl-9 pr-9 py-2 bg-surface-container-low border border-outline-variant/40 rounded font-body-sm text-body-sm text-on-surface placeholder:text-on-surface-variant/50 focus:outline-none focus:border-on-surface transition-all"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
                   aria-label={showPassword ? "Hide password" : "Show password"}
-                  className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-on-surface-variant hover:text-on-surface cursor-pointer focus:outline-none"
+                  className="absolute inset-y-0 right-0 pr-3 flex items-center text-on-surface-variant hover:text-on-surface cursor-pointer focus:outline-none"
                 >
                   {showPassword ? (
                     <EyeOff className="w-4 h-4" />
@@ -154,17 +150,17 @@ function ResetPasswordForm() {
 
             <div>
               <label
-                htmlFor="confirm-new-password"
-                className="block text-xs font-semibold text-on-surface uppercase tracking-wider mb-1.5"
+                htmlFor="confirm-password"
+                className="block font-label-xs text-label-xs uppercase tracking-wider text-on-surface font-semibold mb-1"
               >
                 Confirm New Password
               </label>
               <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-on-surface-variant">
-                  <Lock className="w-4 h-4" />
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-on-surface-variant">
+                  <Lock className="w-4 h-4 text-secondary" />
                 </div>
                 <input
-                  id="confirm-new-password"
+                  id="confirm-password"
                   type={showPassword ? "text" : "password"}
                   autoComplete="new-password"
                   required
@@ -172,38 +168,30 @@ function ResetPasswordForm() {
                   onChange={(e) => setConfirmPassword(e.target.value)}
                   placeholder="••••••••••••"
                   disabled={isLoading}
-                  className="w-full pl-10 pr-4 py-2.5 bg-surface-container-low border border-border-subtle rounded-xl text-sm text-on-surface placeholder:text-on-surface-variant/50 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
+                  className="w-full pl-9 pr-3 py-2 bg-surface-container-low border border-outline-variant/40 rounded font-body-sm text-body-sm text-on-surface placeholder:text-on-surface-variant/50 focus:outline-none focus:border-on-surface transition-all"
                 />
               </div>
             </div>
 
-            <div className="pt-2">
-              <Button
-                type="submit"
-                variant="primary"
-                disabled={isLoading}
-                className="w-full py-3 rounded-xl font-bold flex items-center justify-center gap-2 shadow-md cursor-pointer"
-              >
-                {isLoading ? (
-                  <>
-                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                    <span>Updating password...</span>
-                  </>
-                ) : (
-                  <>
-                    <span>Update Password</span>
-                    <ArrowRight className="w-4 h-4" />
-                  </>
-                )}
-              </Button>
-            </div>
+            <Button
+              type="submit"
+              variant="primary"
+              disabled={isLoading}
+              className="w-full py-2.5 rounded font-label-md text-label-md flex items-center justify-center gap-2 shadow-xs cursor-pointer mt-2"
+            >
+              {isLoading ? (
+                <>
+                  <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                  <span>Updating Password...</span>
+                </>
+              ) : (
+                <>
+                  <span>Save New Password</span>
+                  <ArrowRight className="w-4 h-4" />
+                </>
+              )}
+            </Button>
           </form>
-
-          <div className="mt-6 pt-6 border-t border-border-subtle text-center text-xs text-on-surface-variant">
-            <Link href="/login" className="font-semibold text-primary hover:underline">
-              Cancel and return to sign in
-            </Link>
-          </div>
         </div>
       </div>
     </div>
@@ -214,7 +202,7 @@ export default function ResetPasswordPage() {
   return (
     <Suspense
       fallback={
-        <div className="min-h-screen bg-warm-ivory flex items-center justify-center">
+        <div className="min-h-screen bg-surface flex items-center justify-center">
           <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin" />
         </div>
       }

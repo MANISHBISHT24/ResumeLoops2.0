@@ -3,7 +3,7 @@
 import React from "react";
 import Link from "next/link";
 import { ActionableFix } from "@/lib/ats-analysis";
-import { Lightbulb, Edit3, ArrowRight } from "lucide-react";
+import { Sparkles, Edit3, ArrowRight, CheckCircle2 } from "lucide-react";
 
 interface ActionableFixesProps {
   fixes: ActionableFix[];
@@ -12,60 +12,55 @@ interface ActionableFixesProps {
 
 export function ActionableFixes({ fixes, resumeId }: ActionableFixesProps) {
   return (
-    <div className="bg-surface rounded-2xl p-6 sm:p-8 border border-border-subtle shadow-sm flex flex-col gap-5">
-      <div className="flex items-center justify-between pb-3 border-b border-border-subtle">
+    <div className="bg-surface-container-lowest rounded-xl p-space-lg border border-outline-variant/40 shadow-xs flex flex-col gap-space-md">
+      {/* Header */}
+      <div className="flex items-center justify-between pb-3 border-b border-outline-variant/30">
         <div>
-          <h3 className="text-lg font-bold text-on-surface flex items-center gap-2">
-            <Lightbulb className="w-5 h-5 text-primary" /> Actionable Fixes & Guidance
+          <h3 className="font-headline-sm text-headline-sm text-on-surface flex items-center gap-2">
+            <Sparkles className="w-4 h-4 text-primary" /> High-Value Diagnostic Opportunities
           </h3>
-          <p className="text-xs text-on-surface-variant mt-0.5">
-            Concrete suggestions to improve your resume readiness and recruiter glance velocity.
+          <p className="font-body-sm text-body-sm text-on-surface-variant mt-0.5">
+            Concrete structural suggestions to elevate parse fidelity and human readability.
           </p>
         </div>
       </div>
 
       {fixes.length === 0 ? (
-        <div className="p-4 rounded-xl bg-emerald-50 border border-emerald-200 text-center space-y-1">
-          <p className="text-sm font-semibold text-emerald-800">
-            Outstanding Resume Completeness
+        <div className="p-4 rounded-lg bg-surface-container-low border border-outline-variant/30 text-center space-y-1">
+          <CheckCircle2 className="w-5 h-5 text-[#276a45] mx-auto mb-1" />
+          <p className="font-title-md text-title-md text-on-surface">
+            Outstanding Architectural Completeness
           </p>
-          <p className="text-xs text-emerald-700">
-            No critical structural or metric defects detected. Your resume is well-prepared for application submissions.
+          <p className="font-body-sm text-body-sm text-on-surface-variant max-w-md mx-auto">
+            Zero critical structural or metric defects detected. Your document is well-prepared for executive screening.
           </p>
         </div>
       ) : (
-        <div className="space-y-3.5">
+        <div className="flex flex-col gap-2.5">
           {fixes.map((fix) => {
-            let borderClass = "border-primary";
-            let badgeBg = "bg-primary-fixed text-primary";
-
-            if (fix.impact === "High") {
-              borderClass = "border-primary";
-              badgeBg = "bg-primary/10 text-primary";
-            } else if (fix.impact === "Medium") {
-              borderClass = "border-secondary";
-              badgeBg = "bg-secondary-container text-on-secondary-container";
-            } else {
-              borderClass = "border-outline-variant";
-              badgeBg = "bg-surface-variant text-on-surface-variant";
-            }
-
+            const isHigh = fix.impact === "High";
             return (
               <div
                 key={fix.id}
-                className={`p-4 rounded-xl bg-surface-container-low border-l-4 ${borderClass} border border-border-subtle/60 flex flex-col justify-between space-y-1.5`}
+                className="p-3.5 rounded-lg bg-surface-container-low border border-outline-variant/30 flex flex-col justify-between gap-1.5"
               >
                 <div className="flex items-center justify-between">
-                  <h4 className="text-sm font-bold text-on-surface">{fix.title}</h4>
-                  <span className={`text-[11px] font-semibold px-2 py-0.5 rounded ${badgeBg}`}>
-                    {fix.impact} Impact
+                  <h4 className="font-title-md text-body-sm text-on-surface font-semibold">{fix.title}</h4>
+                  <span
+                    className={`font-label-xs text-label-xs font-mono px-2 py-0.5 rounded border ${
+                      isHigh
+                        ? "bg-primary text-white border-primary"
+                        : "bg-surface-container text-on-surface border-outline-variant/40"
+                    }`}
+                  >
+                    {fix.impact} Priority
                   </span>
                 </div>
-                <p className="text-xs text-on-surface-variant leading-relaxed">
+                <p className="font-body-sm text-body-sm text-on-surface-variant leading-relaxed">
                   {fix.suggestion}
                 </p>
-                <span className="text-[10px] text-on-surface-variant/70 uppercase tracking-wider font-semibold pt-1">
-                  Section: {fix.category}
+                <span className="font-label-xs text-label-xs text-on-surface-variant/70 uppercase tracking-wider font-semibold pt-0.5">
+                  Scope: {fix.category}
                 </span>
               </div>
             );
@@ -73,29 +68,40 @@ export function ActionableFixes({ fixes, resumeId }: ActionableFixesProps) {
         </div>
       )}
 
+      {/* Suggested Bullet Revision Pattern */}
+      <div className="p-3 bg-surface-container-low rounded border border-outline-variant/30 flex flex-col gap-1.5">
+        <span className="font-label-xs text-label-xs uppercase tracking-wider text-on-surface-variant font-semibold">
+          Recommended Bullet Structure
+        </span>
+        <code className="text-body-sm font-mono text-on-surface bg-surface-container-lowest p-2 rounded border border-outline-variant/30">
+          [Action verb] + [Project scope] + [Quantified delta]
+        </code>
+      </div>
+
       {resumeId ? (
         <Link
           href={`/builder?id=${encodeURIComponent(resumeId)}`}
-          className="w-full mt-2 py-3 bg-surface-container-high hover:bg-secondary-container text-on-surface hover:text-primary rounded-xl text-xs sm:text-sm font-semibold transition-all flex items-center justify-center gap-2 border border-border-subtle"
+          className="w-full py-2.5 px-4 bg-primary hover:bg-primary-container text-on-primary rounded font-label-md text-label-md transition-all flex items-center justify-center gap-2 shadow-sm"
         >
           <Edit3 className="w-4 h-4" />
-          Edit Resume in Builder
+          <span>Apply Changes in Live Editor</span>
           <ArrowRight className="w-4 h-4 ml-auto" />
         </Link>
       ) : (
-        <div className="flex flex-col sm:flex-row gap-2 mt-2">
+        <div className="flex flex-col sm:flex-row gap-2 pt-1">
           <Link
             href="/builder"
-            className="flex-1 py-2.5 px-3 bg-surface-container-high hover:bg-secondary-container text-on-surface hover:text-primary rounded-xl text-xs font-semibold transition-all flex items-center justify-center gap-2 border border-border-subtle"
+            className="flex-1 py-2 px-3 bg-surface-container hover:bg-surface-container-high text-on-surface rounded font-label-md text-label-md transition-all flex items-center justify-center gap-1.5 border border-outline-variant/30"
           >
             <Edit3 className="w-3.5 h-3.5" />
-            ResumeLoops Builder
+            <span>Open Builder</span>
           </Link>
           <Link
             href="/ai-rewriter"
-            className="flex-1 py-2.5 px-3 bg-surface-container-high hover:bg-secondary-container text-on-surface hover:text-primary rounded-xl text-xs font-semibold transition-all flex items-center justify-center gap-2 border border-border-subtle"
+            className="flex-1 py-2 px-3 bg-primary hover:bg-primary-container text-on-primary rounded font-label-md text-label-md transition-all flex items-center justify-center gap-1.5 shadow-sm"
           >
-            AI Bullet Rewriter
+            <Sparkles className="w-3.5 h-3.5" />
+            <span>Open AI Rewriter</span>
           </Link>
         </div>
       )}

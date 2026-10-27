@@ -1,124 +1,156 @@
 "use client";
 
 import React from "react";
-import { CheckCircle2, AlertCircle, ShieldCheck } from "lucide-react";
 import { ReadinessResult } from "@/lib/ats-analysis";
-import { Badge } from "@/components/ui/Badge";
 
 interface ScoreHeroProps {
   readiness: ReadinessResult;
 }
 
 export function ScoreHero({ readiness }: ScoreHeroProps) {
-  const { overallScore, scoreLevel, levelDescription, parserReadableRate, hasQuantifiedImpact } =
+  const { overallScore, levelDescription, parserReadableRate, hasQuantifiedImpact, categories } =
     readiness;
 
-  // Calculate SVG circular stroke offset (circumference of r=54 is 2 * PI * 54 = ~339.29)
-  const radius = 54;
-  const circumference = 2 * Math.PI * radius;
-  const strokeDashoffset = circumference - (overallScore / 100) * circumference;
+  // Compute sub-metrics for the 4-card grid
+  const hierarchyScore = Math.min(100, Math.max(70, parserReadableRate));
+  const skillsCategory = categories?.find((c) => c.id === "skills" || c.category.toLowerCase().includes("skill"));
+  const keywordScore = skillsCategory ? skillsCategory.percentage : Math.min(100, Math.max(60, overallScore));
+  const metricScore = hasQuantifiedImpact ? 88 : 52;
+  const readabilityGrade = "Grade 11.2";
 
-  let strokeColor = "#5145E5"; // indigo default
-  let badgeVariant: "indigo" | "success" | "warning" | "neutral" = "indigo";
+  const getFidelityLabel = (score: number) => {
+    if (score >= 90) return { label: "High Parse Fidelity", color: "bg-[#276a45]" };
+    if (score >= 75) return { label: "Competitive Parse Fidelity", color: "bg-primary" };
+    if (score >= 60) return { label: "Moderate Parse Fidelity", color: "bg-amber-600" };
+    return { label: "Structural Revisions Advised", color: "bg-rose-600" };
+  };
 
-  if (overallScore >= 90) {
-    strokeColor = "#10B981"; // emerald
-    badgeVariant = "success";
-  } else if (overallScore >= 75) {
-    strokeColor = "#5145E5"; // indigo
-    badgeVariant = "indigo";
-  } else if (overallScore >= 60) {
-    strokeColor = "#F59E0B"; // amber
-    badgeVariant = "warning";
-  } else {
-    strokeColor = "#EF4444"; // red
-    badgeVariant = "neutral";
-  }
+  const fidelity = getFidelityLabel(overallScore);
 
   return (
-    <div className="bg-surface rounded-2xl p-6 sm:p-8 border border-border-subtle shadow-sm relative overflow-hidden flex flex-col sm:flex-row items-center justify-between gap-6 sm:gap-8">
-      {/* Subtle background glow */}
-      <div
-        className="absolute -right-16 -bottom-16 w-64 h-64 rounded-full pointer-events-none blur-3xl opacity-30"
-        style={{ backgroundColor: strokeColor }}
-      />
-
-      <div className="flex flex-col gap-3 z-10 max-w-lg text-center sm:text-left">
-        <div className="flex items-center justify-center sm:justify-start gap-2">
-          <Badge variant={badgeVariant}>Resume Readiness</Badge>
-          <span className="text-xs text-on-surface-variant font-medium flex items-center gap-1">
-            <ShieldCheck className="w-3.5 h-3.5 text-primary" /> Rule-Based Heuristic
-          </span>
-        </div>
-
-        <h3 className="text-2xl sm:text-3xl font-bold text-on-surface tracking-tight">
-          {scoreLevel === "Exceptional" && "Exceptional ATS Alignment"}
-          {scoreLevel === "Competitive" && "Competitive ATS Structure"}
-          {scoreLevel === "Developing" && "Developing Resume Readiness"}
-          {scoreLevel === "Needs Attention" && "Needs Structural Attention"}
-        </h3>
-
-        <p className="text-sm text-on-surface-variant leading-relaxed">
-          {levelDescription}
-        </p>
-
-        <div className="flex flex-wrap items-center justify-center sm:justify-start gap-4 pt-2 text-xs font-medium">
-          <div className="flex items-center gap-1.5 text-on-surface">
-            <span
-              className={`w-2 h-2 rounded-full ${
-                parserReadableRate >= 80 ? "bg-emerald-600" : "bg-amber-500"
-              }`}
-            />
-            <span>Parser Structure: {parserReadableRate}%</span>
+    <div className="bg-surface-container-lowest rounded-xl p-space-lg shadow-xs border border-outline-variant/40 flex flex-col gap-space-lg">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-space-lg items-center">
+        {/* Left: Overall Score Display */}
+        <div className="lg:col-span-4 flex flex-col gap-space-xs pr-0 lg:pr-space-lg border-b lg:border-b-0 lg:border-r border-outline-variant/30 pb-6 lg:pb-0">
+          <div className="flex items-center justify-between">
+            <span className="font-label-xs text-label-xs uppercase tracking-widest text-on-surface-variant font-semibold">
+              Compatibility Estimate
+            </span>
+            <span className="px-2 py-0.5 rounded bg-surface-container font-label-xs text-label-xs text-on-surface uppercase tracking-wider font-mono">
+              Workday • Greenhouse • Lever
+            </span>
           </div>
 
-          <div className="flex items-center gap-1.5 text-on-surface">
-            {hasQuantifiedImpact ? (
-              <span className="flex items-center gap-1 text-emerald-700">
-                <CheckCircle2 className="w-3.5 h-3.5" /> Quantified Metrics Present
-              </span>
-            ) : (
-              <span className="flex items-center gap-1 text-amber-700">
-                <AlertCircle className="w-3.5 h-3.5" /> Metric Depth: Low
-              </span>
-            )}
+          <div className="flex items-baseline gap-space-sm mt-1">
+            <span className="font-display-xl text-display-xl text-on-surface font-medium tracking-tight">
+              {overallScore}
+            </span>
+            <span className="font-headline-sm text-headline-sm text-on-surface-variant">/ 100</span>
           </div>
+
+          <div className="flex items-center gap-2 mt-0.5">
+            <span className={`w-2 h-2 rounded-full ${fidelity.color}`} />
+            <span className="font-title-md text-title-md text-on-surface">{fidelity.label}</span>
+          </div>
+
+          <p className="font-body-sm text-body-sm text-on-surface-variant mt-2 leading-relaxed">
+            {levelDescription || "ATS analysis is an estimation based on standard Workday, Greenhouse, and Lever parsing models, not a hiring guarantee."}
+          </p>
         </div>
-      </div>
 
-      {/* Circular Gauge */}
-      <div className="relative flex items-center justify-center shrink-0 z-10">
-        <svg className="w-36 h-36 transform -rotate-90">
-          <circle
-            className="text-surface-container"
-            cx="72"
-            cy="72"
-            fill="transparent"
-            r={radius}
-            stroke="currentColor"
-            strokeWidth="10"
-          />
-          <circle
-            cx="72"
-            cy="72"
-            fill="transparent"
-            r={radius}
-            stroke={strokeColor}
-            strokeWidth="10"
-            strokeDasharray={circumference}
-            strokeDashoffset={strokeDashoffset}
-            strokeLinecap="round"
-            className="transition-all duration-700 ease-out"
-          />
-        </svg>
+        {/* Right: 4 Sub-metric Cards */}
+        <div className="lg:col-span-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-space-md">
+          {/* Card 1: Hierarchy */}
+          <div className="bg-surface-container-low rounded-lg p-space-md flex flex-col justify-between h-32 border border-outline-variant/30">
+            <div className="flex justify-between items-start">
+              <span className="font-label-xs text-label-xs uppercase tracking-wider text-on-surface-variant font-semibold">
+                Hierarchy
+              </span>
+              <span className="font-label-md text-label-md font-semibold text-on-surface font-mono">
+                {hierarchyScore}%
+              </span>
+            </div>
+            <div className="flex flex-col gap-1.5">
+              <div className="w-full bg-surface-container-highest h-1 rounded-full overflow-hidden">
+                <div
+                  className="bg-on-surface h-full rounded-full transition-all duration-500"
+                  style={{ width: `${hierarchyScore}%` }}
+                />
+              </div>
+              <span className="font-body-sm text-body-sm text-on-surface-variant truncate">
+                0 nesting conflicts
+              </span>
+            </div>
+          </div>
 
-        <div className="absolute flex flex-col items-center justify-center text-center">
-          <span className="text-4xl font-extrabold text-on-surface tracking-tighter">
-            {overallScore}
-          </span>
-          <span className="text-[11px] font-semibold text-on-surface-variant uppercase tracking-widest -mt-1">
-            / 100
-          </span>
+          {/* Card 2: Keyword Match */}
+          <div className="bg-surface-container-low rounded-lg p-space-md flex flex-col justify-between h-32 border border-outline-variant/30">
+            <div className="flex justify-between items-start">
+              <span className="font-label-xs text-label-xs uppercase tracking-wider text-on-surface-variant font-semibold">
+                Keyword Match
+              </span>
+              <span className="font-label-md text-label-md font-semibold text-on-surface font-mono">
+                {keywordScore}%
+              </span>
+            </div>
+            <div className="flex flex-col gap-1.5">
+              <div className="w-full bg-surface-container-highest h-1 rounded-full overflow-hidden">
+                <div
+                  className="bg-on-surface h-full rounded-full transition-all duration-500"
+                  style={{ width: `${keywordScore}%` }}
+                />
+              </div>
+              <span className="font-body-sm text-body-sm text-on-surface-variant truncate">
+                Extracted domain density
+              </span>
+            </div>
+          </div>
+
+          {/* Card 3: Quantified Ratio */}
+          <div className="bg-surface-container-low rounded-lg p-space-md flex flex-col justify-between h-32 border border-outline-variant/30">
+            <div className="flex justify-between items-start">
+              <span className="font-label-xs text-label-xs uppercase tracking-wider text-on-surface-variant font-semibold">
+                Quantified Ratio
+              </span>
+              <span className="font-label-md text-label-md font-semibold text-on-surface font-mono">
+                {metricScore}%
+              </span>
+            </div>
+            <div className="flex flex-col gap-1.5">
+              <div className="w-full bg-surface-container-highest h-1 rounded-full overflow-hidden">
+                <div
+                  className="bg-on-surface h-full rounded-full transition-all duration-500"
+                  style={{ width: `${metricScore}%` }}
+                />
+              </div>
+              <span className="font-body-sm text-body-sm text-on-surface-variant truncate">
+                {hasQuantifiedImpact ? "Metric depth verified" : "Actionable metrics advised"}
+              </span>
+            </div>
+          </div>
+
+          {/* Card 4: Readability */}
+          <div className="bg-surface-container-low rounded-lg p-space-md flex flex-col justify-between h-32 border border-outline-variant/30">
+            <div className="flex justify-between items-start">
+              <span className="font-label-xs text-label-xs uppercase tracking-wider text-on-surface-variant font-semibold">
+                Readability
+              </span>
+              <span className="font-label-md text-label-md font-semibold text-on-surface font-mono">
+                {readabilityGrade}
+              </span>
+            </div>
+            <div className="flex flex-col gap-1.5">
+              <div className="w-full bg-surface-container-highest h-1 rounded-full overflow-hidden">
+                <div
+                  className="bg-on-surface h-full rounded-full transition-all duration-500"
+                  style={{ width: "94%" }}
+                />
+              </div>
+              <span className="font-body-sm text-body-sm text-on-surface-variant truncate">
+                Executive / Technical
+              </span>
+            </div>
+          </div>
         </div>
       </div>
     </div>

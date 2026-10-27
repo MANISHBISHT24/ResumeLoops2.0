@@ -19,10 +19,10 @@ export const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
         {label && (
           <label
             htmlFor={textareaId}
-            className="text-xs font-semibold text-on-surface uppercase tracking-wider"
+            className="font-label-xs text-label-xs uppercase tracking-wider text-on-surface-variant font-medium"
           >
             {label}
-            {props.required && <span className="text-rose-600 ml-1">*</span>}
+            {props.required && <span className="text-error ml-1">*</span>}
           </label>
         )}
 
@@ -34,16 +34,16 @@ export const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
           aria-describedby={
             error ? errorId : helperText ? helperId : undefined
           }
-          className={`w-full px-3.5 py-2.5 text-sm rounded bg-surface-container-lowest text-on-surface border transition-all placeholder:text-on-surface-variant/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/25 resize-y disabled:bg-surface-container-low disabled:cursor-not-allowed ${
+          className={`w-full px-3.5 py-2.5 text-sm rounded bg-surface-container-low text-on-surface border border-border-subtle transition-all placeholder:text-on-surface-variant/60 focus-visible:outline-none focus-visible:bg-surface-container-lowest focus-visible:border-on-surface resize-y disabled:bg-surface-container-highest/50 disabled:cursor-not-allowed ${
             error
-              ? "border-rose-400 focus-visible:border-rose-500 focus-visible:ring-rose-200"
-              : "border-border-subtle focus-visible:border-primary"
+              ? "border-error focus-visible:border-error"
+              : "border-border-subtle"
           } ${className}`}
           {...props}
         />
 
         {error ? (
-          <span id={errorId} className="text-xs text-rose-600 font-medium">
+          <span id={errorId} className="text-xs text-error font-medium">
             {error}
           </span>
         ) : helperText ? (

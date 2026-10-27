@@ -2,120 +2,115 @@
 
 import React from "react";
 import { ResumeCheck } from "@/lib/ats-analysis";
-import { CheckCircle2, AlertTriangle, AlertCircle, ShieldCheck } from "lucide-react";
+import { Check, CheckCircle2, AlertTriangle, AlertCircle, Columns, Heading, Binary, Grid } from "lucide-react";
 
 interface StructuralChecksProps {
   checks: ResumeCheck[];
 }
 
 export function StructuralChecks({ checks }: StructuralChecksProps) {
-  // Built-in design system template specifications
-  const templateConventions = [
+  const architecturalStandards = [
     {
-      id: "std-layout",
-      title: "Single-Column Flow",
-      badge: "Template Standard",
-      message: "ResumeLoops export templates are architected as single-column layouts to prevent parser column scramble.",
+      id: "single-column",
+      title: "Single-column Flow",
+      description: "Strict vertical stacking verified; eliminates multi-column OCR transposition errors.",
+      icon: Columns,
     },
     {
-      id: "std-headings",
-      title: "Standard Section Headers",
-      badge: "Template Standard",
-      message: "Template headers use standardized taxonomy (Experience, Education, Skills) recognized by applicant tracking systems.",
+      id: "standard-hierarchy",
+      title: "Standard Hierarchy",
+      description: "Headers (Experience, Education, Competencies) follow standard taxonomy patterns.",
+      icon: Heading,
     },
     {
-      id: "std-encoding",
-      title: "Clean Typography & Encoding",
-      badge: "Template Standard",
-      message: "System and web-safe Inter typography with UTF-8 encoding, avoiding decorative character artifacts.",
+      id: "utf8-encoding",
+      title: "UTF-8 Unicode Encoding",
+      description: "Clean typographic marks. No ligature corruption or unencoded symbol glyphs.",
+      icon: Binary,
+    },
+    {
+      id: "zero-tables",
+      title: "Zero Table Dependency",
+      description: "Zero complex layout tables detected. Safe for headless enterprise regex parsers.",
+      icon: Grid,
     },
   ];
 
+  const failedChecks = checks.filter((c) => c.status !== "passed");
+  const allCorePassed = failedChecks.length === 0;
+
   return (
-    <div className="bg-surface rounded-2xl p-6 sm:p-8 border border-border-subtle shadow-sm space-y-5">
-      <div>
-        <div className="flex items-center gap-2 mb-1">
-          <ShieldCheck className="w-4 h-4 text-primary" />
-          <span className="text-xs font-bold text-primary uppercase tracking-wider">
-            Format & Content Audit
+    <div className="bg-surface-container-lowest rounded-xl p-space-lg shadow-xs border border-outline-variant/40 flex flex-col gap-space-md">
+      {/* Header */}
+      <div className="flex items-center justify-between pb-2 border-b border-outline-variant/30">
+        <div className="flex items-center gap-space-sm">
+          <span className="w-6 h-6 rounded bg-[#276a45]/10 text-[#276a45] flex items-center justify-center">
+            <Check className="w-4 h-4" />
           </span>
+          <h2 className="font-headline-sm text-headline-sm text-on-surface">
+            Structural Formatting Architecture
+          </h2>
         </div>
-        <h3 className="text-lg font-bold text-on-surface">Structural & Formatting Compliance</h3>
-        <p className="text-xs text-on-surface-variant mt-0.5">
-          Evaluating resume content readiness alongside ResumeLoops template formatting standards.
-        </p>
+        <span className="font-label-xs text-label-xs text-on-surface-variant uppercase tracking-wider bg-surface-container px-2.5 py-1 rounded">
+          {allCorePassed ? "All Core Rules Passed" : `${failedChecks.length} Warnings Detected`}
+        </span>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        {/* Template Design Conventions */}
-        {templateConventions.map((item) => (
-          <div
-            key={item.id}
-            className="p-4 rounded-xl bg-surface-container-low border border-border-subtle/80 flex flex-col justify-between space-y-2"
-          >
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-semibold text-primary">By Design</span>
-              <span className="text-[11px] font-semibold text-on-secondary-container bg-secondary-container px-2 py-0.5 rounded-full">
-                {item.badge}
-              </span>
+      {/* 4 Architectural Standard Cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-space-sm pt-space-xs">
+        {architecturalStandards.map((std) => {
+          const Icon = std.icon;
+          return (
+            <div
+              key={std.id}
+              className="p-space-sm bg-surface-container-low rounded-lg border border-outline-variant/30 flex items-start gap-space-sm"
+            >
+              <Icon className="w-4 h-4 text-on-surface mt-1 shrink-0" />
+              <div>
+                <p className="font-title-md text-title-md text-on-surface">{std.title}</p>
+                <p className="font-body-sm text-body-sm text-on-surface-variant mt-0.5 leading-relaxed">
+                  {std.description}
+                </p>
+              </div>
             </div>
-            <div>
-              <h4 className="text-sm font-semibold text-on-surface">{item.title}</h4>
-              <p className="text-xs text-on-surface-variant mt-1 leading-relaxed">
-                {item.message}
-              </p>
-            </div>
-          </div>
-        ))}
+          );
+        })}
+      </div>
 
-        {/* Dynamic resume-specific checks */}
-        {checks.slice(0, 6).map((item) => (
-          <div
-            key={item.id}
-            className={`p-4 rounded-xl border flex flex-col justify-between space-y-2 ${
-              item.status === "passed"
-                ? "bg-surface-container-low border-border-subtle/80"
-                : item.status === "warning"
-                ? "bg-amber-50/40 border-amber-200/80"
-                : "bg-rose-50/40 border-rose-200/80"
-            }`}
-          >
-            <div className="flex items-center justify-between">
-              {item.status === "passed" && (
-                <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0" />
-              )}
-              {item.status === "warning" && (
-                <AlertTriangle className="w-5 h-5 text-amber-600 shrink-0" />
-              )}
-              {item.status === "needs-attention" && (
-                <AlertCircle className="w-5 h-5 text-rose-600 shrink-0" />
-              )}
-
-              <span
-                className={`text-[11px] font-semibold px-2 py-0.5 rounded-full border ${
-                  item.status === "passed"
-                    ? "text-emerald-800 bg-emerald-50 border-emerald-200/60"
-                    : item.status === "warning"
-                    ? "text-amber-800 bg-amber-50 border-amber-200/60"
-                    : "text-rose-800 bg-rose-50 border-rose-200/60"
-                }`}
+      {/* Dynamic Content Checks */}
+      {checks.length > 0 && (
+        <div className="pt-2 flex flex-col gap-2">
+          <span className="font-label-xs text-label-xs uppercase tracking-wider text-on-surface-variant font-semibold">
+            Heuristic Content Verifications
+          </span>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
+            {checks.slice(0, 6).map((item) => (
+              <div
+                key={item.id}
+                className="p-3 rounded-lg bg-surface-container-low border border-outline-variant/30 flex flex-col justify-between gap-1.5"
               >
-                {item.status === "passed"
-                  ? "Passed"
-                  : item.status === "warning"
-                  ? "Warning"
-                  : "Attention"}
-              </span>
-            </div>
-            <div>
-              <h4 className="text-sm font-semibold text-on-surface">{item.title}</h4>
-              <p className="text-xs text-on-surface-variant mt-1 leading-relaxed">
-                {item.message}
-              </p>
-            </div>
+                <div className="flex items-center justify-between">
+                  <span className="font-body-sm text-body-sm font-semibold text-on-surface truncate">
+                    {item.title}
+                  </span>
+                  {item.status === "passed" && (
+                    <CheckCircle2 className="w-4 h-4 text-[#276a45] shrink-0" />
+                  )}
+                  {item.status === "warning" && (
+                    <AlertTriangle className="w-4 h-4 text-amber-600 shrink-0" />
+                  )}
+                  {item.status === "needs-attention" && (
+                    <AlertCircle className="w-4 h-4 text-rose-600 shrink-0" />
+                  )}
+                </div>
+                <p className="font-body-sm text-[12px] text-on-surface-variant leading-normal line-clamp-2">
+                  {item.message}
+                </p>
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
+        </div>
+      )}
     </div>
   );
 }

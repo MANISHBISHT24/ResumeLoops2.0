@@ -12,15 +12,15 @@ export function AppShell({ children }: AppShellProps) {
   const [mobileOpen, setMobileOpen] = useState(false);
 
   return (
-    <div className="min-h-screen bg-warm-ivory text-on-surface flex flex-col">
+    <div className="min-h-screen bg-surface text-on-surface antialiased flex flex-col">
+      <AppHeader onMobileMenuOpen={() => setMobileOpen(true)} />
       <AppSidebar
         mobileOpen={mobileOpen}
         onMobileClose={() => setMobileOpen(false)}
       />
 
-      <div className="lg:pl-64 flex flex-col flex-1 min-w-0">
-        <AppHeader onMobileMenuOpen={() => setMobileOpen(true)} />
-        <main className="flex-1 p-4 sm:p-8 max-w-7xl w-full mx-auto">
+      <div className="md:pl-64 flex flex-col flex-1 pt-16 min-w-0">
+        <main className="flex-1 w-full">
           {children}
         </main>
       </div>

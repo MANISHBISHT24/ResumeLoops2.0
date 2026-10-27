@@ -1,173 +1,117 @@
 import React from "react";
-import { Check, Sparkles, Zap, ShieldCheck } from "lucide-react";
+import { CheckCircle2 } from "lucide-react";
 
 export function MarketingFeatures() {
   return (
-    <section className="py-24 sm:py-28 px-6 max-w-7xl mx-auto w-full flex flex-col gap-24 sm:gap-28" id="features">
-      {/* Feature 1: Real-Time Scoring */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-14 items-center">
-        {/* Text Column */}
-        <div className="lg:col-span-6 flex flex-col gap-6">
-          <span className="text-xs uppercase tracking-widest font-bold text-primary">
-            Real-Time Scoring
-          </span>
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-on-surface tracking-tight leading-tight">
-            Know your score before you hit submit.
-          </h2>
-          <p className="text-base sm:text-lg text-on-surface-variant leading-relaxed">
-            Our proprietary ATS simulator evaluates your resume against industry parsers. Spot missing keywords, formatting traps, and readability issues instantly.
-          </p>
-
-          <div className="flex flex-wrap items-center gap-6 pt-2">
-            <div className="flex items-center gap-2.5 text-on-surface">
-              <div className="w-6 h-6 rounded-full bg-primary/10 text-primary flex items-center justify-center shrink-0">
-                <Check className="w-3.5 h-3.5" />
-              </div>
-              <span className="text-sm sm:text-base font-semibold">
-                Keyword Density Checker
+    <section
+      id="diagnostics"
+      className="w-full py-16 sm:py-20 px-4 sm:px-6 lg:px-8 bg-surface"
+    >
+      <div className="max-w-6xl mx-auto">
+        <div className="bg-surface-container rounded p-6 sm:p-12 shadow-xs border border-border-subtle">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+            {/* Text Info */}
+            <div className="lg:col-span-6">
+              <span className="font-label-xs text-label-xs uppercase tracking-widest text-on-surface-variant font-medium">
+                Diagnostics Suite
               </span>
-            </div>
-            <div className="flex items-center gap-2.5 text-on-surface">
-              <div className="w-6 h-6 rounded-full bg-primary/10 text-primary flex items-center justify-center shrink-0">
-                <Check className="w-3.5 h-3.5" />
-              </div>
-              <span className="text-sm sm:text-base font-semibold">
-                Layout Parser Test
-              </span>
-            </div>
-          </div>
-        </div>
-
-        {/* Visual Mockup Column */}
-        <div className="lg:col-span-6 bg-surface-container-low rounded-2xl p-6 sm:p-8 border border-surface-container shadow-inner flex flex-col gap-6">
-          {/* Card 1: Match Score Summary */}
-          <div className="bg-surface-container-lowest p-5 rounded-xl shadow-[0_4px_20px_rgba(0,0,0,0.03)] flex items-center justify-between border border-surface-container-high/80">
-            <div className="flex items-center gap-4">
-              <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center text-primary font-bold text-lg shadow-2xs">
-                98%
-              </div>
-              <div>
-                <h3 className="font-bold text-on-surface text-base">
-                  Software Engineering Role
-                </h3>
-                <p className="text-xs text-on-surface-variant">
-                  Matched against 24 key industry requirements
-                </p>
+              <h2 className="mt-2 font-headline-lg text-2xl sm:text-4xl font-medium text-on-surface tracking-tight leading-snug">
+                Machine validation without graphic compromise.
+              </h2>
+              <p className="mt-3 font-body-md text-sm sm:text-base text-on-surface-variant leading-relaxed">
+                Every document is cross-checked against strict enterprise ATS parsers (Workday, Greenhouse, Taleo) to guarantee flawless text-extraction while maintaining fine typography.
+              </p>
+              <div className="mt-6 space-y-3">
+                <div className="flex items-center gap-2.5">
+                  <CheckCircle2 className="w-4 h-4 text-primary shrink-0" />
+                  <span className="font-body-sm text-sm text-on-surface font-medium">
+                    Standard Unicode character compliance
+                  </span>
+                </div>
+                <div className="flex items-center gap-2.5">
+                  <CheckCircle2 className="w-4 h-4 text-primary shrink-0" />
+                  <span className="font-body-sm text-sm text-on-surface font-medium">
+                    Structured optical heading hierarchies
+                  </span>
+                </div>
+                <div className="flex items-center gap-2.5">
+                  <CheckCircle2 className="w-4 h-4 text-primary shrink-0" />
+                  <span className="font-body-sm text-sm text-on-surface font-medium">
+                    Zero parsing artifact risk
+                  </span>
+                </div>
               </div>
             </div>
-            <span className="text-xs px-3 py-1.5 bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-full font-bold">
-              Ready
-            </span>
-          </div>
 
-          {/* Card 2: Keyword Density & Bar */}
-          <div className="bg-surface-container-lowest p-5 rounded-xl shadow-[0_4px_20px_rgba(0,0,0,0.03)] flex flex-col gap-3.5 border border-surface-container-high/80">
-            <div className="flex justify-between items-center text-sm">
-              <span className="text-on-surface font-bold">
-                Required Keywords Found
-              </span>
-              <span className="text-primary font-extrabold text-base">
-                18 / 19
-              </span>
-            </div>
-            <div className="w-full h-3 bg-surface-container rounded-full overflow-hidden p-0.5">
-              <div
-                className="bg-primary h-full rounded-full transition-all duration-500 shadow-xs"
-                style={{ width: "94%" }}
-              />
-            </div>
-            <div className="flex flex-wrap gap-1.5 pt-1">
-              <span className="text-[11px] px-2 py-0.5 rounded-md bg-surface-container text-on-surface font-medium">
-                TypeScript ✓
-              </span>
-              <span className="text-[11px] px-2 py-0.5 rounded-md bg-surface-container text-on-surface font-medium">
-                System Design ✓
-              </span>
-              <span className="text-[11px] px-2 py-0.5 rounded-md bg-surface-container text-on-surface font-medium">
-                CI/CD Pipelines ✓
-              </span>
-              <span className="text-[11px] px-2 py-0.5 rounded-md bg-amber-50 text-amber-800 border border-amber-200 font-medium">
-                GraphQL (Suggested)
-              </span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Feature 2: AI Content Tailoring */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-14 items-center">
-        {/* Visual Mockup Column (Left on Desktop) */}
-        <div className="lg:col-span-6 order-2 lg:order-1 bg-surface-container-low rounded-2xl p-6 sm:p-8 border border-surface-container shadow-inner flex flex-col gap-6">
-          <div className="bg-surface-container-lowest p-6 rounded-xl shadow-[0_4px_20px_rgba(0,0,0,0.03)] flex flex-col gap-4 border border-surface-container-high/80">
-            <div className="flex items-center justify-between pb-2 border-b border-surface-container">
-              <div className="flex items-center gap-2">
-                <Sparkles className="w-4 h-4 text-primary" />
-                <span className="text-xs text-primary font-bold tracking-wider uppercase">
-                  AI Rewrite Suggestion
+            {/* Diagnostics Metrics Visual Panel */}
+            <div className="lg:col-span-6 bg-surface-container-lowest p-6 rounded shadow-sm border border-border-subtle">
+              <div className="flex items-center justify-between pb-4 border-b border-border-subtle">
+                <span className="font-label-xs text-label-xs uppercase tracking-widest text-on-surface-variant font-medium">
+                  Engine Readout
+                </span>
+                <span className="font-label-xs text-label-xs text-on-surface-variant font-mono">
+                  STATUS: OPTIMAL
                 </span>
               </div>
-              <span className="text-xs px-2.5 py-0.5 rounded-full bg-secondary-container text-primary font-semibold">
-                Impact-driven
-              </span>
-            </div>
 
-            <div className="space-y-3 font-mono text-xs sm:text-sm">
-              <div className="p-3 rounded-lg bg-surface-container-low text-on-surface-variant border border-surface-container">
-                <span className="text-[11px] font-sans font-bold text-neutral-500 uppercase block mb-1">
-                  Original Bullet
-                </span>
-                &quot;Managed team projects&quot;
+              {/* Metric 1: Overall Fidelity */}
+              <div className="py-3">
+                <div className="flex justify-between items-baseline mb-2">
+                  <span className="font-title-md text-sm font-semibold text-on-surface">
+                    Parse Fidelity Index
+                  </span>
+                  <span className="font-headline-sm text-lg font-mono text-on-surface font-semibold">
+                    98.4%
+                  </span>
+                </div>
+                <div className="w-full bg-surface-container h-1.5 rounded-full overflow-hidden">
+                  <div
+                    className="bg-primary h-full rounded-full"
+                    style={{ width: "98.4%" }}
+                  />
+                </div>
               </div>
 
-              <div className="p-3.5 rounded-lg bg-primary/5 text-on-surface border border-primary/25 shadow-2xs">
-                <span className="text-[11px] font-sans font-bold text-primary uppercase block mb-1">
-                  Enhanced with Metrics
-                </span>
-                &quot;Spearheaded cross-functional engineering initiatives, accelerating deployment velocity by 34%.&quot;
+              {/* Metric 2: Hierarchy Score */}
+              <div className="py-3">
+                <div className="flex justify-between items-baseline mb-2">
+                  <span className="font-body-sm text-xs sm:text-sm text-on-surface">
+                    Typographic Hierarchy Validation
+                  </span>
+                  <span className="font-body-sm text-xs sm:text-sm font-mono text-on-surface">
+                    100%
+                  </span>
+                </div>
+                <div className="w-full bg-surface-container h-1.5 rounded-full overflow-hidden">
+                  <div
+                    className="bg-primary h-full rounded-full"
+                    style={{ width: "100%" }}
+                  />
+                </div>
               </div>
-            </div>
 
-            <div className="flex items-center justify-between text-xs text-on-surface-variant pt-1 font-sans">
-              <span className="flex items-center gap-1 font-semibold text-emerald-700">
-                <Zap className="w-3.5 h-3.5 text-emerald-600" />
-                +34% Hiring Match Score
-              </span>
-              <span className="flex items-center gap-1">
-                <ShieldCheck className="w-3.5 h-3.5 text-primary" />
-                ATS Safe Phrasing
-              </span>
-            </div>
-          </div>
-        </div>
-
-        {/* Text Column (Right on Desktop) */}
-        <div className="lg:col-span-6 order-1 lg:order-2 flex flex-col gap-6">
-          <span className="text-xs uppercase tracking-widest font-bold text-primary">
-            AI Content Tailoring
-          </span>
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-on-surface tracking-tight leading-tight">
-            Transform passive duties into quantified impact.
-          </h2>
-          <p className="text-base sm:text-lg text-on-surface-variant leading-relaxed">
-            Stuck on bullet points? Our writing assistant rewrites your work history using powerful action verbs and metric-driven phrasing tailored to senior positions.
-          </p>
-
-          <div className="flex flex-wrap items-center gap-6 pt-2">
-            <div className="flex items-center gap-2.5 text-on-surface">
-              <div className="w-6 h-6 rounded-full bg-primary/10 text-primary flex items-center justify-center shrink-0">
-                <Check className="w-3.5 h-3.5" />
+              {/* Metric 3: Semantic Density */}
+              <div className="py-3">
+                <div className="flex justify-between items-baseline mb-2">
+                  <span className="font-body-sm text-xs sm:text-sm text-on-surface">
+                    Executive Semantic Density
+                  </span>
+                  <span className="font-body-sm text-xs sm:text-sm font-mono text-on-surface">
+                    94.2%
+                  </span>
+                </div>
+                <div className="w-full bg-surface-container h-1.5 rounded-full overflow-hidden">
+                  <div
+                    className="bg-primary h-full rounded-full"
+                    style={{ width: "94.2%" }}
+                  />
+                </div>
               </div>
-              <span className="text-sm sm:text-base font-semibold">
-                One-Click Bullet Enhancer
-              </span>
-            </div>
-            <div className="flex items-center gap-2.5 text-on-surface">
-              <div className="w-6 h-6 rounded-full bg-primary/10 text-primary flex items-center justify-center shrink-0">
-                <Check className="w-3.5 h-3.5" />
+
+              <div className="mt-4 pt-3 flex items-center justify-between text-on-surface-variant font-label-xs text-xs border-t border-border-subtle/50">
+                <span>Parser: Greenhouse API v4</span>
+                <span>Updated Today</span>
               </div>
-              <span className="text-sm sm:text-base font-semibold">
-                Tone &amp; Style Tuning
-              </span>
             </div>
           </div>
         </div>

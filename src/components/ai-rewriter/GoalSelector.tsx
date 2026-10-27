@@ -55,14 +55,14 @@ export function GoalSelector({
 }: GoalSelectorProps) {
   return (
     <div className="space-y-2">
-      <label className="text-xs font-bold text-on-surface-variant flex items-center justify-between">
+      <label className="font-label-xs text-label-xs uppercase tracking-wider text-on-surface-variant font-semibold flex items-center justify-between">
         <span>Rewrite Objective</span>
-        <span className="text-[11px] font-normal text-on-surface-variant/70">
-          Select intended tone & phrasing
+        <span className="font-mono text-[11px] font-normal text-on-surface-variant/70">
+          Optimization Vector
         </span>
       </label>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
         {REWRITE_GOALS.map((g) => {
           const Icon = g.icon;
           const isSelected = selectedGoal === g.id;
@@ -73,26 +73,22 @@ export function GoalSelector({
               type="button"
               disabled={disabled}
               onClick={() => onSelectGoal(g.id)}
-              className={`p-3 rounded-xl border text-left transition-all flex flex-col justify-between space-y-1 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed ${
+              className={`p-3 rounded-lg border text-left transition-all flex flex-col justify-between space-y-1 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed ${
                 isSelected
-                  ? "bg-secondary-container/60 border-primary shadow-sm"
-                  : "bg-surface hover:bg-surface-container-low border-border-subtle"
+                  ? "bg-surface-container-highest border-on-surface text-on-surface shadow-2xs"
+                  : "bg-surface-container-lowest hover:bg-surface-container-low border-outline-variant/40 text-on-surface"
               }`}
             >
               <div className="flex items-center justify-between">
-                <span
-                  className={`text-xs font-bold flex items-center gap-1.5 ${
-                    isSelected ? "text-primary" : "text-on-surface"
-                  }`}
-                >
-                  <Icon className={`w-3.5 h-3.5 ${isSelected ? "text-primary" : "text-on-surface-variant"}`} />
+                <span className="font-title-md text-body-sm font-semibold flex items-center gap-1.5 text-on-surface">
+                  <Icon className={`w-3.5 h-3.5 ${isSelected ? "text-primary" : "text-secondary"}`} />
                   {g.label}
                 </span>
                 {isSelected && (
-                  <span className="w-2 h-2 rounded-full bg-primary" />
+                  <span className="w-1.5 h-1.5 rounded-full bg-primary" />
                 )}
               </div>
-              <p className="text-[11px] text-on-surface-variant leading-snug">
+              <p className="font-body-sm text-[11px] text-on-surface-variant leading-snug">
                 {g.description}
               </p>
             </button>

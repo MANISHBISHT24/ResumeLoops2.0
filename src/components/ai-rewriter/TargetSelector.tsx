@@ -24,13 +24,14 @@ export function TargetSelector({
   const projects = targets.filter((t) => t.sectionType === "project-description");
 
   return (
-    <div className="space-y-2">
-      <label className="text-xs font-bold text-on-surface-variant flex items-center justify-between">
+    <div className="space-y-1.5">
+      <label className="font-label-xs text-label-xs uppercase tracking-wider text-on-surface-variant font-semibold flex items-center justify-between">
         <span className="flex items-center gap-1.5">
-          <Target className="w-3.5 h-3.5 text-primary" /> Target Section to Rewrite
+          <Target className="w-3.5 h-3.5 text-secondary" />
+          <span>Target Field to Refine</span>
         </span>
-        <span className="text-[11px] font-normal text-on-surface-variant/70">
-          {targets.length} editable {targets.length === 1 ? "field" : "fields"} available
+        <span className="font-mono text-[11px] font-normal text-on-surface-variant/70">
+          {targets.length} editable {targets.length === 1 ? "field" : "fields"}
         </span>
       </label>
 
@@ -39,7 +40,7 @@ export function TargetSelector({
           value={selectedKey}
           onChange={(e) => onSelectKey(e.target.value)}
           disabled={disabled || targets.length === 0}
-          className="w-full text-xs sm:text-sm font-semibold bg-surface border border-border-subtle rounded-xl p-3 text-on-surface hover:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+          className="w-full font-body-sm text-body-sm font-semibold bg-surface-container-low border border-outline-variant/40 rounded p-2.5 text-on-surface hover:border-on-surface focus:outline-none transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
           aria-label="Select resume section to rewrite"
         >
           {headlines.length > 0 && (

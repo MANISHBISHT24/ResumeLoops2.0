@@ -1,76 +1,57 @@
 import React from "react";
-import { FileEdit, BarChart3, Rocket } from "lucide-react";
 
 export function MarketingProcess() {
-  const steps = [
-    {
-      number: "01",
-      icon: FileEdit,
-      title: "Import or Build",
-      description:
-        "Paste your existing resume or start fresh with our guided questionnaire. Our editor formats everything instantly.",
-    },
-    {
-      number: "02",
-      icon: BarChart3,
-      title: "ATS Optimization",
-      description:
-        "Paste the job description and watch our AI scan for missing keywords, suggesting precise enhancements.",
-    },
-    {
-      number: "03",
-      icon: Rocket,
-      title: "Export & Apply",
-      description:
-        "Download pixel-perfect PDFs or generate tailored link shares that track recruiter engagement.",
-    },
-  ];
-
   return (
-    <section className="py-24 sm:py-28 bg-surface-container-low px-6 w-full border-y border-surface-container">
-      <div className="max-w-7xl mx-auto flex flex-col items-center">
-        {/* Section Badge & Title */}
-        <span className="text-xs uppercase tracking-widest font-bold text-primary mb-2">
-          Simple Process
-        </span>
-        <h2 className="text-3xl sm:text-4xl font-extrabold text-on-surface text-center mb-14 sm:mb-16 tracking-tight">
-          From Experience to Opportunity
-        </h2>
-
-        {/* Steps Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 w-full">
-          {steps.map((step) => {
-            const Icon = step.icon;
-            return (
-              <div
-                key={step.number}
-                className="bg-surface-container-lowest p-8 rounded-2xl shadow-[0_10px_30px_rgba(0,0,0,0.03)] border border-surface-container flex flex-col gap-6 relative overflow-hidden group hover:border-primary/40 hover:shadow-[0_15px_35px_rgba(81,69,229,0.06)] transition-all duration-300"
-              >
-                {/* Large Numeral Watermark */}
-                <div
-                  className="text-6xl font-black bg-gradient-to-br from-primary/20 to-primary/5 bg-clip-text text-transparent absolute top-4 right-6 select-none font-display pointer-events-none"
-                  aria-hidden="true"
-                >
-                  {step.number}
-                </div>
-
-                {/* Step Icon */}
-                <div className="w-14 h-14 rounded-xl bg-primary text-on-primary flex items-center justify-center shadow-lg shadow-primary/20">
-                  <Icon className="w-6 h-6 text-white" />
-                </div>
-
-                {/* Step Content */}
-                <div className="flex flex-col gap-2 relative z-10">
-                  <h3 className="font-bold text-on-surface text-xl">
-                    {step.title}
-                  </h3>
-                  <p className="text-sm sm:text-base text-on-surface-variant leading-relaxed">
-                    {step.description}
-                  </p>
-                </div>
-              </div>
-            );
-          })}
+    <section
+      id="philosophy"
+      className="w-full bg-surface-container-low py-16 px-4 sm:px-6 lg:px-8 border-y border-border-subtle"
+    >
+      <div className="max-w-6xl mx-auto">
+        <div className="mb-8 flex items-center justify-between">
+          <span className="font-label-xs text-label-xs uppercase tracking-widest text-on-surface-variant">
+            Our Tenets
+          </span>
+          <span className="font-label-xs text-label-xs uppercase tracking-widest text-on-surface-variant font-medium">
+            Vol. II — Principles
+          </span>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-start">
+          {/* 01 */}
+          <div className="p-6 bg-surface-container rounded shadow-xs hover:shadow-sm transition-shadow border border-border-subtle">
+            <span className="font-display-xl text-4xl lg:text-5xl text-on-surface-variant/40 block leading-none">
+              01
+            </span>
+            <h3 className="mt-4 font-headline-sm text-xl font-semibold text-on-surface">
+              Structured Thought
+            </h3>
+            <p className="mt-2 font-body-sm text-sm text-on-surface-variant leading-relaxed">
+              Content precedes layout. We guide you to distill complex achievements into deliberate, measurable narratives before setting a single line of type.
+            </p>
+          </div>
+          {/* 02 */}
+          <div className="p-6 bg-surface-container-high rounded shadow-xs hover:shadow-sm transition-shadow md:-mt-3 border border-border-subtle">
+            <span className="font-display-xl text-4xl lg:text-5xl text-on-surface-variant/40 block leading-none">
+              02
+            </span>
+            <h3 className="mt-4 font-headline-sm text-xl font-semibold text-on-surface">
+              Editorial Restraint
+            </h3>
+            <p className="mt-2 font-body-sm text-sm text-on-surface-variant leading-relaxed">
+              Absence of visual noise communicates authority. No neon skill progress gauges or decorative ribbons—only typographic proportion and crystalline hierarchy.
+            </p>
+          </div>
+          {/* 03 */}
+          <div className="p-6 bg-surface-container rounded shadow-xs hover:shadow-sm transition-shadow border border-border-subtle">
+            <span className="font-display-xl text-4xl lg:text-5xl text-on-surface-variant/40 block leading-none">
+              03
+            </span>
+            <h3 className="mt-4 font-headline-sm text-xl font-semibold text-on-surface">
+              Algorithmic Precision
+            </h3>
+            <p className="mt-2 font-body-sm text-sm text-on-surface-variant leading-relaxed">
+              Under-the-hood parsing engines test line-length, semantic token distribution, and ATS machine readability without warping your human voice.
+            </p>
+          </div>
         </div>
       </div>
     </section>

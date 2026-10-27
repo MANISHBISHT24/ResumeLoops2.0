@@ -106,32 +106,24 @@ export function ResumeUploadDropzone({
     const isPdf = selectedFile.name.toLowerCase().endsWith(".pdf");
 
     return (
-      <div className="bg-surface rounded-2xl p-6 border border-border-subtle shadow-sm space-y-4">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 rounded-xl bg-surface-container-low border border-border-subtle/80">
+      <div className="bg-surface-container-lowest rounded-xl p-space-md border border-outline-variant/40 shadow-xs space-y-3">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 rounded-lg bg-surface-container-low border border-outline-variant/30">
           <div className="flex items-center gap-3.5 min-w-0">
-            <div
-              className={`w-12 h-12 rounded-xl flex items-center justify-center shrink-0 ${
-                isPdf ? "bg-red-50 text-red-600 border border-red-200" : "bg-blue-50 text-blue-600 border border-blue-200"
-              }`}
-            >
-              <FileText className="w-6 h-6" />
+            <div className="w-10 h-10 rounded-lg flex items-center justify-center shrink-0 bg-surface-container text-on-surface border border-outline-variant/40">
+              <FileText className="w-5 h-5 text-secondary" />
             </div>
 
             <div className="min-w-0">
               <div className="flex items-center gap-2">
-                <span className="font-bold text-sm text-on-surface truncate block" title={selectedFile.name}>
+                <span className="font-title-md text-body-sm font-semibold text-on-surface truncate block" title={selectedFile.name}>
                   {selectedFile.name}
                 </span>
-                <span
-                  className={`text-[10px] font-bold px-2 py-0.5 rounded uppercase tracking-wider shrink-0 ${
-                    isPdf ? "bg-red-100 text-red-800" : "bg-blue-100 text-blue-800"
-                  }`}
-                >
+                <span className="text-[10px] font-mono px-2 py-0.5 rounded uppercase tracking-wider shrink-0 bg-surface-container-highest text-on-surface border border-outline-variant/30">
                   {isPdf ? "PDF" : "DOCX"}
                 </span>
               </div>
-              <p className="text-xs text-on-surface-variant mt-0.5">
-                {formatFileSize(selectedFile.size)} • Ready for analysis
+              <p className="font-body-sm text-[12px] text-on-surface-variant mt-0.5 font-mono">
+                {formatFileSize(selectedFile.size)} • Ready for parse extraction
               </p>
             </div>
           </div>
@@ -155,7 +147,7 @@ export function ResumeUploadDropzone({
               size="sm"
               onClick={onFileClear}
               disabled={isProcessing}
-              className="text-xs text-red-600 hover:text-red-700 hover:bg-red-50"
+              className="text-xs text-rose-700 hover:text-rose-800 hover:bg-rose-50"
               aria-label="Remove selected resume file"
             >
               <X className="w-3.5 h-3.5 mr-1" />
@@ -194,58 +186,60 @@ export function ResumeUploadDropzone({
         tabIndex={0}
         role="button"
         aria-label="Upload resume: Drag and drop a PDF or DOCX file here, or press Enter to browse files"
-        className={`w-full relative rounded-2xl border-2 border-dashed p-8 sm:p-12 text-center cursor-pointer transition-all focus:outline-none focus:ring-2 focus:ring-primary/40 ${
+        className={`w-full relative rounded-xl border-2 border-dashed p-8 sm:p-12 text-center cursor-pointer transition-all focus:outline-none focus:ring-1 focus:ring-primary ${
           isDragOver
-            ? "border-primary bg-secondary-container/30 scale-[1.01]"
-            : "border-border-subtle hover:border-primary/50 bg-surface-container-low/40 hover:bg-surface-container-low/70"
-        } ${disabled || isProcessing ? "opacity-60 cursor-not-allowed" : ""}`}
+            ? "border-primary bg-surface-container-high scale-[1.005]"
+            : "border-outline-variant/60 hover:border-on-surface bg-surface-container-lowest hover:bg-surface-container-low"
+        }`}
       >
-        <div className="max-w-md mx-auto space-y-4 pointer-events-none">
-          <div className="w-14 h-14 rounded-2xl bg-secondary-container text-primary flex items-center justify-center mx-auto shadow-sm">
-            <UploadCloud className="w-7 h-7" />
+        <div className="flex flex-col items-center justify-center space-y-3">
+          <div className="w-12 h-12 rounded-full bg-surface-container flex items-center justify-center text-on-surface shadow-2xs">
+            <UploadCloud className="w-6 h-6 text-secondary" />
           </div>
 
           <div className="space-y-1">
-            <p className="text-base sm:text-lg font-bold text-on-surface">
-              Drag and drop your resume file here
+            <p className="font-title-md text-title-md text-on-surface">
+              Drop resume document here, or <span className="underline decoration-1 underline-offset-4 text-primary">browse files</span>
             </p>
-            <p className="text-xs sm:text-sm text-on-surface-variant">
-              or <span className="text-primary font-semibold underline underline-offset-2">browse computer files</span> to upload
+            <p className="font-body-sm text-body-sm text-on-surface-variant max-w-sm mx-auto">
+              Accepts machine-readable PDF or DOCX files up to 10 MB. Scanned image PDFs are not supported.
             </p>
           </div>
 
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-surface border border-border-subtle/80 text-[11px] font-medium text-on-surface-variant">
-            <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
-            Accepted: PDF &amp; DOCX • Maximum 10 MB per file
+          <div className="flex items-center gap-3 pt-1 text-on-surface-variant font-label-xs text-label-xs">
+            <span className="flex items-center gap-1">
+              <CheckCircle2 className="w-3.5 h-3.5 text-[#276a45]" /> Single-column verified
+            </span>
+            <span>•</span>
+            <span className="flex items-center gap-1">
+              <CheckCircle2 className="w-3.5 h-3.5 text-[#276a45]" /> Private Storage
+            </span>
+            <span>•</span>
+            <span className="flex items-center gap-1">
+              <CheckCircle2 className="w-3.5 h-3.5 text-[#276a45]" /> Max 10 MB
+            </span>
           </div>
         </div>
 
+        {/* Hidden File Input */}
         <input
           ref={inputRef}
           type="file"
-          id="resume-file-upload-input"
+          id="resume-file-input"
           accept=".pdf,.docx,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
           onChange={handleInputChange}
+          disabled={disabled || isProcessing}
           className="sr-only"
         />
       </div>
 
+      {/* Client validation error notice */}
       {clientError && (
-        <div className="p-3.5 rounded-xl bg-red-50 border border-red-200 text-red-800 text-xs flex items-center gap-2.5">
-          <AlertCircle className="w-4 h-4 shrink-0 text-red-600" />
-          <span>{clientError}</span>
+        <div className="flex items-start gap-2.5 p-3 rounded-lg bg-rose-50 border border-rose-200 text-rose-800 text-body-sm">
+          <AlertCircle className="w-4 h-4 shrink-0 mt-0.5 text-rose-600" />
+          <p className="leading-snug">{clientError}</p>
         </div>
       )}
-
-      {/* Honest OCR notice and privacy disclosure */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 px-1 text-[11px] text-on-surface-variant/80">
-        <p>
-          <strong>Notice:</strong> Text-based resumes only. Scanned image PDFs without selectable text require OCR (not supported in this version).
-        </p>
-        <p className="italic shrink-0">
-          Files are parsed securely on the server.
-        </p>
-      </div>
     </div>
   );
 }

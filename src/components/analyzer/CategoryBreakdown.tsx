@@ -9,38 +9,32 @@ interface CategoryBreakdownProps {
 
 export function CategoryBreakdown({ categories }: CategoryBreakdownProps) {
   return (
-    <div className="bg-surface rounded-2xl p-6 sm:p-8 border border-border-subtle shadow-sm space-y-6">
-      <div className="border-b border-border-subtle pb-3">
-        <h3 className="text-lg font-bold text-on-surface">Category Score Breakdown</h3>
-        <p className="text-xs text-on-surface-variant mt-0.5">
+    <div className="bg-surface-container-lowest rounded-xl p-space-md border border-outline-variant/40 shadow-xs space-y-4">
+      <div className="border-b border-outline-variant/30 pb-2">
+        <h3 className="font-title-md text-title-md text-on-surface font-semibold">Category Score Breakdown</h3>
+        <p className="font-body-sm text-[12px] text-on-surface-variant mt-0.5">
           Deterministic 100-point rubric assessing core resume sections and depth.
         </p>
       </div>
 
-      <div className="space-y-5">
+      <div className="space-y-4">
         {categories.map((cat) => (
-          <div key={cat.id} className="space-y-1.5">
-            <div className="flex items-center justify-between text-xs sm:text-sm font-semibold">
+          <div key={cat.id} className="space-y-1">
+            <div className="flex items-center justify-between text-body-sm font-body-sm font-semibold">
               <span className="text-on-surface">{cat.category}</span>
-              <span className="text-primary font-bold">
+              <span className="font-mono text-on-surface text-label-xs">
                 {cat.score} / {cat.maxScore} pts ({cat.percentage}%)
               </span>
             </div>
 
-            <div className="w-full h-2 bg-surface-container rounded-full overflow-hidden">
+            <div className="w-full h-1.5 bg-surface-container rounded-full overflow-hidden">
               <div
-                className={`h-full rounded-full transition-all duration-500 ${
-                  cat.percentage >= 80
-                    ? "bg-primary"
-                    : cat.percentage >= 50
-                    ? "bg-amber-500"
-                    : "bg-rose-500"
-                }`}
+                className="h-full bg-on-surface rounded-full transition-all duration-500"
                 style={{ width: `${cat.percentage}%` }}
               />
             </div>
 
-            <p className="text-[11px] sm:text-xs text-on-surface-variant leading-snug">
+            <p className="font-body-sm text-[11px] text-on-surface-variant leading-snug">
               {cat.description}
             </p>
           </div>

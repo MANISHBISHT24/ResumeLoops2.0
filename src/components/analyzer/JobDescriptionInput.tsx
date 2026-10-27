@@ -50,13 +50,13 @@ export function JobDescriptionInput({
   const [isOpen, setIsOpen] = useState(true);
 
   return (
-    <div className="bg-surface rounded-2xl p-6 border border-border-subtle shadow-sm space-y-4">
+    <div className="bg-surface-container-lowest rounded-xl p-space-md border border-outline-variant/40 shadow-xs space-y-3">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
-          <h3 className="text-base font-bold text-on-surface flex items-center gap-2">
-            <Search className="w-4 h-4 text-primary" /> Target Job Description Matching
+          <h3 className="font-title-md text-title-md text-on-surface flex items-center gap-2">
+            <Search className="w-4 h-4 text-primary" /> Target Job Requisition Matching
           </h3>
-          <p className="text-xs text-on-surface-variant mt-0.5">
+          <p className="font-body-sm text-[12px] text-on-surface-variant mt-0.5">
             Paste target role requirements to extract domain terms and calculate keyword alignment.
           </p>
         </div>
@@ -67,7 +67,7 @@ export function JobDescriptionInput({
               variant="ghost"
               size="sm"
               onClick={() => onJobDescriptionChange("")}
-              className="text-xs text-on-surface-variant hover:text-error"
+              className="text-xs text-on-surface-variant hover:text-rose-700"
             >
               <XCircle className="w-3.5 h-3.5 mr-1" /> Clear
             </Button>
@@ -87,7 +87,7 @@ export function JobDescriptionInput({
         <div className="space-y-3 pt-1">
           {/* Quick preset chips */}
           <div className="flex flex-wrap items-center gap-2">
-            <span className="text-xs text-on-surface-variant font-medium">Quick sample JDs:</span>
+            <span className="font-label-xs text-label-xs text-on-surface-variant font-medium">Quick sample requisitions:</span>
             {SAMPLE_PRESETS.map((preset) => (
               <button
                 key={preset.name}
@@ -95,7 +95,7 @@ export function JobDescriptionInput({
                 onClick={() => {
                   onJobDescriptionChange(preset.text);
                 }}
-                className="px-2.5 py-1 text-xs font-medium rounded-lg bg-surface-container hover:bg-secondary-container hover:text-primary transition-colors border border-border-subtle cursor-pointer"
+                className="px-2 py-0.5 font-label-xs text-label-xs rounded bg-surface-container hover:bg-surface-container-high text-on-surface transition-colors border border-outline-variant/30 cursor-pointer"
               >
                 {preset.name}
               </button>
@@ -104,19 +104,18 @@ export function JobDescriptionInput({
 
           <div className="relative">
             <textarea
+              rows={5}
               value={jobDescription}
               onChange={(e) => onJobDescriptionChange(e.target.value)}
-              placeholder="Paste target job description here (e.g., requirements, responsibilities, technical qualifications)..."
-              rows={5}
-              className="w-full text-xs sm:text-sm font-normal text-on-surface bg-surface-container-lowest border border-border-subtle rounded-xl p-3.5 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all resize-y placeholder:text-on-surface-variant/50"
+              placeholder="Paste target job description or requirements section here (minimum 20 characters)..."
+              className="w-full p-3 font-body-sm text-body-sm bg-surface-container-low border border-outline-variant/40 rounded-lg focus:outline-none focus:border-on-surface text-on-surface placeholder:text-on-surface-variant/50 transition-all resize-y"
             />
           </div>
 
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-1">
-            <span className="text-[11px] text-on-surface-variant/80 italic">
-              {jobDescription.trim().length > 0
-                ? `${jobDescription.trim().split(/\s+/).filter(Boolean).length} words entered`
-                : "No job description entered — job match estimate is currently withheld."}
+          <div className="flex items-center justify-between">
+            <span className="font-label-xs text-label-xs font-mono text-on-surface-variant">
+              {jobDescription.length} characters
+              {jobDescription.length > 0 && jobDescription.length < 20 && " (min 20 needed)"}
             </span>
 
             <Button
@@ -124,10 +123,10 @@ export function JobDescriptionInput({
               size="sm"
               onClick={onAnalyze}
               disabled={jobDescription.trim().length < 20}
-              className="w-full sm:w-auto text-xs font-semibold"
+              className="flex items-center gap-1.5"
             >
-              <Sparkles className="w-3.5 h-3.5 mr-1.5" />
-              {isAnalyzed ? "Re-Analyze Keyword Alignment" : "Analyze Job Keywords"}
+              <Sparkles className="w-3.5 h-3.5" />
+              <span>{isAnalyzed ? "Recalculate Alignment" : "Analyze Job Alignment"}</span>
             </Button>
           </div>
         </div>

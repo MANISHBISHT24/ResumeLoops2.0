@@ -3,7 +3,6 @@
 import React, { Suspense, useState } from "react";
 import Link from "next/link";
 import {
-  FileText,
   Mail,
   ArrowRight,
   ArrowLeft,
@@ -71,24 +70,21 @@ function ForgotPasswordForm() {
   };
 
   return (
-    <div className="min-h-screen bg-warm-ivory flex flex-col justify-between py-12 px-4 sm:px-6 lg:px-8">
-      <div className="w-full max-w-md mx-auto space-y-8">
+    <div className="min-h-screen bg-surface flex flex-col justify-between py-12 px-4 sm:px-6 lg:px-8">
+      <div className="w-full max-w-md mx-auto space-y-6">
         <div className="text-center">
           <Link
             href="/"
-            className="inline-flex items-center gap-3 group focus:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded-xl p-1"
+            className="inline-flex items-center gap-2 group focus:outline-none"
           >
-            <div className="w-10 h-10 rounded-xl bg-primary text-white flex items-center justify-center font-bold shadow-md shadow-primary/20 group-hover:scale-105 transition-transform">
-              <FileText className="w-5 h-5" />
-            </div>
-            <span className="font-extrabold text-2xl text-on-surface tracking-tight">
+            <span className="font-title-md text-title-md font-semibold text-on-surface tracking-tight">
               ResumeLoops
             </span>
           </Link>
-          <h1 className="mt-6 text-2xl sm:text-3xl font-extrabold text-on-surface tracking-tight">
+          <h1 className="mt-4 font-headline-md text-headline-md font-medium text-on-surface tracking-tight">
             Reset your password
           </h1>
-          <p className="mt-2 text-sm text-on-surface-variant">
+          <p className="mt-1 font-body-sm text-body-sm text-on-surface-variant">
             Enter your email address and we&apos;ll send you a secure link to reset your password.
           </p>
         </div>
@@ -96,20 +92,20 @@ function ForgotPasswordForm() {
         {!isConfigured && <SupabaseSetupBanner />}
 
         {isResetSent ? (
-          <div className="bg-surface-container-lowest p-8 rounded-2xl border border-border-subtle shadow-xs text-center space-y-5 animate-in fade-in">
-            <div className="w-14 h-14 rounded-full bg-emerald-500/10 text-emerald-600 flex items-center justify-center mx-auto">
-              <CheckCircle2 className="w-8 h-8" />
+          <div className="bg-surface-container-lowest p-8 rounded-xl border border-outline-variant/40 shadow-xs text-center space-y-4 animate-in fade-in">
+            <div className="w-12 h-12 rounded-full bg-surface-container text-[#276a45] flex items-center justify-center mx-auto">
+              <CheckCircle2 className="w-6 h-6" />
             </div>
-            <h2 className="text-xl font-bold text-on-surface">
-              Check your email
+            <h2 className="font-title-md text-title-md text-on-surface font-semibold">
+              Check your inbox
             </h2>
-            <p className="text-sm text-on-surface-variant leading-relaxed">
-              If an account exists with <strong className="text-on-surface">{email}</strong>, you will receive a password reset link shortly.
+            <p className="font-body-sm text-body-sm text-on-surface-variant leading-relaxed">
+              If an account exists with <strong className="text-on-surface font-mono">{email}</strong>, you will receive a password reset link shortly.
             </p>
-            <div className="pt-4 border-t border-border-subtle">
+            <div className="pt-2">
               <Link
                 href="/login"
-                className="text-xs font-semibold text-primary hover:underline inline-flex items-center gap-1.5"
+                className="font-label-xs text-label-xs font-semibold text-on-surface hover:underline inline-flex items-center gap-1.5"
               >
                 <ArrowLeft className="w-3.5 h-3.5" />
                 <span>Back to sign in</span>
@@ -117,14 +113,14 @@ function ForgotPasswordForm() {
             </div>
           </div>
         ) : (
-          <div className="bg-surface-container-lowest p-8 rounded-2xl border border-border-subtle shadow-xs">
+          <div className="bg-surface-container-lowest p-8 rounded-xl border border-outline-variant/40 shadow-xs">
             {errorMessage && (
               <div
                 role="alert"
-                className="mb-6 p-4 rounded-xl bg-red-500/10 border border-red-500/30 text-red-800 dark:text-red-300 text-xs flex items-center gap-2.5 animate-in fade-in"
+                className="mb-4 p-3.5 rounded-lg bg-rose-50 border border-rose-200 text-rose-800 font-body-sm text-body-sm flex items-start gap-2"
               >
-                <AlertCircle className="w-4 h-4 shrink-0 text-red-600" />
-                <span className="leading-relaxed">{errorMessage}</span>
+                <AlertCircle className="w-4 h-4 shrink-0 mt-0.5 text-rose-600" />
+                <span className="leading-snug">{errorMessage}</span>
               </div>
             )}
 
@@ -132,13 +128,13 @@ function ForgotPasswordForm() {
               <div>
                 <label
                   htmlFor="reset-email"
-                  className="block text-xs font-semibold text-on-surface uppercase tracking-wider mb-1.5"
+                  className="block font-label-xs text-label-xs uppercase tracking-wider text-on-surface font-semibold mb-1"
                 >
-                  Account Email
+                  Email Address
                 </label>
                 <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-on-surface-variant">
-                    <Mail className="w-4 h-4" />
+                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-on-surface-variant">
+                    <Mail className="w-4 h-4 text-secondary" />
                   </div>
                   <input
                     id="reset-email"
@@ -147,39 +143,37 @@ function ForgotPasswordForm() {
                     required
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    placeholder="alex.lawson@example.com"
+                    placeholder="alex.vance@studio.io"
                     disabled={isLoading}
-                    className="w-full pl-10 pr-4 py-2.5 bg-surface-container-low border border-border-subtle rounded-xl text-sm text-on-surface placeholder:text-on-surface-variant/50 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
+                    className="w-full pl-9 pr-3 py-2 bg-surface-container-low border border-outline-variant/40 rounded font-body-sm text-body-sm text-on-surface placeholder:text-on-surface-variant/50 focus:outline-none focus:border-on-surface transition-all"
                   />
                 </div>
               </div>
 
-              <div className="pt-2">
-                <Button
-                  type="submit"
-                  variant="primary"
-                  disabled={isLoading}
-                  className="w-full py-3 rounded-xl font-bold flex items-center justify-center gap-2 shadow-md cursor-pointer"
-                >
-                  {isLoading ? (
-                    <>
-                      <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                      <span>Sending link...</span>
-                    </>
-                  ) : (
-                    <>
-                      <span>Send Reset Link</span>
-                      <ArrowRight className="w-4 h-4" />
-                    </>
-                  )}
-                </Button>
-              </div>
+              <Button
+                type="submit"
+                variant="primary"
+                disabled={isLoading}
+                className="w-full py-2.5 rounded font-label-md text-label-md flex items-center justify-center gap-2 shadow-xs cursor-pointer"
+              >
+                {isLoading ? (
+                  <>
+                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                    <span>Sending Reset Link...</span>
+                  </>
+                ) : (
+                  <>
+                    <span>Send Reset Link</span>
+                    <ArrowRight className="w-4 h-4" />
+                  </>
+                )}
+              </Button>
             </form>
 
-            <div className="mt-6 pt-6 border-t border-border-subtle text-center text-xs text-on-surface-variant">
+            <div className="mt-5 pt-4 border-t border-outline-variant/30 text-center font-body-sm text-[13px] text-on-surface-variant">
               <Link
                 href="/login"
-                className="font-semibold text-primary hover:underline inline-flex items-center gap-1.5"
+                className="font-semibold text-on-surface hover:underline inline-flex items-center gap-1.5"
               >
                 <ArrowLeft className="w-3.5 h-3.5" />
                 <span>Return to sign in</span>
@@ -196,7 +190,7 @@ export default function ForgotPasswordPage() {
   return (
     <Suspense
       fallback={
-        <div className="min-h-screen bg-warm-ivory flex items-center justify-center">
+        <div className="min-h-screen bg-surface flex items-center justify-center">
           <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin" />
         </div>
       }

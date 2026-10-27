@@ -4,7 +4,6 @@ import React, { Suspense, useState } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import {
-  FileText,
   Mail,
   Lock,
   Eye,
@@ -87,26 +86,23 @@ function LoginForm() {
   };
 
   return (
-    <div className="min-h-screen bg-warm-ivory flex flex-col justify-between py-12 px-4 sm:px-6 lg:px-8">
-      <div className="w-full max-w-md mx-auto space-y-8">
+    <div className="min-h-screen bg-surface flex flex-col justify-between py-12 px-4 sm:px-6 lg:px-8">
+      <div className="w-full max-w-md mx-auto space-y-6">
         {/* Brand header */}
         <div className="text-center">
           <Link
             href="/"
-            className="inline-flex items-center gap-3 group focus:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded-xl p-1"
+            className="inline-flex items-center gap-2 group focus:outline-none"
           >
-            <div className="w-10 h-10 rounded-xl bg-primary text-white flex items-center justify-center font-bold shadow-md shadow-primary/20 group-hover:scale-105 transition-transform">
-              <FileText className="w-5 h-5" />
-            </div>
-            <span className="font-extrabold text-2xl text-on-surface tracking-tight">
+            <span className="font-title-md text-title-md font-semibold text-on-surface tracking-tight">
               ResumeLoops
             </span>
           </Link>
-          <h1 className="mt-6 text-2xl sm:text-3xl font-extrabold text-on-surface tracking-tight">
-            Sign in to your account
+          <h1 className="mt-4 font-headline-md text-headline-md font-medium text-on-surface tracking-tight">
+            Sign in to your archive
           </h1>
-          <p className="mt-2 text-sm text-on-surface-variant">
-            Access your cloud-synced resumes, ATS analyses, and tailoring pipeline
+          <p className="mt-1 font-body-sm text-body-sm text-on-surface-variant">
+            Access your cloud-synced resumes, ATS analyses, and editorial tailoring pipeline
           </p>
         </div>
 
@@ -117,19 +113,19 @@ function LoginForm() {
         {verifiedParam && (
           <div
             role="status"
-            className="p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-800 dark:text-emerald-300 text-xs flex items-center gap-2.5"
+            className="p-3 rounded-lg bg-surface-container border border-outline-variant/40 text-[#276a45] font-body-sm text-body-sm flex items-center gap-2"
           >
-            <CheckCircle2 className="w-4 h-4 shrink-0 text-emerald-600" />
-            <span>Email verified successfully! You can now log in to your account.</span>
+            <CheckCircle2 className="w-4 h-4 shrink-0" />
+            <span>Email verified successfully. You can now sign in to your archive.</span>
           </div>
         )}
 
         {resetParam && (
           <div
             role="status"
-            className="p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-800 dark:text-emerald-300 text-xs flex items-center gap-2.5"
+            className="p-3 rounded-lg bg-surface-container border border-outline-variant/40 text-[#276a45] font-body-sm text-body-sm flex items-center gap-2"
           >
-            <CheckCircle2 className="w-4 h-4 shrink-0 text-emerald-600" />
+            <CheckCircle2 className="w-4 h-4 shrink-0" />
             <span>Your password has been updated. Please sign in with your new password.</span>
           </div>
         )}
@@ -138,26 +134,26 @@ function LoginForm() {
         {errorMessage && (
           <div
             role="alert"
-            className="p-4 rounded-xl bg-red-500/10 border border-red-500/30 text-red-800 dark:text-red-300 text-xs flex items-center gap-2.5 animate-in fade-in"
+            className="p-3.5 rounded-lg bg-rose-50 border border-rose-200 text-rose-800 font-body-sm text-body-sm flex items-start gap-2"
           >
-            <AlertCircle className="w-4 h-4 shrink-0 text-red-600" />
-            <span className="leading-relaxed">{errorMessage}</span>
+            <AlertCircle className="w-4 h-4 shrink-0 mt-0.5 text-rose-600" />
+            <span className="leading-snug">{errorMessage}</span>
           </div>
         )}
 
         {/* Login form card */}
-        <div className="bg-surface-container-lowest p-8 rounded-2xl border border-border-subtle shadow-xs">
-          <form onSubmit={handleLogin} className="space-y-5" noValidate>
+        <div className="bg-surface-container-lowest p-8 rounded-xl border border-outline-variant/40 shadow-xs">
+          <form onSubmit={handleLogin} className="space-y-4" noValidate>
             <div>
               <label
                 htmlFor="login-email"
-                className="block text-xs font-semibold text-on-surface uppercase tracking-wider mb-1.5"
+                className="block font-label-xs text-label-xs uppercase tracking-wider text-on-surface font-semibold mb-1"
               >
                 Email Address
               </label>
               <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-on-surface-variant">
-                  <Mail className="w-4 h-4" />
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-on-surface-variant">
+                  <Mail className="w-4 h-4 text-secondary" />
                 </div>
                 <input
                   id="login-email"
@@ -166,31 +162,31 @@ function LoginForm() {
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="alex.lawson@example.com"
+                  placeholder="alex.lawson@studio.io"
                   disabled={isLoading}
-                  className="w-full pl-10 pr-4 py-2.5 bg-surface-container-low border border-border-subtle rounded-xl text-sm text-on-surface placeholder:text-on-surface-variant/50 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
+                  className="w-full pl-9 pr-3 py-2 bg-surface-container-low border border-outline-variant/40 rounded font-body-sm text-body-sm text-on-surface placeholder:text-on-surface-variant/50 focus:outline-none focus:border-on-surface transition-all"
                 />
               </div>
             </div>
 
             <div>
-              <div className="flex items-center justify-between mb-1.5">
+              <div className="flex items-center justify-between mb-1">
                 <label
                   htmlFor="login-password"
-                  className="block text-xs font-semibold text-on-surface uppercase tracking-wider"
+                  className="block font-label-xs text-label-xs uppercase tracking-wider text-on-surface font-semibold"
                 >
                   Password
                 </label>
                 <Link
                   href="/forgot-password"
-                  className="text-xs text-primary hover:underline font-medium"
+                  className="font-label-xs text-label-xs text-primary hover:underline"
                 >
                   Forgot password?
                 </Link>
               </div>
               <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-on-surface-variant">
-                  <Lock className="w-4 h-4" />
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-on-surface-variant">
+                  <Lock className="w-4 h-4 text-secondary" />
                 </div>
                 <input
                   id="login-password"
@@ -201,13 +197,13 @@ function LoginForm() {
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••••••"
                   disabled={isLoading}
-                  className="w-full pl-10 pr-10 py-2.5 bg-surface-container-low border border-border-subtle rounded-xl text-sm text-on-surface placeholder:text-on-surface-variant/50 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
+                  className="w-full pl-9 pr-9 py-2 bg-surface-container-low border border-outline-variant/40 rounded font-body-sm text-body-sm text-on-surface placeholder:text-on-surface-variant/50 focus:outline-none focus:border-on-surface transition-all"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
                   aria-label={showPassword ? "Hide password" : "Show password"}
-                  className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-on-surface-variant hover:text-on-surface cursor-pointer focus:outline-none"
+                  className="absolute inset-y-0 right-0 pr-3 flex items-center text-on-surface-variant hover:text-on-surface cursor-pointer focus:outline-none"
                 >
                   {showPassword ? (
                     <EyeOff className="w-4 h-4" />
@@ -222,7 +218,7 @@ function LoginForm() {
               type="submit"
               variant="primary"
               disabled={isLoading}
-              className="w-full py-3 rounded-xl font-bold flex items-center justify-center gap-2 shadow-md cursor-pointer"
+              className="w-full py-2.5 rounded font-label-md text-label-md flex items-center justify-center gap-2 shadow-xs cursor-pointer mt-2"
             >
               {isLoading ? (
                 <>
@@ -238,20 +234,20 @@ function LoginForm() {
             </Button>
           </form>
 
-          <div className="mt-6 pt-6 border-t border-border-subtle text-center text-xs text-on-surface-variant">
+          <div className="mt-5 pt-4 border-t border-outline-variant/30 text-center font-body-sm text-[13px] text-on-surface-variant">
             <span>Don&apos;t have an account yet? </span>
             <Link
               href={nextParam ? `/signup?next=${encodeURIComponent(nextParam)}` : "/signup"}
-              className="font-bold text-primary hover:underline"
+              className="font-semibold text-on-surface hover:underline"
             >
               Create free account
             </Link>
           </div>
         </div>
 
-        {/* Privacy footnote */}
-        <p className="text-center text-xs text-on-surface-variant/70">
-          Protected by Supabase Row Level Security &amp; end-to-end encrypted session tokens.
+        {/* Footnote */}
+        <p className="text-center font-label-xs text-label-xs text-on-surface-variant/70">
+          Protected by Supabase Row Level Security &amp; encrypted session tokens.
         </p>
       </div>
     </div>
@@ -262,7 +258,7 @@ export default function LoginPage() {
   return (
     <Suspense
       fallback={
-        <div className="min-h-screen bg-warm-ivory flex items-center justify-center">
+        <div className="min-h-screen bg-surface flex items-center justify-center">
           <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin" />
         </div>
       }

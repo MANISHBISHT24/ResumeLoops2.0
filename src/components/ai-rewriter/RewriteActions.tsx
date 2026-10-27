@@ -9,7 +9,6 @@ import {
   X,
   RotateCcw,
   Copy,
-  CheckCheck,
   RefreshCw,
 } from "lucide-react";
 
@@ -51,7 +50,7 @@ export function RewriteActions({
   };
 
   return (
-    <div className="flex flex-wrap items-center justify-between gap-3 pt-2 border-t border-border-subtle">
+    <div className="flex flex-wrap items-center justify-between gap-3 pt-2 border-t border-outline-variant/30">
       <div className="flex items-center gap-2">
         {!proposal ? (
           <Button
@@ -59,7 +58,7 @@ export function RewriteActions({
             size="md"
             onClick={onGenerate}
             disabled={!canGenerate || isLoading}
-            className="text-xs font-bold shadow-sm"
+            className="text-xs font-bold shadow-xs"
           >
             {isLoading ? (
               <>
@@ -81,10 +80,10 @@ export function RewriteActions({
                 size="md"
                 onClick={onApply}
                 disabled={isLoading || isStale}
-                className="text-xs font-bold shadow-sm"
+                className="text-xs font-bold shadow-xs"
               >
                 <Check className="w-4 h-4 mr-1.5" />
-                Apply Rewrite to Resume
+                Apply Rewrite to Document
               </Button>
             ) : (
               <Button
@@ -94,29 +93,18 @@ export function RewriteActions({
                 className="text-xs font-semibold"
               >
                 <RotateCcw className="w-3.5 h-3.5 mr-1.5" />
-                Undo & Restore Original
+                Undo &amp; Restore Original
               </Button>
             )}
 
             <Button
               variant="outline"
-              size="md"
-              onClick={onGenerate}
-              disabled={isLoading || !canGenerate}
-              className="text-xs font-semibold"
-            >
-              <RefreshCw className={`w-3.5 h-3.5 mr-1.5 ${isLoading ? "animate-spin" : ""}`} />
-              Rewrite Again
-            </Button>
-
-            <Button
-              variant="ghost"
-              size="md"
+              size="sm"
               onClick={onReject}
               disabled={isLoading}
-              className="text-xs text-on-surface-variant hover:text-error"
+              className="text-xs"
             >
-              <X className="w-3.5 h-3.5 mr-1.5" />
+              <X className="w-3.5 h-3.5 mr-1" />
               Discard Proposal
             </Button>
           </>
@@ -126,27 +114,24 @@ export function RewriteActions({
       {proposal && (
         <div className="flex items-center gap-2">
           <Button
-            variant="outline"
+            variant="ghost"
             size="sm"
             onClick={handleCopy}
-            className="text-xs font-medium"
+            className="text-xs text-on-surface-variant hover:text-on-surface"
           >
-            {copied ? (
-              <>
-                <CheckCheck className="w-3.5 h-3.5 mr-1.5 text-emerald-600" />
-                Copied!
-              </>
-            ) : copyFailed ? (
-              <>
-                <X className="w-3.5 h-3.5 mr-1.5 text-error" />
-                <span className="text-error">Copy Failed</span>
-              </>
-            ) : (
-              <>
-                <Copy className="w-3.5 h-3.5 mr-1.5" />
-                Copy Output
-              </>
-            )}
+            <Copy className="w-3.5 h-3.5 mr-1 text-secondary" />
+            <span>{copied ? "Copied" : copyFailed ? "Copy Failed" : "Copy Proposed"}</span>
+          </Button>
+
+          <Button
+            variant="secondary"
+            size="sm"
+            onClick={onGenerate}
+            disabled={isLoading || !canGenerate}
+            className="text-xs font-semibold"
+          >
+            <RefreshCw className={`w-3.5 h-3.5 mr-1.5 ${isLoading ? "animate-spin" : ""}`} />
+            Regenerate
           </Button>
         </div>
       )}

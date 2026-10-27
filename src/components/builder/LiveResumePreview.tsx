@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useMemo } from "react";
 import { Resume } from "@/types/resume";
 
 export interface LiveResumePreviewProps {
@@ -18,12 +18,37 @@ export function LiveResumePreview({ resume }: LiveResumePreviewProps) {
   const isMonoMeta = templateId === "stripe-mono";
   const isModernGrid = templateId === "linear-grid";
 
+  // Dynamic Word and Character Count computation
+  const { wordCount, charCount } = useMemo(() => {
+    let text = `${fullName} ${personalInfo.title || ""} ${personalInfo.location || ""} ${summary || ""}`;
+    experience?.forEach((e) => {
+      text += ` ${e.role} ${e.company} ${e.location || ""} ${e.bullets?.join(" ") || ""}`;
+    });
+    education?.forEach((e) => {
+      text += ` ${e.degree} ${e.institution} ${e.location || ""} ${e.honors || ""}`;
+    });
+    skillCategories?.forEach((s) => {
+      text += ` ${s.categoryName} ${s.skills?.join(" ") || ""}`;
+    });
+    projects?.forEach((p) => {
+      text += ` ${p.name} ${p.description || ""} ${p.technologies?.join(" ") || ""}`;
+    });
+    certifications?.forEach((c) => {
+      text += ` ${c.name} ${c.issuer || ""}`;
+    });
+
+    const trimmed = text.trim();
+    const words = trimmed ? trimmed.split(/\s+/).length : 0;
+    const chars = trimmed.length;
+    return { wordCount: words, charCount: chars };
+  }, [fullName, personalInfo, summary, experience, education, skillCategories, projects, certifications]);
+
   return (
-    <div className="w-full flex justify-center py-2 sm:py-4">
-      {/* Printable A4 Container */}
+    <div className="w-full flex flex-col items-center py-2 sm:py-4">
+      {/* Printable A4 Container (Simulated 120gsm Uncoated Cotton Rag) */}
       <article
         id="resume-document-preview"
-        className={`print-container w-full max-w-[760px] min-h-[960px] bg-white text-neutral-900 shadow-lg border border-border-subtle rounded-sm p-8 sm:p-12 flex flex-col gap-6 text-[11px] sm:text-[12px] leading-relaxed transition-all select-text ${
+        className={`print-container w-full max-w-[760px] min-h-[960px] bg-[#FFFDF8] text-[#1B1B1B] shadow-paper-elevated border border-outline-variant/40 rounded-sm p-8 sm:p-12 flex flex-col gap-6 text-[11px] sm:text-[12px] leading-relaxed transition-all select-text print:shadow-none print:border-none print:p-0 print:m-0 print:min-h-0 print:bg-transparent ${
           isSerif ? "font-serif" : "font-sans"
         }`}
       >
@@ -32,7 +57,7 @@ export function LiveResumePreview({ resume }: LiveResumePreviewProps) {
           className={`flex flex-col gap-2 pb-4 ${
             templateId === "classic-oxford"
               ? "text-center border-b-2 border-neutral-900"
-              : "border-b border-border-subtle"
+              : "border-b border-outline-variant/40"
           }`}
         >
           <div
@@ -41,7 +66,7 @@ export function LiveResumePreview({ resume }: LiveResumePreviewProps) {
             }`}
           >
             <h1
-              className={`text-2xl sm:text-3xl font-extrabold tracking-tight text-neutral-950 ${
+              className={`text-2xl sm:text-3xl font-extrabold tracking-tight text-[#1B1B1B] ${
                 isSerif ? "font-serif" : "font-sans"
               }`}
             >
@@ -342,6 +367,14 @@ export function LiveResumePreview({ resume }: LiveResumePreviewProps) {
           </section>
         )}
       </article>
+
+      {/* Document Dimension / Paper Status Stamp */}
+      <div className="no-print w-full max-w-[760px] flex items-center justify-between px-2 pt-3 text-on-surface-variant font-label-xs text-label-xs">
+        <span>A4 Standard (210 × 297mm) • 120gsm Uncoated Cotton Rag</span>
+        <span className="font-mono">
+          {wordCount} Words • {charCount} Characters
+        </span>
+      </div>
     </div>
   );
 }

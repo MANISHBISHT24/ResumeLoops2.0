@@ -4,7 +4,6 @@ import React, { Suspense, useState } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import {
-  FileText,
   Mail,
   Lock,
   User,
@@ -111,217 +110,210 @@ function SignupForm() {
   };
 
   return (
-    <div className="min-h-screen bg-warm-ivory flex flex-col justify-between py-12 px-4 sm:px-6 lg:px-8">
-      <div className="w-full max-w-md mx-auto space-y-8">
+    <div className="min-h-screen bg-surface flex flex-col justify-between py-12 px-4 sm:px-6 lg:px-8">
+      <div className="w-full max-w-md mx-auto space-y-6">
         {/* Brand Header */}
         <div className="text-center">
           <Link
             href="/"
-            className="inline-flex items-center gap-3 group focus:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded-xl p-1"
+            className="inline-flex items-center gap-2 group focus:outline-none"
           >
-            <div className="w-10 h-10 rounded-xl bg-primary text-white flex items-center justify-center font-bold shadow-md shadow-primary/20 group-hover:scale-105 transition-transform">
-              <FileText className="w-5 h-5" />
-            </div>
-            <span className="font-extrabold text-2xl text-on-surface tracking-tight">
+            <span className="font-title-md text-title-md font-semibold text-on-surface tracking-tight">
               ResumeLoops
             </span>
           </Link>
-          <h1 className="mt-6 text-2xl sm:text-3xl font-extrabold text-on-surface tracking-tight">
+          <h1 className="mt-4 font-headline-md text-headline-md font-medium text-on-surface tracking-tight">
             Create your account
           </h1>
-          <p className="mt-2 text-sm text-on-surface-variant">
-            Start building publication-grade, ATS-optimized resumes with cloud persistence
+          <p className="mt-1 font-body-sm text-body-sm text-on-surface-variant">
+            Start authoring publication-grade, ATS-aligned resumes with cloud persistence
           </p>
         </div>
 
         {/* Unconfigured notice */}
         {!isConfigured && <SupabaseSetupBanner />}
 
-        {/* Verification Sent State */}
+        {/* Verification Sent Success Notice */}
         {isVerificationSent ? (
-          <div className="bg-surface-container-lowest p-8 rounded-2xl border border-border-subtle shadow-xs text-center space-y-5 animate-in fade-in">
-            <div className="w-14 h-14 rounded-full bg-emerald-500/10 text-emerald-600 flex items-center justify-center mx-auto">
-              <CheckCircle2 className="w-8 h-8" />
+          <div className="bg-surface-container-lowest p-8 rounded-xl border border-outline-variant/40 shadow-xs text-center space-y-4 animate-in fade-in">
+            <div className="w-12 h-12 rounded-full bg-surface-container text-[#276a45] flex items-center justify-center mx-auto">
+              <CheckCircle2 className="w-6 h-6" />
             </div>
-            <h2 className="text-xl font-bold text-on-surface">
-              Check your inbox
-            </h2>
-            <p className="text-sm text-on-surface-variant leading-relaxed">
-              We&apos;ve sent a confirmation link to{" "}
-              <strong className="text-on-surface">{email}</strong>. Please click the link to confirm your account and begin building.
+            <h2 className="font-title-md text-title-md text-on-surface font-semibold">Check your inbox</h2>
+            <p className="font-body-sm text-body-sm text-on-surface-variant leading-relaxed">
+              We&apos;ve sent a confirmation link to <strong className="text-on-surface">{email}</strong>.
+              Click the link to verify your email address and activate your cloud archive.
             </p>
-            <div className="pt-4 border-t border-border-subtle">
-              <Link
-                href="/login"
-                className="text-xs font-semibold text-primary hover:underline inline-flex items-center gap-1.5"
-              >
-                <span>Return to sign in</span>
-                <ArrowRight className="w-3.5 h-3.5" />
+            <div className="pt-2">
+              <Link href="/login">
+                <Button variant="outline" size="sm" className="mx-auto">
+                  Return to Sign In
+                </Button>
               </Link>
             </div>
           </div>
         ) : (
-          /* Signup Form */
-          <div className="bg-surface-container-lowest p-8 rounded-2xl border border-border-subtle shadow-xs">
+          <>
+            {/* Error Notification */}
             {errorMessage && (
               <div
                 role="alert"
-                className="mb-6 p-4 rounded-xl bg-red-500/10 border border-red-500/30 text-red-800 dark:text-red-300 text-xs flex items-center gap-2.5 animate-in fade-in"
+                className="p-3.5 rounded-lg bg-rose-50 border border-rose-200 text-rose-800 font-body-sm text-body-sm flex items-start gap-2"
               >
-                <AlertCircle className="w-4 h-4 shrink-0 text-red-600" />
-                <span className="leading-relaxed">{errorMessage}</span>
+                <AlertCircle className="w-4 h-4 shrink-0 mt-0.5 text-rose-600" />
+                <span className="leading-snug">{errorMessage}</span>
               </div>
             )}
 
-            <form onSubmit={handleSignup} className="space-y-4" noValidate>
-              <div>
-                <label
-                  htmlFor="signup-name"
-                  className="block text-xs font-semibold text-on-surface uppercase tracking-wider mb-1.5"
-                >
-                  Full Name (Optional)
-                </label>
-                <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-on-surface-variant">
-                    <User className="w-4 h-4" />
-                  </div>
-                  <input
-                    id="signup-name"
-                    type="text"
-                    autoComplete="name"
-                    value={fullName}
-                    onChange={(e) => setFullName(e.target.value)}
-                    placeholder="Alex Lawson"
-                    disabled={isLoading}
-                    className="w-full pl-10 pr-4 py-2.5 bg-surface-container-low border border-border-subtle rounded-xl text-sm text-on-surface placeholder:text-on-surface-variant/50 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label
-                  htmlFor="signup-email"
-                  className="block text-xs font-semibold text-on-surface uppercase tracking-wider mb-1.5"
-                >
-                  Email Address
-                </label>
-                <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-on-surface-variant">
-                    <Mail className="w-4 h-4" />
-                  </div>
-                  <input
-                    id="signup-email"
-                    type="email"
-                    autoComplete="email"
-                    required
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder="alex.lawson@example.com"
-                    disabled={isLoading}
-                    className="w-full pl-10 pr-4 py-2.5 bg-surface-container-low border border-border-subtle rounded-xl text-sm text-on-surface placeholder:text-on-surface-variant/50 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label
-                  htmlFor="signup-password"
-                  className="block text-xs font-semibold text-on-surface uppercase tracking-wider mb-1.5"
-                >
-                  Password (min 8 characters)
-                </label>
-                <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-on-surface-variant">
-                    <Lock className="w-4 h-4" />
-                  </div>
-                  <input
-                    id="signup-password"
-                    type={showPassword ? "text" : "password"}
-                    autoComplete="new-password"
-                    required
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    placeholder="••••••••••••"
-                    disabled={isLoading}
-                    className="w-full pl-10 pr-10 py-2.5 bg-surface-container-low border border-border-subtle rounded-xl text-sm text-on-surface placeholder:text-on-surface-variant/50 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    aria-label={showPassword ? "Hide password" : "Show password"}
-                    className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-on-surface-variant hover:text-on-surface cursor-pointer focus:outline-none"
+            {/* Signup Form Card */}
+            <div className="bg-surface-container-lowest p-8 rounded-xl border border-outline-variant/40 shadow-xs">
+              <form onSubmit={handleSignup} className="space-y-4" noValidate>
+                <div>
+                  <label
+                    htmlFor="signup-name"
+                    className="block font-label-xs text-label-xs uppercase tracking-wider text-on-surface font-semibold mb-1"
                   >
-                    {showPassword ? (
-                      <EyeOff className="w-4 h-4" />
-                    ) : (
-                      <Eye className="w-4 h-4" />
-                    )}
-                  </button>
-                </div>
-              </div>
-
-              <div>
-                <label
-                  htmlFor="signup-confirm-password"
-                  className="block text-xs font-semibold text-on-surface uppercase tracking-wider mb-1.5"
-                >
-                  Confirm Password
-                </label>
-                <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-on-surface-variant">
-                    <Lock className="w-4 h-4" />
+                    Full Name <span className="text-on-surface-variant/50 font-normal">(Optional)</span>
+                  </label>
+                  <div className="relative">
+                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-on-surface-variant">
+                      <User className="w-4 h-4 text-secondary" />
+                    </div>
+                    <input
+                      id="signup-name"
+                      type="text"
+                      autoComplete="name"
+                      value={fullName}
+                      onChange={(e) => setFullName(e.target.value)}
+                      placeholder="Alexandre Vance"
+                      disabled={isLoading}
+                      className="w-full pl-9 pr-3 py-2 bg-surface-container-low border border-outline-variant/40 rounded font-body-sm text-body-sm text-on-surface placeholder:text-on-surface-variant/50 focus:outline-none focus:border-on-surface transition-all"
+                    />
                   </div>
-                  <input
-                    id="signup-confirm-password"
-                    type={showPassword ? "text" : "password"}
-                    autoComplete="new-password"
-                    required
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                    placeholder="••••••••••••"
-                    disabled={isLoading}
-                    className="w-full pl-10 pr-4 py-2.5 bg-surface-container-low border border-border-subtle rounded-xl text-sm text-on-surface placeholder:text-on-surface-variant/50 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
-                  />
                 </div>
-              </div>
 
-              <div className="pt-2">
+                <div>
+                  <label
+                    htmlFor="signup-email"
+                    className="block font-label-xs text-label-xs uppercase tracking-wider text-on-surface font-semibold mb-1"
+                  >
+                    Email Address
+                  </label>
+                  <div className="relative">
+                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-on-surface-variant">
+                      <Mail className="w-4 h-4 text-secondary" />
+                    </div>
+                    <input
+                      id="signup-email"
+                      type="email"
+                      autoComplete="email"
+                      required
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      placeholder="alex.vance@studio.io"
+                      disabled={isLoading}
+                      className="w-full pl-9 pr-3 py-2 bg-surface-container-low border border-outline-variant/40 rounded font-body-sm text-body-sm text-on-surface placeholder:text-on-surface-variant/50 focus:outline-none focus:border-on-surface transition-all"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label
+                    htmlFor="signup-password"
+                    className="block font-label-xs text-label-xs uppercase tracking-wider text-on-surface font-semibold mb-1"
+                  >
+                    Password <span className="text-on-surface-variant/50 font-normal">(Min 8 chars)</span>
+                  </label>
+                  <div className="relative">
+                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-on-surface-variant">
+                      <Lock className="w-4 h-4 text-secondary" />
+                    </div>
+                    <input
+                      id="signup-password"
+                      type={showPassword ? "text" : "password"}
+                      autoComplete="new-password"
+                      required
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      placeholder="••••••••••••"
+                      disabled={isLoading}
+                      className="w-full pl-9 pr-9 py-2 bg-surface-container-low border border-outline-variant/40 rounded font-body-sm text-body-sm text-on-surface placeholder:text-on-surface-variant/50 focus:outline-none focus:border-on-surface transition-all"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword(!showPassword)}
+                      aria-label={showPassword ? "Hide password" : "Show password"}
+                      className="absolute inset-y-0 right-0 pr-3 flex items-center text-on-surface-variant hover:text-on-surface cursor-pointer focus:outline-none"
+                    >
+                      {showPassword ? (
+                        <EyeOff className="w-4 h-4" />
+                      ) : (
+                        <Eye className="w-4 h-4" />
+                      )}
+                    </button>
+                  </div>
+                </div>
+
+                <div>
+                  <label
+                    htmlFor="signup-confirm-password"
+                    className="block font-label-xs text-label-xs uppercase tracking-wider text-on-surface font-semibold mb-1"
+                  >
+                    Confirm Password
+                  </label>
+                  <div className="relative">
+                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-on-surface-variant">
+                      <Lock className="w-4 h-4 text-secondary" />
+                    </div>
+                    <input
+                      id="signup-confirm-password"
+                      type={showPassword ? "text" : "password"}
+                      autoComplete="new-password"
+                      required
+                      value={confirmPassword}
+                      onChange={(e) => setConfirmPassword(e.target.value)}
+                      placeholder="••••••••••••"
+                      disabled={isLoading}
+                      className="w-full pl-9 pr-3 py-2 bg-surface-container-low border border-outline-variant/40 rounded font-body-sm text-body-sm text-on-surface placeholder:text-on-surface-variant/50 focus:outline-none focus:border-on-surface transition-all"
+                    />
+                  </div>
+                </div>
+
                 <Button
                   type="submit"
                   variant="primary"
                   disabled={isLoading}
-                  className="w-full py-3 rounded-xl font-bold flex items-center justify-center gap-2 shadow-md cursor-pointer"
+                  className="w-full py-2.5 rounded font-label-md text-label-md flex items-center justify-center gap-2 shadow-xs cursor-pointer mt-2"
                 >
                   {isLoading ? (
                     <>
                       <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                      <span>Creating account...</span>
+                      <span>Creating Account...</span>
                     </>
                   ) : (
                     <>
-                      <span>Sign Up</span>
+                      <span>Create Free Account</span>
                       <ArrowRight className="w-4 h-4" />
                     </>
                   )}
                 </Button>
-              </div>
-            </form>
+              </form>
 
-            <div className="mt-6 pt-6 border-t border-border-subtle text-center text-xs text-on-surface-variant">
-              <span>Already have an account? </span>
-              <Link
-                href={nextParam ? `/login?next=${encodeURIComponent(nextParam)}` : "/login"}
-                className="font-bold text-primary hover:underline"
-              >
-                Sign in
-              </Link>
+              <div className="mt-5 pt-4 border-t border-outline-variant/30 text-center font-body-sm text-[13px] text-on-surface-variant">
+                <span>Already have an account? </span>
+                <Link
+                  href={nextParam ? `/login?next=${encodeURIComponent(nextParam)}` : "/login"}
+                  className="font-semibold text-on-surface hover:underline"
+                >
+                  Sign in here
+                </Link>
+              </div>
             </div>
-          </div>
+          </>
         )}
 
-        {/* Security footnote */}
-        <p className="text-center text-xs text-on-surface-variant/70">
-          Your credentials and resume data are stored with PostgreSQL Row Level Security.
+        <p className="text-center font-label-xs text-label-xs text-on-surface-variant/70">
+          By signing up, you agree to our Terms of Service and Privacy Policy.
         </p>
       </div>
     </div>
@@ -332,7 +324,7 @@ export default function SignupPage() {
   return (
     <Suspense
       fallback={
-        <div className="min-h-screen bg-warm-ivory flex items-center justify-center">
+        <div className="min-h-screen bg-surface flex items-center justify-center">
           <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin" />
         </div>
       }

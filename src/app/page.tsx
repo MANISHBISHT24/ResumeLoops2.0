@@ -19,12 +19,12 @@ export const metadata: Metadata = {
 
 export default function LandingPage() {
   return (
-    <div className="min-h-screen flex flex-col bg-warm-ivory text-on-surface">
+    <div className="min-h-screen flex flex-col bg-surface text-on-surface">
       {/* Canonical Marketing Header */}
       <MarketingHeader />
 
       {/* Main Landing Page Content */}
-      <main className="w-full pt-20 bg-warm-ivory min-h-screen flex-1">
+      <main className="w-full pt-20 bg-surface min-h-screen flex-1">
         {/* 1. Hero Section */}
         <MarketingHero />
 

@@ -12,6 +12,7 @@ const eslintConfig = defineConfig([
     "dist/**",
     "node_modules/**",
     "design-reference/**",
+    "stitch-refresh-reference/**",
     "next-env.d.ts",
   ]),
 ]);

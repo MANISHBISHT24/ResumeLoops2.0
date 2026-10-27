@@ -20,7 +20,7 @@ export function Badge({
   ...props
 }: BadgeProps) {
   const baseStyles =
-    "inline-flex items-center gap-1.5 px-2.5 py-0.5 text-xs font-medium rounded-full transition-colors select-none";
+    "inline-flex items-center gap-1.5 px-2 py-0.5 font-label-xs text-label-xs uppercase tracking-wider rounded select-none";
 
   const resolvedVariant = variant === "secondary" ? "indigo" : variant;
 
@@ -28,13 +28,13 @@ export function Badge({
     neutral:
       "bg-surface-container text-on-surface-variant border border-border-subtle",
     indigo:
-      "bg-secondary-container text-primary border border-primary/15 font-semibold",
+      "bg-brand-light text-brand border border-brand/20 font-semibold",
     success:
-      "bg-emerald-50 text-emerald-800 border border-emerald-200/80",
+      "bg-[#e8f5e9] text-[#276a45] border border-[#276a45]/20 font-medium",
     warning:
-      "bg-amber-50 text-amber-800 border border-amber-200/80",
+      "bg-[#fff8e1] text-[#9b7338] border border-[#9b7338]/20 font-medium",
     danger:
-      "bg-rose-50 text-rose-800 border border-rose-200/80",
+      "bg-error-container/60 text-error border border-error/20 font-medium",
   };
 
   return (

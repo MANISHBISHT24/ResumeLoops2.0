@@ -20,7 +20,7 @@ const FAQ_ITEMS: FaqItem[] = [
     id: "faq-2",
     question: "Can I export my resume to PDF and Word formats?",
     answer:
-      "Yes! You can instantly export your resume as a clean, highly formatted PDF or a Microsoft Word document with publication-grade typography and alignment intact.",
+      "Yes! You can instantly export your resume as a clean, vector-rendered PDF or printable document with publication-grade typography and alignment intact.",
   },
   {
     id: "faq-3",
@@ -50,24 +50,24 @@ export function MarketingFaq() {
   };
 
   return (
-    <section className="py-24 sm:py-28 bg-surface-container-low px-6 w-full border-t border-surface-container" id="faq">
+    <section className="py-16 sm:py-20 px-4 sm:px-6 lg:px-8 w-full bg-surface" id="faq">
       <div className="max-w-4xl mx-auto flex flex-col items-center">
         {/* Section Header */}
-        <span className="text-xs uppercase tracking-widest font-bold text-primary mb-2">
-          Questions &amp; Answers
+        <span className="font-label-xs text-label-xs uppercase tracking-widest text-on-surface-variant font-medium mb-2">
+          Architecture &amp; Intelligence FAQ
         </span>
-        <h2 className="text-3xl sm:text-4xl font-extrabold text-on-surface text-center mb-12 sm:mb-16 tracking-tight">
+        <h2 className="font-headline-lg text-2xl sm:text-3xl font-medium text-on-surface text-center mb-10 tracking-tight">
           Frequently Asked Questions
         </h2>
 
         {/* Accordion Container */}
-        <div className="space-y-4 w-full" role="region" aria-label="Frequently Asked Questions">
+        <div className="space-y-3 w-full" role="region" aria-label="Frequently Asked Questions">
           {FAQ_ITEMS.map((item) => {
             const isOpen = openId === item.id;
             return (
               <div
                 key={item.id}
-                className="bg-surface-container-lowest rounded-2xl shadow-[0_4px_20px_rgba(0,0,0,0.03)] border border-surface-container hover:border-primary/30 transition-all overflow-hidden"
+                className="bg-surface-container rounded border border-border-subtle transition-all overflow-hidden"
               >
                 <button
                   type="button"
@@ -75,12 +75,12 @@ export function MarketingFaq() {
                   aria-expanded={isOpen}
                   aria-controls={`faq-panel-${item.id}`}
                   onClick={() => toggleItem(item.id)}
-                  className="w-full p-6 sm:p-7 text-left flex items-center justify-between gap-4 font-bold text-on-surface text-base sm:text-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-inset"
+                  className="w-full p-5 sm:p-6 text-left flex items-center justify-between gap-4 font-semibold text-on-surface text-base focus:outline-none focus-visible:ring-1 focus-visible:ring-on-surface cursor-pointer"
                 >
                   <span className="leading-snug">{item.question}</span>
                   <div
-                    className={`w-8 h-8 rounded-full bg-surface-container flex items-center justify-center shrink-0 transition-transform duration-200 ${
-                      isOpen ? "rotate-180 bg-primary/10 text-primary" : "text-on-surface-variant"
+                    className={`w-7 h-7 rounded flex items-center justify-center shrink-0 transition-transform duration-200 ${
+                      isOpen ? "rotate-180 text-on-surface" : "text-on-surface-variant"
                     }`}
                   >
                     <ChevronDown className="w-4 h-4" />
@@ -92,7 +92,7 @@ export function MarketingFaq() {
                     id={`faq-panel-${item.id}`}
                     role="region"
                     aria-labelledby={`faq-btn-${item.id}`}
-                    className="px-6 sm:px-7 pb-6 sm:pb-7 text-sm sm:text-base text-on-surface-variant leading-relaxed border-t border-surface-container/60 pt-4"
+                    className="px-5 sm:px-6 pb-5 text-sm text-on-surface-variant leading-relaxed border-t border-border-subtle/40 pt-4"
                   >
                     <p>{item.answer}</p>
                   </div>

@@ -1,81 +1,98 @@
 import React from "react";
-import { X, Check } from "lucide-react";
+import { Edit3, Sparkles, SlidersHorizontal } from "lucide-react";
 
 export function MarketingComparison() {
-  const beforePoints = [
-    "Generic bullet points lacking measurable results or metrics.",
-    "Incompatible multi-column layout causing parsing errors in ATS.",
-    "Missing critical industry keywords required by recruiters.",
-  ];
-
-  const afterPoints = [
-    "Quantified achievements highlighting efficiency and revenue growth.",
-    "Clean, single-column structured format fully compliant with major ATS software.",
-    "Precisely targeted keywords matching job description requirements.",
-  ];
-
   return (
-    <section className="py-24 sm:py-28 bg-surface-container-low px-6 w-full border-y border-surface-container">
-      <div className="max-w-7xl mx-auto flex flex-col items-center">
-        {/* Section Badge & Title */}
-        <span className="text-xs uppercase tracking-widest font-bold text-primary mb-2">
-          Transformation
-        </span>
-        <h2 className="text-3xl sm:text-4xl font-extrabold text-on-surface text-center mb-14 sm:mb-16 tracking-tight">
-          The ResumeLoops Effect
-        </h2>
+    <section className="w-full py-16 sm:py-20 px-4 sm:px-6 lg:px-8 bg-surface">
+      <div className="max-w-6xl mx-auto">
+        <div className="text-center max-w-2xl mx-auto mb-12">
+          <span className="font-label-xs text-label-xs tracking-widest text-on-surface-variant uppercase block font-medium">
+            The Editorial Lens
+          </span>
+          <h2 className="mt-2 font-headline-lg text-3xl sm:text-4xl font-medium text-on-surface tracking-tight">
+            Elevate without inventing.
+          </h2>
+          <p className="mt-3 font-body-md text-base text-on-surface-variant leading-relaxed">
+            Generic AI tools inflate experience with synthetic buzzwords. ResumeLoops sharpens your real impact using boardroom-tested syntax.
+          </p>
+        </div>
 
-        {/* 2-Card Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-5xl">
-          {/* Before Card */}
-          <div className="bg-surface-container-lowest p-7 sm:p-8 rounded-2xl shadow-[0_10px_30px_rgba(0,0,0,0.03)] border border-red-200/80 flex flex-col gap-6 relative">
-            <div className="flex items-center justify-between pb-2 border-b border-surface-container">
-              <span className="text-xs sm:text-sm px-3.5 py-1.5 bg-red-50 text-red-700 rounded-full font-bold border border-red-200">
-                Before ResumeLoops
-              </span>
-              <span className="text-xs sm:text-sm text-on-surface-variant font-medium">
-                ATS Score: <strong className="text-red-600 font-bold text-base">42/100</strong>
+        {/* Before & After Interactive Container */}
+        <div className="bg-surface-container rounded p-6 sm:p-8 max-w-4xl mx-auto border border-border-subtle shadow-xs">
+          <div className="flex items-center justify-between pb-4 border-b border-border-subtle">
+            <span className="font-label-xs text-label-xs uppercase tracking-widest text-on-surface-variant font-medium">
+              Interactive Transformation
+            </span>
+            <div className="flex items-center gap-1.5">
+              <span className="w-2 h-2 rounded-full bg-primary" />
+              <span className="font-label-xs text-label-xs text-on-surface-variant font-medium">
+                Real-time Refinement
               </span>
             </div>
-
-            <ul className="space-y-4 text-sm sm:text-base text-on-surface-variant font-medium">
-              {beforePoints.map((point, idx) => (
-                <li key={idx} className="flex items-start gap-3">
-                  <div className="w-6 h-6 rounded-full bg-red-100 text-red-700 flex items-center justify-center shrink-0 mt-0.5">
-                    <X className="w-3.5 h-3.5" />
-                  </div>
-                  <span className="leading-relaxed">{point}</span>
-                </li>
-              ))}
-            </ul>
           </div>
 
-          {/* After Card */}
-          <div className="bg-surface-container-lowest p-7 sm:p-8 rounded-2xl shadow-[0_15px_40px_rgba(81,69,229,0.08)] border-2 border-primary/40 flex flex-col gap-6 relative">
-            {/* Top Right "Optimized" Badge */}
-            <div className="absolute -top-3.5 right-6 sm:right-8 bg-primary text-on-primary text-[11px] font-bold px-3.5 py-1 rounded-full uppercase tracking-wider shadow-sm">
-              Optimized
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-6">
+            {/* Before Card */}
+            <div className="bg-surface-container-low p-6 rounded flex flex-col justify-between shadow-2xs border border-border-subtle">
+              <div>
+                <div className="flex items-center justify-between mb-3">
+                  <span className="font-label-xs text-label-xs tracking-widest uppercase text-on-surface-variant font-medium">
+                    Draft / Input
+                  </span>
+                  <Edit3 className="w-4 h-4 text-on-surface-variant" />
+                </div>
+                <p className="font-body-md text-sm text-on-surface italic leading-relaxed">
+                  “Managed a team of designers and shipped new dashboard features.”
+                </p>
+              </div>
+              <div className="mt-6 pt-3 border-t border-border-subtle/50">
+                <span className="font-label-xs text-label-xs text-on-surface-variant block uppercase font-medium">
+                  Diagnosis
+                </span>
+                <p className="font-body-sm text-xs text-on-surface-variant mt-0.5">
+                  Vague metrics, passive stance, zero organizational leverage identified.
+                </p>
+              </div>
             </div>
 
-            <div className="flex items-center justify-between pb-2 border-b border-surface-container">
-              <span className="text-xs sm:text-sm px-3.5 py-1.5 bg-secondary-container text-primary rounded-full font-bold">
-                After ResumeLoops
-              </span>
-              <span className="text-xs sm:text-sm text-on-surface-variant font-medium">
-                ATS Score: <strong className="text-primary font-black text-base">96/100</strong>
+            {/* After Card */}
+            <div className="bg-surface-container-lowest p-6 rounded flex flex-col justify-between shadow-sm border border-border-subtle">
+              <div>
+                <div className="flex items-center justify-between mb-3">
+                  <span className="font-label-xs text-label-xs tracking-widest uppercase text-primary font-semibold">
+                    ResumeLoops Refined
+                  </span>
+                  <Sparkles className="w-4 h-4 text-primary" />
+                </div>
+                <p className="font-body-md text-sm text-on-surface font-medium leading-relaxed">
+                  “Directed 8 product designers across 4 squads to launch multi-region analytics suite, accelerating ARR expansion by $4.2M.”
+                </p>
+              </div>
+              <div className="mt-6 flex flex-wrap gap-1.5">
+                <span className="px-2 py-0.5 rounded bg-surface-container font-label-xs text-label-xs text-on-surface uppercase">
+                  +Measurable Impact
+                </span>
+                <span className="px-2 py-0.5 rounded bg-surface-container font-label-xs text-label-xs text-on-surface uppercase">
+                  +Executive Tone
+                </span>
+                <span className="px-2 py-0.5 rounded bg-surface-container-high font-label-xs text-label-xs text-on-surface font-semibold uppercase">
+                  100% Truthful
+                </span>
+              </div>
+            </div>
+          </div>
+
+          {/* Micro metric bar */}
+          <div className="mt-6 p-3 bg-surface-container-high rounded flex flex-col sm:flex-row items-center justify-between gap-2 border border-border-subtle">
+            <div className="flex items-center gap-2">
+              <SlidersHorizontal className="w-4 h-4 text-on-surface" />
+              <span className="font-body-sm text-xs sm:text-sm text-on-surface font-medium">
+                Voice Control: Active C-Suite Stance
               </span>
             </div>
-
-            <ul className="space-y-4 text-sm sm:text-base text-on-surface font-medium">
-              {afterPoints.map((point, idx) => (
-                <li key={idx} className="flex items-start gap-3">
-                  <div className="w-6 h-6 rounded-full bg-primary/10 text-primary flex items-center justify-center shrink-0 mt-0.5">
-                    <Check className="w-3.5 h-3.5" />
-                  </div>
-                  <span className="leading-relaxed">{point}</span>
-                </li>
-              ))}
-            </ul>
+            <span className="font-label-xs text-label-xs uppercase tracking-widest text-on-surface-variant">
+              Validated against 4,000+ Verified Placements
+            </span>
           </div>
         </div>
       </div>

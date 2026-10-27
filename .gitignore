@@ -48,3 +48,6 @@ ehthumbs.db
 
 # TypeScript cache
 *.tsbuildinfo
+
+# Supabase CLI runtime cache
+supabase/.temp/

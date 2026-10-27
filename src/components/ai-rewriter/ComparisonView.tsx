@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { ProposalState, RewriteTarget } from "@/types/ai-rewriter";
-import { Sparkles, AlertTriangle, ShieldCheck, CheckCircle2, History } from "lucide-react";
+import { Sparkles, AlertTriangle, History } from "lucide-react";
 
 interface ComparisonViewProps {
   target: RewriteTarget;
@@ -31,13 +31,13 @@ export function ComparisonView({
   return (
     <div className="space-y-3">
       {/* Mobile view switcher */}
-      <div className="flex md:hidden items-center justify-between p-1 bg-surface-container rounded-xl border border-border-subtle">
+      <div className="flex md:hidden items-center justify-between p-1 bg-surface-container rounded-lg border border-outline-variant/40">
         <button
           type="button"
           onClick={() => setMobileTab("original")}
-          className={`flex-1 py-1.5 text-xs font-semibold rounded-lg transition-all ${
+          className={`flex-1 py-1.5 font-label-xs text-label-xs font-semibold rounded transition-all ${
             mobileTab === "original"
-              ? "bg-surface text-primary shadow-sm"
+              ? "bg-surface-container-lowest text-on-surface shadow-2xs"
               : "text-on-surface-variant hover:text-on-surface"
           }`}
         >
@@ -46,9 +46,9 @@ export function ComparisonView({
         <button
           type="button"
           onClick={() => setMobileTab("proposal")}
-          className={`flex-1 py-1.5 text-xs font-semibold rounded-lg transition-all ${
+          className={`flex-1 py-1.5 font-label-xs text-label-xs font-semibold rounded transition-all ${
             mobileTab === "proposal"
-              ? "bg-surface text-primary shadow-sm"
+              ? "bg-surface-container-lowest text-on-surface shadow-2xs"
               : "text-on-surface-variant hover:text-on-surface"
           }`}
         >
@@ -58,7 +58,7 @@ export function ComparisonView({
 
       {/* Stale Warning Banner */}
       {isStale && proposal && (
-        <div className="p-3.5 bg-amber-50 border border-amber-200 rounded-xl flex items-start gap-2.5 text-xs text-amber-900">
+        <div className="p-3.5 bg-amber-50 border border-amber-200 rounded-lg flex items-start gap-2.5 text-xs text-amber-900">
           <AlertTriangle className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
           <p className="leading-relaxed">
             <strong>Source Changed:</strong> The content for &quot;{target.label}&quot; has been modified in your resume
@@ -71,20 +71,18 @@ export function ComparisonView({
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {/* Original Text Card */}
         <div
-          className={`bg-surface-container-low rounded-2xl p-5 border border-border-subtle flex flex-col justify-between space-y-3 ${
+          className={`bg-surface-container-low rounded-xl p-4 border border-outline-variant/30 flex flex-col justify-between space-y-3 ${
             mobileTab === "proposal" ? "hidden md:flex" : "flex"
           }`}
         >
-          <div className="flex items-center justify-between pb-2 border-b border-border-subtle/60">
-            <div>
-              <span className="text-[11px] font-bold text-on-surface-variant uppercase tracking-wider block">
-                Source Content
-              </span>
-              <span className="text-xs font-semibold text-on-surface truncate block max-w-[200px] sm:max-w-xs">
-                {target.label}
+          <div className="flex items-center justify-between pb-2 border-b border-outline-variant/30">
+            <div className="flex items-center gap-1.5 text-on-surface-variant">
+              <History className="w-3.5 h-3.5" />
+              <span className="font-label-xs text-label-xs uppercase tracking-wider font-semibold">
+                Original Passage
               </span>
             </div>
-            <span className="text-[11px] font-medium text-on-surface-variant/70">
+            <span className="font-mono text-[11px] text-on-surface-variant/80">
               {sourceWords} words • {sourceText.length} chars
             </span>
           </div>
@@ -95,81 +93,69 @@ export function ComparisonView({
               onChange={(e) => onSourceTextChange(e.target.value)}
               rows={5}
               placeholder="Source text to rewrite..."
-              className="w-full h-full text-xs sm:text-sm font-normal text-on-surface bg-transparent border-0 p-0 focus:outline-none focus:ring-0 resize-y leading-relaxed"
+              className="w-full h-full font-body-sm text-body-sm text-on-surface bg-transparent border-0 p-0 focus:outline-none resize-y leading-relaxed"
             />
           </div>
 
-          <div className="pt-2 border-t border-border-subtle/60 text-[11px] text-on-surface-variant/70 italic flex items-center gap-1.5">
-            <span>You can fine-tune the source text directly above before sending it to the rewriter.</span>
+          <div className="text-[11px] text-on-surface-variant/70 italic border-t border-outline-variant/20 pt-2 flex items-center justify-between">
+            <span>Section: {target.label}</span>
+            <span className="font-mono text-[10px]">Editable buffer</span>
           </div>
         </div>
 
-        {/* Proposed Rewrite Card */}
+        {/* AI Proposal Card */}
         <div
-          className={`bg-surface rounded-2xl p-5 border border-border-subtle flex flex-col justify-between space-y-3 shadow-sm ${
+          className={`bg-surface-container-lowest rounded-xl p-4 border border-outline-variant/40 shadow-xs flex flex-col justify-between space-y-3 ${
             mobileTab === "original" ? "hidden md:flex" : "flex"
-          } ${proposal?.applied ? "ring-2 ring-emerald-500/30" : ""}`}
+          }`}
         >
-          <div className="flex items-center justify-between pb-2 border-b border-border-subtle/60">
-            <div className="flex items-center gap-2">
-              <span className="text-[11px] font-bold text-primary uppercase tracking-wider block">
-                AI Suggested Rewrite
+          <div className="flex items-center justify-between pb-2 border-b border-outline-variant/30">
+            <div className="flex items-center gap-1.5 text-on-surface">
+              <Sparkles className="w-3.5 h-3.5 text-primary" />
+              <span className="font-label-xs text-label-xs uppercase tracking-wider font-semibold">
+                Refined Architecture
               </span>
-              {proposal?.applied ? (
-                <span className="inline-flex items-center gap-1 text-[10px] font-bold text-emerald-800 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-full">
-                  <CheckCircle2 className="w-3 h-3 text-emerald-600" /> Applied
-                </span>
-              ) : proposal ? (
-                <span className="text-[10px] font-bold text-primary bg-secondary-container px-2 py-0.5 rounded-full">
-                  Proposal Ready
-                </span>
-              ) : null}
             </div>
-
             {proposal && (
-              <span className="text-[11px] font-medium text-on-surface-variant/70">
+              <span className="font-mono text-[11px] text-[#276a45] font-semibold">
                 {proposedWords} words • {proposal.proposedText.length} chars
               </span>
             )}
           </div>
 
-          {isLoading ? (
-            <div className="flex-1 min-h-[140px] flex flex-col items-center justify-center space-y-3 text-center py-8">
-              <div className="w-7 h-7 border-2 border-primary border-t-transparent rounded-full animate-spin" />
-              <p className="text-xs text-on-surface-variant font-medium">
-                Calling OpenAI Responses API with factual integrity instructions...
-              </p>
-            </div>
-          ) : proposal ? (
-            <div className="flex-1 min-h-[140px] space-y-3">
-              <div className="p-3.5 rounded-xl bg-secondary-container/30 border border-primary/20">
-                <p className="text-xs sm:text-sm font-medium text-on-surface leading-relaxed">
-                  {proposal.proposedText}
+          <div className="flex-1 min-h-[140px]">
+            {isLoading ? (
+              <div className="h-full flex flex-col items-center justify-center space-y-2 py-8 text-on-surface-variant">
+                <div className="w-6 h-6 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+                <span className="font-body-sm text-xs font-medium">Generating architectural revision...</span>
+              </div>
+            ) : proposal ? (
+              <div className="font-body-sm text-body-sm text-on-surface leading-relaxed whitespace-pre-wrap select-text">
+                {proposal.proposedText}
+              </div>
+            ) : (
+              <div className="h-full flex flex-col items-center justify-center text-center py-8 text-on-surface-variant/60 space-y-1">
+                <Sparkles className="w-5 h-5 text-secondary mx-auto mb-1" />
+                <p className="font-body-sm text-xs">No proposal generated yet</p>
+                <p className="text-[11px] text-on-surface-variant/60 max-w-xs">
+                  Choose an objective below and click &quot;Generate Rewrite&quot; to inspect the revision.
                 </p>
               </div>
+            )}
+          </div>
 
-              {/* Factual Integrity Reminder */}
-              <div className="p-2.5 bg-surface-container-low rounded-lg border border-border-subtle/80 flex items-start gap-2 text-[11px] text-on-surface-variant">
-                <ShieldCheck className="w-3.5 h-3.5 text-primary shrink-0 mt-0.5" />
-                <p className="leading-snug">
-                  <strong>Factual Integrity Guarantee:</strong> The AI rewriter strictly refines wording and structure.
-                  Always verify that technical metrics and responsibilities match your real background before applying.
-                </p>
+          {proposal && (
+            <div className="space-y-2 border-t border-outline-variant/30 pt-2">
+              <div className="p-2.5 rounded bg-surface-container-low text-[12px] text-on-surface-variant leading-relaxed">
+                <strong className="text-on-surface font-semibold block text-[11px] uppercase tracking-wider mb-0.5">
+                  Factual Integrity Guarantee:
+                </strong>
+                The AI rewriter strictly refines tone and impact. Verify all technical metrics match your real accomplishments before applying.
               </div>
-            </div>
-          ) : (
-            <div className="flex-1 min-h-[140px] flex flex-col items-center justify-center space-y-2 text-center py-8 text-on-surface-variant">
-              <div className="w-10 h-10 rounded-full bg-secondary-container flex items-center justify-center text-primary">
-                <Sparkles className="w-5 h-5" />
-              </div>
-              <p className="text-xs font-semibold text-on-surface">No Proposal Generated Yet</p>
-              <p className="text-[11px] max-w-xs text-on-surface-variant/80">
-                Choose your rewrite objective and optional job description, then click &quot;Generate AI Rewrite&quot;.
-              </p>
             </div>
           )}
 
-          <div className="pt-2 border-t border-border-subtle/60 text-[11px] text-on-surface-variant/70 flex items-center justify-between">
+          <div className="pt-2 border-t border-outline-variant/30 text-[11px] text-on-surface-variant/70 flex items-center justify-between">
             <span>Changes are NOT saved until you click &quot;Apply Rewrite&quot;.</span>
             {proposal?.previousText && (
               <span className="flex items-center gap-1 text-primary font-medium">

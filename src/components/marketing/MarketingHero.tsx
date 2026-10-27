@@ -1,152 +1,129 @@
 import React from "react";
 import Link from "next/link";
-import { ArrowRight, Sparkles, Star, Lightbulb, FileCheck2 } from "lucide-react";
+import { ArrowRight, CheckCircle2, Sliders } from "lucide-react";
 
 export function MarketingHero() {
   return (
-    <section className="relative pt-12 sm:pt-16 pb-20 sm:pb-24 px-6 max-w-7xl mx-auto w-full overflow-hidden">
-      {/* Ambient glow background elements */}
-      <div
-        className="absolute top-1/4 right-10 w-80 sm:w-[500px] h-80 sm:h-[500px] bg-primary/10 rounded-full blur-[100px] sm:blur-[120px] pointer-events-none -z-10"
-        aria-hidden="true"
-      />
-      <div
-        className="absolute bottom-0 left-6 w-64 sm:w-96 h-64 sm:h-96 bg-secondary-container/40 rounded-full blur-[90px] sm:blur-[100px] pointer-events-none -z-10"
-        aria-hidden="true"
-      />
-
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-14 items-center">
-        {/* Left Column: Typography & CTAs */}
-        <div className="lg:col-span-6 flex flex-col items-start gap-6 z-10">
-          {/* Badge Pill */}
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-secondary-container/80 backdrop-blur-sm text-on-secondary-container text-xs sm:text-sm font-medium border border-primary/20 shadow-xs">
-            <span className="w-2.5 h-2.5 rounded-full bg-primary animate-pulse" />
-            <Sparkles className="w-4 h-4 text-primary" />
-            <span>Powered by Advanced ATS Intelligence</span>
-          </div>
-
-          {/* Display Heading */}
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-on-surface leading-[1.12]">
-            Your Next Opportunity Starts With a Better Resume.
-          </h1>
-
-          {/* Subtitle */}
-          <p className="text-base sm:text-lg text-on-surface-variant max-w-xl leading-relaxed">
-            Create a compelling resume, understand your ATS compatibility, and tailor your experience to the roles you want with editorial precision.
-          </p>
-
-          {/* Action CTAs */}
-          <div className="flex flex-wrap items-center gap-4 pt-2">
-            <Link
-              href="/dashboard"
-              className="relative group bg-primary hover:bg-primary-dark text-on-primary font-bold px-7 sm:px-8 py-3.5 sm:py-4 rounded-xl transition-all duration-300 flex items-center gap-2 shadow-[0_10px_30px_rgba(81,69,229,0.25)] hover:shadow-[0_15px_35px_rgba(81,69,229,0.35)] hover:-translate-y-0.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary"
-            >
-              <span className="tracking-wide">Create My Resume</span>
-              <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-            </Link>
-
-            <a
-              href="#templates"
-              className="bg-surface-container-low hover:bg-surface-container border border-surface-container-high text-on-surface font-semibold px-7 sm:px-8 py-3.5 sm:py-4 rounded-xl transition-all shadow-xs hover:border-primary/30 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
-            >
-              Explore Templates
-            </a>
-          </div>
-
-          {/* Social Proof Metric / Quality Endorsement */}
-          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 pt-4 border-t border-surface-container-high/80 w-full mt-2">
-            <div className="flex -space-x-2.5">
-              <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-indigo-600 to-indigo-400 text-white flex items-center justify-center font-bold text-xs border-2 border-warm-ivory shadow-sm">
-                AL
-              </div>
-              <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-slate-700 to-slate-900 text-white flex items-center justify-center font-bold text-xs border-2 border-warm-ivory shadow-sm">
-                MR
-              </div>
-              <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-purple-600 to-purple-400 text-white flex items-center justify-center font-bold text-xs border-2 border-warm-ivory shadow-sm">
-                EK
-              </div>
-              <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-amber-600 to-amber-500 text-white flex items-center justify-center font-bold text-xs border-2 border-warm-ivory shadow-sm">
-                JP
-              </div>
-            </div>
-            <div>
-              <div className="flex items-center gap-1 text-amber-500 mb-0.5" aria-label="Rated 5 out of 5 stars">
-                <Star className="w-4 h-4 fill-amber-400 text-amber-400" />
-                <Star className="w-4 h-4 fill-amber-400 text-amber-400" />
-                <Star className="w-4 h-4 fill-amber-400 text-amber-400" />
-                <Star className="w-4 h-4 fill-amber-400 text-amber-400" />
-                <Star className="w-4 h-4 fill-amber-400 text-amber-400" />
-              </div>
-              <span className="text-xs sm:text-sm text-on-surface-variant font-medium">
-                Built for ambitious professionals targeting high-impact tech &amp; leadership roles
-              </span>
-            </div>
-          </div>
+    <section className="relative w-full px-4 sm:px-6 lg:px-8 pt-10 sm:pt-14 pb-16 overflow-hidden">
+      <div className="max-w-6xl mx-auto flex flex-col items-center text-center">
+        {/* Product Badge */}
+        <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-surface-container-high text-on-surface-variant font-label-xs text-label-xs uppercase tracking-widest shadow-2xs border border-border-subtle">
+          <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
+          <span>ResumeLoops Studio 2.0 • Quiet Editorial Platform</span>
         </div>
 
-        {/* Right Column: Layered Product Composition */}
-        <div className="lg:col-span-6 relative flex justify-center items-center py-6 sm:py-8">
-          {/* Main Mockup Card Surface */}
-          <div className="w-full max-w-lg bg-surface-container-lowest rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.08)] border border-surface-container-high/80 p-5 sm:p-7 relative flex flex-col gap-4 backdrop-blur-xl">
-            {/* Mock Resume Header inside preview */}
-            <div className="flex items-center justify-between pb-4 bg-surface-container-low p-4 rounded-xl border border-surface-container">
-              <div className="flex items-center gap-3">
-                <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold text-base">
-                  AL
-                </div>
-                <div>
-                  <h3 className="text-base font-bold text-on-surface">Alex Lawson</h3>
-                  <p className="text-xs text-on-surface-variant font-medium">Senior Product Designer</p>
-                </div>
-              </div>
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-secondary-container text-primary rounded-full text-xs font-semibold shadow-2xs">
-                <FileCheck2 className="w-3.5 h-3.5" />
-                <span>PDF Ready</span>
-              </span>
-            </div>
+        {/* Headline */}
+        <h1 className="mt-6 max-w-4xl font-display-xl text-3xl sm:text-5xl lg:text-[56px] lg:leading-[64px] text-on-surface tracking-tight font-normal">
+          The next chapter of your career starts here.
+        </h1>
 
-            {/* Mock Experience entries */}
-            <div className="space-y-2.5 p-3.5 bg-surface-container-low/50 rounded-xl border border-surface-container/60">
-              <div className="flex items-center justify-between">
-                <div className="h-3.5 bg-surface-container-high rounded-full w-2/5" />
-                <div className="h-2.5 bg-surface-container rounded-full w-16" />
-              </div>
-              <div className="h-2.5 bg-surface-container rounded-full w-full" />
-              <div className="h-2.5 bg-surface-container rounded-full w-5/6" />
-            </div>
+        {/* Sub-copy */}
+        <p className="mt-4 max-w-2xl font-body-lg text-base sm:text-lg text-on-surface-variant leading-relaxed">
+          Create a thoughtful, professional resume with a workspace that helps you express your experience clearly, without artificial templates or generic AI tropes.
+        </p>
 
-            <div className="space-y-2.5 p-3.5 bg-surface-container-low/50 rounded-xl border border-surface-container/60">
-              <div className="flex items-center justify-between">
-                <div className="h-3.5 bg-surface-container-high rounded-full w-1/2" />
-                <div className="h-2.5 bg-surface-container rounded-full w-14" />
-              </div>
-              <div className="h-2.5 bg-surface-container rounded-full w-full" />
-            </div>
+        {/* CTAs */}
+        <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
+          <Link
+            href="/dashboard"
+            className="h-11 px-6 rounded bg-primary text-on-primary font-label-md text-label-md transition-all duration-200 hover:bg-neutral-800 shadow-xs flex items-center gap-2"
+          >
+            <span>Build your resume</span>
+            <ArrowRight className="w-4 h-4" />
+          </Link>
+          <a
+            href="#templates"
+            className="h-11 px-6 rounded bg-surface-container-low text-on-surface border border-border-subtle font-label-md text-label-md transition-all duration-200 hover:bg-surface-container shadow-xs flex items-center gap-2"
+          >
+            <span>Explore templates</span>
+          </a>
+        </div>
 
-            {/* Floating ATS Score Card */}
-            <div className="absolute -top-6 -left-2 sm:-left-6 bg-surface-container-lowest/95 backdrop-blur-md rounded-2xl shadow-[0_15px_35px_rgba(0,0,0,0.1)] p-3.5 sm:p-4 flex items-center gap-3.5 border border-surface-container-high">
-              <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-xl bg-primary text-on-primary flex items-center justify-center font-black text-xl shadow-md shadow-primary/25">
-                96
-              </div>
+        {/* Centerpiece Visual: Heavy Paper Mockup */}
+        <div className="relative w-full max-w-4xl mt-12 pt-2">
+          {/* Ambient blurred backing */}
+          <div
+            className="absolute inset-x-8 top-12 h-64 bg-surface-container-highest/60 rounded-full blur-3xl -z-10 pointer-events-none"
+            aria-hidden="true"
+          />
+
+          {/* The Paper Document Container */}
+          <div className="relative mx-auto w-full max-w-3xl bg-surface-container-lowest rounded p-6 sm:p-12 shadow-paper-elevated border border-border-subtle text-left select-none">
+            {/* Document Header */}
+            <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-3 pb-6 border-b border-border-subtle">
               <div>
-                <span className="text-[11px] uppercase tracking-wider font-bold text-on-surface-variant block">
-                  ATS Compatibility
-                </span>
-                <p className="text-sm sm:text-base font-bold text-on-surface">
-                  Optimized Score
+                <h2 className="font-headline-md text-2xl font-medium tracking-tight text-on-surface uppercase">
+                  Julian Vance
+                </h2>
+                <p className="font-label-md text-label-md tracking-widest text-on-surface-variant uppercase mt-1">
+                  VP of Product Architecture • San Francisco
                 </p>
               </div>
+              <div className="text-left sm:text-right font-body-sm text-body-sm text-on-surface-variant/80">
+                <p>julian.vance@curated.io</p>
+                <p>+1 (415) 890-2104</p>
+              </div>
             </div>
 
-            {/* Floating AI Suggestion Card */}
-            <div className="absolute -bottom-6 -right-2 sm:-right-4 bg-surface-container-lowest/95 backdrop-blur-md rounded-2xl shadow-[0_15px_35px_rgba(0,0,0,0.1)] p-3.5 sm:p-4 max-w-[260px] sm:max-w-xs border border-surface-container-high flex flex-col gap-1.5">
-              <div className="flex items-center gap-1.5 text-primary">
-                <Lightbulb className="w-4 h-4 text-primary" />
-                <span className="text-xs font-bold uppercase tracking-wider">AI Keyword Match</span>
-              </div>
-              <p className="text-xs text-on-surface-variant leading-relaxed">
-                Added <strong className="text-on-surface font-semibold">&apos;Design Systems&apos;</strong> &amp; <strong className="text-on-surface font-semibold">&apos;Cross-functional Leadership&apos;</strong> seamlessly.
+            {/* Section: Executive Summary */}
+            <div className="mt-6">
+              <span className="font-label-xs text-label-xs tracking-widest text-on-surface-variant uppercase block font-medium">
+                Executive Synthesis
+              </span>
+              <p className="mt-2 font-body-md text-body-md text-on-surface leading-relaxed">
+                Product executive with 14 years architecting resilient platform systems and consumer ecosystems. Steered platform scaling from $12M to $84M ARR while orchestrating cross-continental design and technical organizations. Focused on quiet utility and system durability.
               </p>
+            </div>
+
+            {/* Section: Experience */}
+            <div className="mt-6">
+              <span className="font-label-xs text-label-xs tracking-widest text-on-surface-variant uppercase block mb-3 font-medium">
+                Select Trajectory
+              </span>
+              <div className="space-y-4">
+                <div>
+                  <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-1">
+                    <span className="font-title-md text-title-md text-on-surface font-semibold">
+                      Head of Product Strategy — Monolith Systems
+                    </span>
+                    <span className="font-label-xs text-label-xs text-on-surface-variant font-mono">
+                      2021 — PRESENT
+                    </span>
+                  </div>
+                  <p className="mt-1 font-body-sm text-body-sm text-on-surface-variant leading-relaxed">
+                    • Architected autonomous service frameworks cutting transactional latency by 42% across 3M daily active accounts.<br />
+                    • Unified 6 decoupled product squads under single design standard, shortening release cycles from quarterly to bi-weekly cadences.
+                  </p>
+                </div>
+
+                <div>
+                  <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-1">
+                    <span className="font-title-md text-title-md text-on-surface font-semibold">
+                      Principal Systems Designer — Archive Collective
+                    </span>
+                    <span className="font-label-xs text-label-xs text-on-surface-variant font-mono">
+                      2017 — 2021
+                    </span>
+                  </div>
+                  <p className="mt-1 font-body-sm text-body-sm text-on-surface-variant leading-relaxed">
+                    • Led foundational design overhaul of core asset registry, preserving archival fidelity for 180,000 corporate records.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Floating Editorial Annotations */}
+            <div className="absolute -right-3 sm:-right-6 top-24 bg-surface-container-highest px-3 py-1.5 rounded shadow-sm hidden md:flex items-center gap-1.5 border border-border-subtle">
+              <CheckCircle2 className="w-3.5 h-3.5 text-primary" />
+              <span className="font-label-xs text-label-xs tracking-wider uppercase text-on-surface font-semibold">
+                120gsm Archival Grade
+              </span>
+            </div>
+            <div className="absolute -left-3 sm:-left-6 bottom-20 bg-surface-container-highest px-3 py-1.5 rounded shadow-sm hidden md:flex items-center gap-1.5 border border-border-subtle">
+              <Sliders className="w-3.5 h-3.5 text-primary" />
+              <span className="font-label-xs text-label-xs tracking-wider uppercase text-on-surface font-semibold">
+                Optical Baselined
+              </span>
             </div>
           </div>
         </div>

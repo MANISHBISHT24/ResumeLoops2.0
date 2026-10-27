@@ -1,20 +1,27 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
+import { AuthProvider } from "@/components/auth/AuthProvider";
 
 const inter = Inter({
   subsets: ["latin"],
-  variable: "--font-inter",
+  variable: "--font-sans",
   display: "swap",
+  weight: ["300", "400", "500", "600", "700"],
+});
+
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ["latin"],
+  variable: "--font-mono",
+  display: "swap",
+  weight: ["400", "500", "600"],
 });
 
 export const metadata: Metadata = {
-  title: "ResumeLoops — AI-Powered Resume Builder",
+  title: "ResumeLoops — Quiet Editorial Resume Platform",
   description:
     "Publication-quality resume builder engineered with deterministic ATS scoring and editorial elegance.",
 };
-
-import { AuthProvider } from "@/components/auth/AuthProvider";
 
 export default function RootLayout({
   children,
@@ -22,8 +29,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={inter.variable}>
-      <body className="min-h-screen bg-warm-ivory text-on-surface antialiased font-sans">
+    <html
+      lang="en"
+      className={`${inter.variable} ${jetbrainsMono.variable}`}
+    >
+      <body className="min-h-screen bg-surface text-on-surface antialiased font-sans">
         <AuthProvider>{children}</AuthProvider>
       </body>
     </html>

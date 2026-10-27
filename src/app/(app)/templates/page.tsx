@@ -22,7 +22,6 @@ import { useResumeStore } from "@/lib/storage";
 import { TemplateThumbnail } from "@/components/templates/TemplateThumbnail";
 import { TemplatePreviewModal } from "@/components/templates/TemplatePreviewModal";
 import { CreateResumeModal } from "@/components/dashboard/CreateResumeModal";
-import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 
 function TemplatesGalleryContent() {
@@ -110,7 +109,7 @@ function TemplatesGalleryContent() {
     return (
       <div className="py-24 flex flex-col items-center justify-center space-y-4 text-center">
         <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin" />
-        <p className="text-sm text-on-surface-variant font-medium">
+        <p className="font-body-sm text-body-sm text-on-surface-variant font-medium">
           Loading templates catalog...
         </p>
       </div>
@@ -118,54 +117,53 @@ function TemplatesGalleryContent() {
   }
 
   return (
-    <div className="space-y-8 pb-16">
+    <div className="space-y-space-xl pb-16">
       {/* Toast Notification */}
       {toastMessage && (
         <div
           role="status"
           aria-live="polite"
-          className="fixed bottom-6 right-6 z-50 bg-neutral-900 text-white text-xs sm:text-sm px-4 py-3 rounded-xl shadow-2xl flex items-center justify-between gap-4 animate-in fade-in slide-in-from-bottom-3 duration-200 border border-neutral-700 max-w-md"
+          className="fixed bottom-6 right-6 z-50 bg-[#1B1C1A] text-[#FAF9F5] text-body-sm px-4 py-3 rounded-xl shadow-paper-elevated flex items-center justify-between gap-4 animate-in fade-in slide-in-from-bottom-3 duration-200 border border-neutral-700 max-w-md"
         >
           <div className="flex items-center gap-2.5">
-            <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+            <CheckCircle2 className="w-4 h-4 text-[#276a45] shrink-0" />
             <span className="leading-snug">{toastMessage.text}</span>
           </div>
           <Link
             href={`/builder?id=${encodeURIComponent(toastMessage.resumeId)}`}
-            className="text-primary-fixed-dim hover:text-white font-bold flex items-center gap-1 shrink-0 text-xs underline underline-offset-2"
+            className="text-white hover:underline font-semibold flex items-center gap-1 shrink-0 text-xs"
           >
-            <span>Open Builder</span>
+            <span>Open Editor</span>
             <ArrowRight className="w-3.5 h-3.5" />
           </Link>
         </div>
       )}
 
       {/* Header and Search */}
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-4 border-b border-border-subtle">
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-space-lg pb-4 border-b border-outline-variant/30">
         <div>
           <div className="flex items-center gap-2 mb-1">
-            <span className="w-2 h-2 rounded-full bg-primary inline-block" />
-            <span className="text-xs uppercase tracking-wider font-semibold text-on-surface-variant">
-              Canonical Typographic Collection
+            <span className="font-label-xs text-label-xs uppercase tracking-widest text-on-surface-variant bg-surface-container px-2 py-0.5 rounded font-semibold">
+              The Curated Formats
             </span>
           </div>
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-on-surface tracking-tight">
-            Templates Gallery
+          <h1 className="font-headline-lg text-headline-lg text-on-surface tracking-tight">
+            Typographic Archive &amp; Layouts
           </h1>
-          <p className="text-sm text-on-surface-variant mt-1 max-w-xl">
-            Publication-quality single-column layouts engineered for flawless ATS scanning, high recruiter glance velocity, and typographic authority.
+          <p className="font-body-lg text-body-lg text-on-surface-variant mt-1 max-w-xl leading-relaxed">
+            Four canonical, print-calibrated single-column layouts engineered for machine readability, recruiter glance velocity, and typographic authority.
           </p>
         </div>
 
         {/* Search input */}
         <div className="w-full sm:w-72 relative">
-          <Search className="w-4 h-4 text-on-surface-variant/60 absolute left-3 top-1/2 -translate-y-1/2" />
+          <Search className="w-4 h-4 text-on-surface-variant absolute left-3 top-1/2 -translate-y-1/2" />
           <input
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search templates or styles..."
-            className="w-full pl-9 pr-3 py-2 text-xs text-on-surface bg-surface-container-lowest border border-border-subtle rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all shadow-xs"
+            placeholder="Search formats or disciplines..."
+            className="w-full pl-9 pr-3 py-2 font-body-sm text-body-sm text-on-surface bg-surface-container-low border border-outline-variant/40 rounded-lg focus:outline-none focus:border-on-surface transition-all"
             aria-label="Search resume templates"
           />
         </div>
@@ -173,28 +171,28 @@ function TemplatesGalleryContent() {
 
       {/* Target Resume Context Bar */}
       {resumes.length > 0 ? (
-        <div className="p-4 rounded-2xl bg-surface-container-low border border-border-subtle flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-2xs">
+        <div className="p-space-md rounded-xl bg-surface-container-low border border-outline-variant/40 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-xs">
           <div className="flex items-center gap-3 min-w-0">
-            <div className="w-9 h-9 rounded-xl bg-primary/10 text-primary flex items-center justify-center shrink-0">
-              <Layout className="w-4 h-4" />
+            <div className="w-9 h-9 rounded bg-surface-container text-on-surface border border-outline-variant/40 flex items-center justify-center shrink-0">
+              <Layout className="w-4 h-4 text-secondary" />
             </div>
             <div className="min-w-0">
-              <div className="text-[11px] font-semibold text-on-surface-variant uppercase tracking-wider flex items-center gap-1.5">
-                <span>Active Target Resume</span>
+              <div className="font-label-xs text-label-xs font-semibold text-on-surface-variant uppercase tracking-wider flex items-center gap-1.5">
+                <span>Active Target Document</span>
                 {targetResume && (
-                  <span className="text-primary font-bold">
-                    • Current Layout: {getTemplateById(targetResume.templateId).name}
+                  <span className="text-primary font-bold font-mono">
+                    • Current Format: {getTemplateById(targetResume.templateId).name}
                   </span>
                 )}
               </div>
               <div className="flex items-center gap-2 mt-0.5">
-                <span className="text-sm font-bold text-on-surface truncate">
+                <span className="font-title-md text-title-md font-semibold text-on-surface truncate">
                   {targetResume ? targetResume.title : "No draft selected"}
                 </span>
                 {targetResume?.id.startsWith("sample-") && (
-                  <Badge variant="neutral" className="text-[10px] shrink-0">
+                  <span className="font-label-xs text-[10px] px-1.5 py-0.5 rounded bg-surface-container text-on-surface-variant border border-outline-variant/30">
                     Sample
-                  </Badge>
+                  </span>
                 )}
               </div>
             </div>
@@ -202,8 +200,8 @@ function TemplatesGalleryContent() {
 
           <div className="flex items-center gap-2 self-start sm:self-auto">
             {/* Target Selector Dropdown */}
-            <div className="flex items-center gap-1.5 bg-surface-container-lowest px-2.5 py-1.5 rounded-xl border border-border-subtle text-xs font-semibold text-on-surface">
-              <SlidersHorizontal className="w-3.5 h-3.5 text-primary shrink-0" />
+            <div className="flex items-center gap-1.5 bg-surface-container-lowest px-2.5 py-1.5 rounded border border-outline-variant/40 font-label-xs text-label-xs font-semibold text-on-surface">
+              <SlidersHorizontal className="w-3 h-3 text-secondary shrink-0" />
               <select
                 value={targetResume?.id || ""}
                 onChange={(e) => setActiveResumeOverrideId(e.target.value)}
@@ -229,15 +227,15 @@ function TemplatesGalleryContent() {
           </div>
         </div>
       ) : (
-        <div className="p-4 rounded-2xl bg-secondary-container/40 border border-border-subtle flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div className="p-space-md rounded-xl bg-surface-container-low border border-outline-variant/40 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-primary text-white flex items-center justify-center shrink-0">
+            <div className="w-9 h-9 rounded bg-primary text-white flex items-center justify-center shrink-0">
               <Sparkles className="w-4 h-4" />
             </div>
             <div>
-              <p className="text-xs font-bold text-on-surface">No Resumes in Workspace</p>
-              <p className="text-[11px] text-on-surface-variant">
-                Select any template below to create your very first draft with publication-grade typography.
+              <p className="font-title-md text-title-md text-on-surface">No Documents in Workspace</p>
+              <p className="font-body-sm text-body-sm text-on-surface-variant">
+                Select any format below to author your very first edition with publication-grade typography.
               </p>
             </div>
           </div>
@@ -248,18 +246,18 @@ function TemplatesGalleryContent() {
             className="text-xs font-bold"
           >
             <Plus className="w-3.5 h-3.5 mr-1.5" />
-            Create First Resume
+            Create First Document
           </Button>
         </div>
       )}
 
       {/* Invalid Resume ID Banner */}
       {isInvalidRequestedId && (
-        <div className="p-3.5 rounded-xl bg-amber-50 border border-amber-200 text-xs text-amber-900 flex items-start gap-2.5">
+        <div className="p-3.5 rounded-lg bg-amber-50 border border-amber-200 font-body-sm text-xs text-amber-900 flex items-start gap-2.5">
           <AlertCircle className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
           <div>
             <span className="font-bold">Requested resume not found: </span>
-            The draft ID &ldquo;{resumeIdParam}&rdquo; does not exist in your local storage. We have defaulted to your first available resume &ldquo;{targetResume?.title}&rdquo;.
+            The draft ID &ldquo;{resumeIdParam}&rdquo; does not exist in your workspace archive. We have defaulted to your first available resume &ldquo;{targetResume?.title}&rdquo;.
           </div>
         </div>
       )}
@@ -275,10 +273,10 @@ function TemplatesGalleryContent() {
               role="tab"
               aria-selected={isSelected}
               onClick={() => setSelectedCategory(cat)}
-              className={`px-4 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-all cursor-pointer ${
+              className={`px-3.5 py-1.5 rounded-lg font-label-xs text-label-xs font-semibold whitespace-nowrap transition-all cursor-pointer ${
                 isSelected
-                  ? "bg-primary text-white shadow-xs"
-                  : "bg-surface-container-low text-on-surface-variant hover:text-on-surface hover:bg-surface-container border border-border-subtle"
+                  ? "bg-primary text-white shadow-2xs"
+                  : "bg-surface-container-low text-on-surface-variant hover:text-on-surface hover:bg-surface-container border border-outline-variant/30"
               }`}
             >
               {cat}
@@ -288,33 +286,33 @@ function TemplatesGalleryContent() {
       </div>
 
       {/* Templates Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 items-stretch">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-space-lg items-stretch">
         {filteredTemplates.map((tmpl) => {
           const isCurrentApplied = targetResume?.templateId === tmpl.id;
 
           return (
             <div
               key={tmpl.id}
-              className={`bg-surface-container-lowest rounded-2xl border flex flex-col justify-between overflow-hidden shadow-xs hover:shadow-md transition-all group ${
+              className={`bg-surface-container-lowest rounded-xl border flex flex-col justify-between overflow-hidden shadow-xs hover:shadow-paper transition-all group ${
                 isCurrentApplied
-                  ? "border-primary ring-2 ring-primary/20"
-                  : "border-border-subtle hover:border-border-subtle/90"
+                  ? "border-primary ring-1 ring-primary"
+                  : "border-outline-variant/40 hover:border-outline-variant/80"
               }`}
             >
               {/* Document Thumbnail Preview Header */}
-              <div className="relative border-b border-border-subtle overflow-hidden">
+              <div className="relative border-b border-outline-variant/30 overflow-hidden bg-surface-container-low">
                 <TemplateThumbnail templateId={tmpl.id} />
 
                 {/* Status Badges */}
                 <div className="absolute top-3 left-3 flex items-center gap-1.5">
-                  <Badge variant="indigo" className="text-[10px] bg-white/95 backdrop-blur-xs font-bold shadow-xs">
+                  <span className="font-label-xs text-[10px] uppercase tracking-wider font-semibold px-2 py-0.5 rounded bg-white/95 text-on-surface shadow-2xs border border-outline-variant/30">
                     {tmpl.category}
-                  </Badge>
+                  </span>
                 </div>
 
                 {isCurrentApplied && (
                   <div className="absolute top-3 right-3">
-                    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-600 text-white text-[10px] font-bold shadow-xs">
+                    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-[#276a45] text-white font-label-xs text-[10px] font-bold shadow-2xs">
                       <Check className="w-3 h-3" />
                       Active
                     </span>
@@ -323,16 +321,16 @@ function TemplatesGalleryContent() {
               </div>
 
               {/* Template Body Info */}
-              <div className="p-5 flex-1 flex flex-col justify-between space-y-4">
+              <div className="p-space-md flex-1 flex flex-col justify-between space-y-4">
                 <div className="space-y-2">
-                  <h3 className="font-bold text-base text-on-surface tracking-tight group-hover:text-primary transition-colors">
+                  <h3 className="font-title-md text-title-md text-on-surface tracking-tight group-hover:text-primary transition-colors">
                     {tmpl.name}
                   </h3>
-                  <p className="text-xs text-on-surface-variant leading-relaxed line-clamp-2">
+                  <p className="font-body-sm text-[12px] text-on-surface-variant leading-relaxed line-clamp-2">
                     {tmpl.description}
                   </p>
 
-                  <div className="pt-2 space-y-1.5 border-t border-border-subtle/60 text-[11px] text-on-surface-variant">
+                  <div className="pt-2 space-y-1.5 border-t border-outline-variant/30 font-body-sm text-[11px] text-on-surface-variant">
                     <div className="flex items-center gap-1.5">
                       <span className="font-semibold text-on-surface">Style:</span>
                       <span className="truncate">{tmpl.fontStyle}</span>
@@ -345,7 +343,7 @@ function TemplatesGalleryContent() {
                 </div>
 
                 {/* Actions */}
-                <div className="space-y-2 pt-3 border-t border-border-subtle">
+                <div className="space-y-2 pt-3 border-t border-outline-variant/30">
                   <div className="grid grid-cols-2 gap-2">
                     <Button
                       variant="outline"
@@ -364,7 +362,7 @@ function TemplatesGalleryContent() {
                       className="text-xs font-semibold w-full"
                     >
                       <Plus className="w-3.5 h-3.5 mr-1" />
-                      New Draft
+                      New Edition
                     </Button>
                   </div>
 
@@ -374,11 +372,11 @@ function TemplatesGalleryContent() {
                       size="sm"
                       disabled={isCurrentApplied}
                       onClick={() => handleApplyTemplate(tmpl.id)}
-                      className="w-full text-xs font-bold shadow-xs"
+                      className="w-full text-xs font-semibold shadow-xs"
                     >
                       {isCurrentApplied ? (
                         <>
-                          <Check className="w-3.5 h-3.5 mr-1 text-emerald-600" />
+                          <Check className="w-3.5 h-3.5 mr-1 text-[#276a45]" />
                           Currently Applied
                         </>
                       ) : (
@@ -424,7 +422,7 @@ export default function TemplatesPage() {
   return (
     <Suspense
       fallback={
-        <div className="py-24 text-center text-xs text-on-surface-variant font-medium">
+        <div className="py-24 text-center font-body-sm text-xs text-on-surface-variant font-medium">
           Loading templates gallery...
         </div>
       }

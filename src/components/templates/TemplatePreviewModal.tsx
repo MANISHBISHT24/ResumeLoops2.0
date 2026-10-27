@@ -33,13 +33,13 @@ export function TemplatePreviewModal({
   // Otherwise, use DEMO_RESUME with this template applied as an authentic visual preview.
   const previewResume: Resume = selectedResume
     ? {
-        ...selectedResume,
-        templateId: template.id,
-      }
+      ...selectedResume,
+      templateId: template.id,
+    }
     : {
-        ...DEMO_RESUME,
-        templateId: template.id,
-      };
+      ...DEMO_RESUME,
+      templateId: template.id,
+    };
 
   const isCurrentActive = selectedResume?.templateId === template.id;
 

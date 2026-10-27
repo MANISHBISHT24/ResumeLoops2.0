@@ -53,7 +53,7 @@ export function Modal({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-xs transition-opacity"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/30 backdrop-blur-xs transition-opacity"
       role="dialog"
       aria-modal="true"
       aria-labelledby={title ? titleId : undefined}
@@ -67,7 +67,7 @@ export function Modal({
       <div
         ref={modalRef}
         tabIndex={-1}
-        className={`relative w-full max-w-lg max-h-[90vh] overflow-y-auto bg-surface-container-lowest border border-border-subtle rounded-2xl shadow-xl p-6 text-on-surface focus:outline-none animate-in fade-in zoom-in-95 duration-200 ${className}`}
+        className={`relative w-full max-w-lg max-h-[90vh] overflow-y-auto bg-surface-container-lowest border border-border-subtle rounded-lg shadow-editorial-modal p-6 text-on-surface focus:outline-none animate-in fade-in zoom-in-95 duration-200 ${className}`}
       >
         {/* Header */}
         <div className="flex items-start justify-between gap-4 mb-4">
@@ -75,13 +75,13 @@ export function Modal({
             {title && (
               <h2
                 id={titleId}
-                className="text-lg font-semibold text-on-surface tracking-tight"
+                className="font-headline-sm text-headline-sm text-on-surface tracking-tight"
               >
                 {title}
               </h2>
             )}
             {description && (
-              <p id={descId} className="text-sm text-on-surface-variant mt-1">
+              <p id={descId} className="font-body-sm text-body-sm text-on-surface-variant mt-1">
                 {description}
               </p>
             )}
@@ -90,7 +90,7 @@ export function Modal({
             type="button"
             onClick={onClose}
             aria-label="Close dialog"
-            className="p-1 rounded text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary cursor-pointer"
+            className="p-1 rounded text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-on-surface cursor-pointer"
           >
             <X className="w-5 h-5" />
           </button>
